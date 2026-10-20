@@ -1,0 +1,47 @@
+name: Update predictions
+
+on:
+  schedule:
+    # UTC. Nov to Mar (Eastern Standard Time): 9:00 AM, 4:00 PM, 6:30 PM ET.
+    - cron: "0 14 * * *"
+    - cron: "0 21 * * *"
+    - cron: "30 23 * * *"
+  workflow_dispatch: {}
+  push:
+    paths: ["bundle.b64"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unpack code bundle if present
+        run: |
+          if [ -f bundle.b64 ]; then
+            base64 -d bundle.b64 | tar -xzf -
+            git rm -q bundle.b64
+          fi
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Seed history if missing
+        run: python -m pipeline.bootstrap
+      - name: Run pipeline
+        run: python -m pipeline.run daily
+      - name: Commit results
+        run: |
+          git config user.name "cbb-predictor bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A -- . ':!raw'
+          git diff --staged --quiet || git commit -m "Update predictions $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git pull --rebase
+          git push
