@@ -1,0 +1,48 @@
+{
+  "current_season": 2027,
+  "season_start": {
+    "2026": "2025-11-03",
+    "2027": "2026-11-02"
+  },
+  "selection_sunday": {
+    "2026": "2026-03-15",
+    "2027": "2027-03-14"
+  },
+  "final_four_pairs": {
+    "2026": [
+      [
+        "West",
+        "Midwest"
+      ],
+      [
+        "East",
+        "South"
+      ]
+    ],
+    "2025": [
+      [
+        "South",
+        "West"
+      ],
+      [
+        "East",
+        "Midwest"
+      ]
+    ]
+  },
+  "blend": {
+    "model_weight_default": 0.3,
+    "sigma_default": 10.8,
+    "min_games_to_fit": 1500
+  },
+  "bracket": {
+    "n_sims": 50000,
+    "team_sd": 1.0
+  },
+  "preseason_meta": {
+    "mu": 111.265,
+    "h": 2.675,
+    "hn": 0.052,
+    "tau": 65.941
+  }
+}
