@@ -20,12 +20,14 @@ def win_prob_matrix(R, meta, ids, p):
     return norm.cdf(margin / sig), em, poss, sig
 
 
-def project_field(R, conf_of, net_rank=None, n_teams=68):
+def project_field(R, conf_of, net_rank=None, n_teams=68, autos=None):
     """conf_of: {team_id: conference_name}. Returns DataFrame team_id, seed, region, bid."""
     r = R[R.index.isin(conf_of.keys())].copy()
     r["conf"] = r.index.map(conf_of)
     order_key = (lambda t: net_rank.get(t, 999)) if net_rank else (lambda t: -r.at[t, "em"])
-    autos = r.sort_values("em", ascending=False).groupby("conf").head(1).index.tolist()
+    if autos is None:
+        autos = r.sort_values("em", ascending=False).groupby("conf").head(1).index.tolist()
+    autos = [t for t in autos if t in r.index]
     rest = sorted([t for t in r.index if t not in autos], key=order_key)
     at_large = rest[: n_teams - len(autos)]
     field = sorted(autos + at_large, key=order_key)
@@ -146,3 +148,81 @@ def simulate(field, R, meta, p, n_sims=20000, team_sd=2.0, f4_pairs=(("East", "W
     a, b = fin; w = a if P0[a, b] >= 0.5 else b
     picks.append(dict(round="Final", region="", a=ids[a], b=ids[b], winner=ids[w], p=float(max(P0[a, b], P0[b, a]))))
     return probs.sort_values("Champ", ascending=False), pd.DataFrame(picks)
+
+
+# ---------------- conference tournaments and field odds ----------------
+SMALL_TOURNEYS = {"Ivy League": 4}  # conferences whose tournament takes only the top N teams
+
+
+def _bracket_order(n):
+    """Standard seeded single-elimination order for a power of two (1 v n, 2 v n-1 ...)."""
+    order = [1]
+    while len(order) < n:
+        m = len(order) * 2
+        order = [x for s in order for x in (s, m + 1 - s)]
+    return order
+
+
+def conf_tourney_odds(R, meta, p, conf_of, conf_pct, n_sims=5000, seed=11):
+    """Monte Carlo of every conference tournament. Seeds by conference win pct, then rating.
+    Teams beyond the bracket size get byes in seed order. Returns {team_id: P(win conference tournament)}."""
+    rng = np.random.default_rng(seed)
+    out = {}
+    by_conf = {}
+    for t, c in conf_of.items():
+        if t in R.index:
+            by_conf.setdefault(c, []).append(t)
+    for c, teams in by_conf.items():
+        teams = sorted(teams, key=lambda t: (-conf_pct.get(t, 0.0), -R.at[t, "em"]))
+        teams = teams[: SMALL_TOURNEYS.get(c, len(teams))]
+        n = len(teams)
+        if n == 1:
+            out[teams[0]] = 1.0
+            continue
+        size = 1 << (n - 1).bit_length()
+        slots = [teams[s - 1] if s <= n else None for s in _bracket_order(size)]
+        P, em, poss, sig = win_prob_matrix(R, meta, teams, p)
+        ix = {t: i for i, t in enumerate(teams)}
+        alive = [np.full(n_sims, ix[t]) if t is not None else None for t in slots]
+        rows = np.arange(n_sims)
+        while len(alive) > 1:
+            nxt = []
+            for i in range(0, len(alive), 2):
+                a, b = alive[i], alive[i + 1]
+                if a is None or b is None:
+                    nxt.append(a if b is None else b)
+                    continue
+                win = rng.random(n_sims) < P[a, b]
+                nxt.append(np.where(win, a, b))
+            alive = nxt
+        w = np.bincount(alive[0], minlength=n) / n_sims
+        out.update({t: float(w[ix[t]]) for t in teams})
+    return out
+
+
+def field_odds(R, auto_p, conf_of, order_key, n_at_large=None, n_sims=4000, seed=5):
+    """P(make the field) per team: sample each conference's champion from auto_p, then fill at-large
+    spots from the remaining teams in order_key order (lower is better)."""
+    rng = np.random.default_rng(seed)
+    confs = {}
+    for t, c in conf_of.items():
+        if t in R.index:
+            confs.setdefault(c, []).append(t)
+    n_auto = len(confs)
+    n_al = n_at_large if n_at_large is not None else 68 - n_auto
+    ranked = sorted([t for t in R.index if t in conf_of], key=order_key)
+    made = {t: 0 for t in ranked}
+    autos = {t: 0 for t in ranked}
+    conf_lists = {c: (ts, np.array([auto_p.get(t, 0.0) for t in ts])) for c, ts in confs.items()}
+    for _ in range(n_sims):
+        champs = set()
+        for c, (ts, pr) in conf_lists.items():
+            pr = pr / pr.sum() if pr.sum() > 0 else np.full(len(ts), 1 / len(ts))
+            champs.add(ts[rng.choice(len(ts), p=pr)])
+        k = 0
+        for t in ranked:
+            if t in champs:
+                made[t] += 1; autos[t] += 1
+            elif k < n_al:
+                made[t] += 1; k += 1
+    return {t: made[t] / n_sims for t in ranked}, {t: autos[t] / n_sims for t in ranked}

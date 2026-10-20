@@ -27,7 +27,7 @@ def d1_teams():
     for t in d["sports"][0]["leagues"][0]["teams"]:
         t = t["team"]
         logo = (t.get("logos") or [{}])[0].get("href", "")
-        rows.append(dict(team_id=int(t["id"]), name=t.get("shortDisplayName"), full=t.get("displayName"),
+        rows.append(dict(team_id=int(t["id"]), name=t.get("shortDisplayName"), full=t.get("displayName"), location=t.get("location"),
                          abbr=t.get("abbreviation"), color=t.get("color"), logo=logo))
     return pd.DataFrame(rows).set_index("team_id")
 
@@ -126,7 +126,21 @@ def boxscore(game_id):
         out[t["homeAway"]] = fga - orb + to + 0.44 * fta
     if "home" not in out or "away" not in out:
         return None
-    return dict(home_poss_est=out["home"], away_poss_est=out["away"], poss=(out["home"] + out["away"]) / 2)
+    players = []
+    for t in d.get("boxscore", {}).get("players", []):
+        tid = int(t["team"]["id"])
+        for block in t.get("statistics", [])[:1]:
+            names = block.get("names") or []
+            mi = names.index("MIN") if "MIN" in names else 0
+            for a in block.get("athletes", []):
+                st = a.get("stats") or []
+                try:
+                    mins = float(st[mi]) if st and st[mi] not in ("", "--") else 0.0
+                except (ValueError, IndexError):
+                    mins = 0.0
+                players.append(dict(team_id=tid, athlete_id=int(a["athlete"]["id"]), name=a["athlete"].get("displayName"),
+                                    minutes=0.0 if a.get("didNotPlay") else mins, starter=bool(a.get("starter"))))
+    return dict(home_poss_est=out["home"], away_poss_est=out["away"], poss=(out["home"] + out["away"]) / 2, players=players)
 
 
 def conferences():

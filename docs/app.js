@@ -41,6 +41,7 @@ async function home() {
     view.innerHTML = `<h1>This week</h1><p class="lede">No games on the schedule for the next seven days. The season opens in early November; predictions appear here as soon as games are on the calendar.</p>${await preseasonTop()}`;
     return;
   }
+  OUTS = up.out || {};
   const lined = up.games.filter(g => g.sp != null).length;
   view.innerHTML = `<h1>This week</h1>
     <p class="lede">Projected margin, total, and win chance for every Division I game in the next seven days. Where a betting line exists, the posted pick blends the model with the market; otherwise it is the model alone.</p>
@@ -58,6 +59,11 @@ async function home() {
   $("#onlyLined").addEventListener("click", e => { const b = e.currentTarget; b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); draw(); });
   draw();
 }
+let OUTS = {};
+function outNote(id) {
+  const o = OUTS[id]; if (!o || !o.length) return "";
+  return `<div class="meta out">${esc(T(id).n)} missed its last game without ${o.map(p => `${esc(p.name)} (${p.mpg} min a game)`).join(" and ")}. The prediction does not adjust for this.</div>`;
+}
 function gameRow(g) {
   const p = g.bp ?? g.mp, m = g.bm ?? g.mm;
   const hs = (g.mt + g.mm) / 2, as = (g.mt - g.mm) / 2;
@@ -67,6 +73,7 @@ function gameRow(g) {
     <div class="match">${teamCell(g.a)}<span class="at">${g.n ? "vs" : "at"}</span>${teamCell(g.h)}</div>
     <div class="nums"><b>${esc(fav)} by ${Math.abs(m).toFixed(1)}</b><br>${as.toFixed(0)} to ${hs.toFixed(0)}, total ${g.mt?.toFixed(1)}</div>
     ${splitBar(g.a, g.h, p)}
+    ${outNote(g.a)}${outNote(g.h)}
     <div class="meta">${fmtTime(g.start)}${g.n ? ", neutral site" : ""}${g.note ? ", " + esc(g.note) : ""}, ${line}${g.bp != null ? `, model alone ${pct(g.mp)} for ${esc(T(g.h).n)}` : ""}</div>
   </div>`;
 }
@@ -144,8 +151,8 @@ function bindWeek(weeks) {
 
 /* ---------------- Ratings ---------------- */
 function ratingsTable(list, r, compact) {
-  return `<div class="tablewrap"><table class="rt"><thead><tr><th>#</th><th class="l" data-k="name">Team</th><th data-k="em">Net rating</th><th data-k="o">Offense</th><th data-k="d">Defense</th><th data-k="t">Pace</th>${compact ? "" : `<th data-k="g">Games</th>`}</tr></thead><tbody>
-    ${list.map((t, i) => `<tr><td>${t.rank ?? i + 1}</td><td class="l">${teamCell(t.id)}</td><td><b>${sgn(t.em)}</b></td><td>${t.o.toFixed(1)}</td><td>${t.d.toFixed(1)}</td><td>${t.t.toFixed(1)}</td>${compact ? "" : `<td>${t.g}</td>`}</tr>`).join("")}</tbody></table></div>`;
+  return `<div class="tablewrap"><table class="rt"><thead><tr><th>#</th><th class="l" data-k="name">Team</th><th data-k="net">NET</th><th class="l">Quad 1</th><th data-k="em">Net rating</th><th data-k="o">Offense</th><th data-k="d">Defense</th><th data-k="t">Pace</th>${compact ? "" : `<th data-k="g">Games</th>`}</tr></thead><tbody>
+    ${list.map((t, i) => `<tr><td>${t.rank ?? i + 1}</td><td class="l">${teamCell(t.id)}</td><td>${t.net ?? "-"}</td><td class="l">${esc(t.q1 || "-")}</td><td><b>${sgn(t.em)}</b></td><td>${t.o.toFixed(1)}</td><td>${t.d.toFixed(1)}</td><td>${t.t.toFixed(1)}</td>${compact ? "" : `<td>${t.g}</td>`}</tr>`).join("")}</tbody></table></div>`;
 }
 async function ratings() {
   const r = await load("ratings");
@@ -153,14 +160,14 @@ async function ratings() {
   r.teams.forEach((t, i) => t.rank = i + 1);
   view.innerHTML = `<h1>Ratings</h1>
     <p class="lede">Points per 100 possessions against an average Division I team on a neutral floor. Net rating is offense minus defense; a +10 team beats an average team by about 7 points in a 68 possession game. Defense is points allowed, so lower is better.</p>
-    <p class="muted">League average ${r.mu} points per 100 possessions, average pace ${r.tau} possessions, home court worth ${r.home} points.</p>
+    <p class="muted">${r.net_through ? `NET is the NCAA's official ranking through games of ${esc(r.net_through)}; Quad 1 is the record in the committee's top tier of games. ` : "The NCAA's official NET ranking appears here once it is published in early December. "}League average ${r.mu} points per 100 possessions, average pace ${r.tau} possessions, home court worth ${r.home} points.</p>
     <div class="controls"><input type="search" id="rq" placeholder="Find a team" aria-label="Find a team in ratings"></div><div id="rtab"></div>`;
   let key = "em", dir = -1;
   const draw = () => {
     const q = $("#rq").value.trim().toLowerCase();
-    const list = r.teams.filter(t => !q || T(t.id).n.toLowerCase().includes(q)).sort((a, b) => key === "name" ? T(a.id).n.localeCompare(T(b.id).n) * -dir : (a[key] - b[key]) * dir);
+    const list = r.teams.filter(t => !q || T(t.id).n.toLowerCase().includes(q)).sort((a, b) => key === "name" ? T(a.id).n.localeCompare(T(b.id).n) * -dir : key === "net" ? ((a.net ?? 999) - (b.net ?? 999)) * -dir : (a[key] - b[key]) * dir);
     $("#rtab").innerHTML = ratingsTable(list, r, false);
-    document.querySelectorAll(".rt th[data-k]").forEach(th => th.addEventListener("click", () => { const k = th.dataset.k; dir = key === k ? -dir : (k === "d" ? 1 : -1); key = k; draw(); }));
+    document.querySelectorAll(".rt th[data-k]").forEach(th => th.addEventListener("click", () => { const k = th.dataset.k; dir = key === k ? -dir : (k === "d" || k === "net" ? 1 : -1); key = k; draw(); }));
   };
   $("#rq").addEventListener("input", draw); draw();
 }
@@ -186,12 +193,17 @@ async function bracket() {
   const ff = b.picks.filter(p => p.round === "F4" || p.round === "Final" || p.round === "First Four");
   view.innerHTML = `<h1>Bracket</h1>
     ${b.kind === "official" ? `<p class="lede">The official field, simulated 50,000 times with the latest ratings.</p>` :
-      `<div class="notice"><b>Projected field.</b> Until Selection Sunday this bracket is built from current ratings: the top rated team in each conference takes the automatic bid and the best remaining teams fill the at-large spots, seeded in order. It shows who the model rates highest, not a guess at the committee's choices. It firms up as the season goes on.</div>`}
+      `<div class="notice"><b>Projected field.</b> Until Selection Sunday, every conference tournament is simulated thousands of times and the most likely champion takes each automatic bid. At-large spots and seeds follow ${b.seeding === "NET" ? "the NCAA's official NET ranking, the committee's main sorting tool" : "model ratings until the NCAA publishes its NET ranking in early December"}. Game odds always come from the model. This is a projection, not a guess at the committee's exact choices.</div>`}
     <p class="muted">Highlighted picks are the favorite in each game; the percentage is that team's chance to win that game if the matchup happens. The odds table shows each team's chance to reach every round across all simulations.</p>
     <h2>Final Four and title</h2>
     <div class="tablewrap"><table><tbody>${ff.filter(p => p.round !== "First Four").map(p => `<tr><td class="l">${p.round === "F4" ? "National semifinal" : "Championship"}${p.region ? " (" + esc(p.region) + ")" : ""}</td><td class="l">${teamCell(p.a)} vs ${teamCell(p.b)}</td><td>${esc(T(p.w).n)} ${pct(p.p)}</td></tr>`).join("")}</tbody></table></div>
     ${ff.some(p => p.round === "First Four") ? `<h3>First Four</h3><div class="tablewrap"><table><tbody>${ff.filter(p => p.round === "First Four").map(p => `<tr><td class="l">${esc(p.region)}</td><td class="l">${teamCell(p.a)} vs ${teamCell(p.b)}</td><td>${esc(T(p.w).n)} ${pct(p.p)}</td></tr>`).join("")}</tbody></table></div>` : ""}
     <h2>Regions</h2><div class="regions">${regions.map(regionHTML).join("")}</div>
+    ${b.field_odds && b.field_odds.length ? `<h2>Chance to make the field</h2>
+    <p class="muted">Automatic bid is the chance to win the conference tournament. Make the field adds the chance of an at-large spot in the simulated outcomes. Teams sorted by chance to make it.</p>
+    <div class="tablewrap"><table><thead><tr><th class="l">Team</th><th class="l">Conference</th><th>${b.seeding === "NET" ? "NET" : "Rating rank"}</th><th>Automatic bid</th><th>Make the field</th></tr></thead><tbody>
+      ${b.field_odds.map((t, i) => `<tr><td class="l">${teamCell(t.id)}</td><td class="l">${esc(t.conf)}</td><td>${t.net ?? "-"}</td><td>${pct(t.auto, 1)}</td><td><b>${t.make >= .995 ? ">99%" : pct(t.make, 1)}</b></td></tr>`).join("")}
+    </tbody></table></div>` : ""}
     <h2>Chance to reach each round</h2>
     <div class="tablewrap"><table><thead><tr><th>Seed</th><th class="l">Team</th><th class="l">Region</th><th>Second round</th><th>Sweet 16</th><th>Elite Eight</th><th>Final Four</th><th>Title game</th><th>Champion</th></tr></thead><tbody>
       ${champ.map(t => `<tr><td>${t.seed}</td><td class="l">${teamCell(t.id)}</td><td class="l">${esc(t.region)}</td>${["R32","S16","E8","F4","Final","Champ"].map(c => `<td>${t[c] < .001 ? "<0.1%" : pct(t[c], 1)}</td>`).join("")}</tr>`).join("")}
@@ -232,8 +244,15 @@ async function route() {
   setNav(r in routes ? r : "");
   TEAMS = (await load("teams")) || {};
   const meta = await load("meta");
+  let warn = "";
+  if (meta) {
+    const ageH = (Date.now() - new Date(meta.updated)) / 36e5;
+    const w = (meta.warnings || []).slice();
+    if (ageH > 30) w.unshift(`The last successful update was ${Math.floor(ageH)} hours ago, so predictions and results may be out of date. Updates normally run three times a day.`);
+    if (w.length) warn = `<div class="notice warn" role="status">${w.map(esc).join("<br>")}</div>`;
+  }
   if (meta) $("#updated").textContent = `Updated ${new Date(meta.updated).toLocaleString()}, season ${meta.season - 1} to ${String(meta.season).slice(2)}, ${meta.games_ingested} games in the model`;
-  try { await (routes[r] || home)(); } catch (e) { view.innerHTML = `<p>This page failed to load: ${esc(e.message)}. Try refreshing.</p>`; }
+  try { await (routes[r] || home)(); if (warn) view.insertAdjacentHTML("afterbegin", warn); } catch (e) { view.innerHTML = `<p>This page failed to load: ${esc(e.message)}. Try refreshing.</p>`; }
   window.scrollTo(0, 0);
 }
 addEventListener("hashchange", route);

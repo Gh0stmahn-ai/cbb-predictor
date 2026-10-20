@@ -14,12 +14,14 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 from model.ratings import fit, predict, DEFAULTS, make_prior
 from model.prior import roster_features, build_prior
-from model.bracket import project_field, simulate
+from model.bracket import project_field, simulate, conf_tourney_odds, field_odds
+from model import net as netmod
 from model import live
 
 STATE = os.path.join(ROOT, "state")
 OUT = os.path.join(ROOT, "docs", "data")
 CFG = json.load(open(os.path.join(ROOT, "config.json")))
+WARN = []  # problems shown as a banner on the site
 
 
 def p_(name):
@@ -69,7 +71,7 @@ def ingest(season, asof, d1):
     g = load_games(season)
     have = set(g.game_id.astype(int)) if len(g) else set()
     start = (g.date.max() - timedelta(days=2)) if len(g) else pd.Timestamp(CFG["season_start"][str(season)]) - timedelta(days=1)
-    new = []
+    new, new_players = [], []
     day = pd.Timestamp(start)
     while day < asof:
         for x in live.scoreboard(day.strftime("%Y%m%d")):
@@ -80,6 +82,8 @@ def ingest(season, asof, d1):
             bx = live.boxscore(x["game_id"])
             if bx is None or not (40 < bx["poss"] < 110):
                 continue
+            for pl in bx.get("players", []):
+                new_players.append(dict(game_id=x["game_id"], date=x["date"], **pl))
             new.append(dict(game_id=x["game_id"], season=season, date=pd.Timestamp(x["date"]), home_id=x["home_id"],
                             away_id=x["away_id"], home_name=x["home_name"], away_name=x["away_name"],
                             home_pts=x["home_pts"], away_pts=x["away_pts"], poss=bx["poss"], neutral=x["neutral"],
@@ -89,6 +93,10 @@ def ingest(season, asof, d1):
     if new:
         g = pd.concat([g, pd.DataFrame(new)], ignore_index=True)
         g.to_csv(p_(f"games_{season}.csv"), index=False)
+    if new_players:
+        pp = p_(f"players_{season}.csv")
+        old = pd.read_csv(pp) if os.path.exists(pp) else pd.DataFrame()
+        pd.concat([old, pd.DataFrame(new_players)], ignore_index=True).drop_duplicates(["game_id", "athlete_id"]).to_csv(pp, index=False)
     print(f"ingest: {len(new)} new games, {len(g)} total")
     g["date"] = pd.to_datetime(g["date"])
     g["neutral"] = g.neutral.astype(bool)
@@ -170,6 +178,51 @@ def grade(ledger, games):
     return ledger
 
 
+def availability(season):
+    """Key players (20+ minutes per team game) who did not play in their team's most recent game."""
+    pp = p_(f"players_{season}.csv")
+    if not os.path.exists(pp):
+        return {}
+    pl = pd.read_csv(pp)
+    if pl.empty:
+        return {}
+    out = {}
+    for tid, d in pl.groupby("team_id"):
+        games = d.drop_duplicates("game_id").sort_values("date")
+        if len(games) < 3:
+            continue
+        mpg = d.groupby(["athlete_id", "name"]).minutes.sum() / len(games)
+        key = mpg[mpg >= 20]
+        last = games.game_id.iloc[-1]
+        played = set(d[(d.game_id == last) & (d.minutes > 0)].athlete_id)
+        miss = [dict(name=n, mpg=round(float(v), 1)) for (a, n), v in key.items() if a not in played]
+        if miss:
+            out[int(tid)] = miss
+    return out
+
+
+def net_ranks(season, espn_teams):
+    """Official NET for the current season, or {} before it is published."""
+    try:
+        t, through = netmod.fetch()
+        if not through or pd.Timestamp(through) < pd.Timestamp(f"{season - 1}-11-01"):
+            return {}, None
+        m = netmod.match(t, espn_teams)
+        return {tid: dict(rank=int(r["Rank"]), q1=str(r.get("Quad 1", "")), rec=str(r.get("Record", ""))) for tid, r in m.items()}, through
+    except Exception as e:
+        WARN.append(f"Official NET rankings could not be loaded ({type(e).__name__}); the bracket uses model ratings instead.")
+        return {}, None
+
+
+def conf_records(games):
+    cg = games[games.conf_game.astype(bool)]
+    if cg.empty:
+        return {}
+    w = pd.concat([cg[cg.home_pts > cg.away_pts].home_id, cg[cg.away_pts > cg.home_pts].away_id]).value_counts()
+    n = pd.concat([cg.home_id, cg.away_id]).value_counts()
+    return (w.reindex(n.index).fillna(0) / n).to_dict()
+
+
 # ---------------- main daily run ----------------
 def daily(asof=None, season=None, weekly=None):
     now = datetime.now(timezone.utc) if asof is None else datetime.fromisoformat(asof).replace(hour=14, tzinfo=timezone.utc)
@@ -226,7 +279,14 @@ def daily(asof=None, season=None, weekly=None):
         write_json(week_path, dict(week_of=week_of, frozen_at=now.isoformat(), season=season,
                                    games=[game_row(r) for r in wk.itertuples()]))
         print("weekly snapshot frozen:", week_path)
-    publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games)
+    net, net_through = net_ranks(season, [dict(id=t, location=r.location, displayName=r.full, shortDisplayName=r["name"], abbreviation=r.abbr) for t, r in teams_df.iterrows()])
+    avail = availability(season)
+    # line capture health: games starting later today should have lines by the afternoon runs
+    if len(up) and now.hour >= 20:
+        todays = up[(pd.to_datetime(up.date).dt.date == today.date()) & (up.state == "pre")]
+        if len(todays) >= 5 and todays.home_spread.notna().sum() == 0:
+            WARN.append(f"No betting lines were found for today's {len(todays)} games, so posted picks are model-only until lines return.")
+    publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, net, avail, net_through)
 
 
 def game_row(r):
@@ -247,14 +307,14 @@ def metrics(df, pcol, mcol):
                 mae=r1(np.mean(np.abs(act - d[mcol])), 2))
 
 
-def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games):
+def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, net=None, avail=None, net_through=None):
     tinfo = teams_df.to_dict(orient="index")
     write_json(os.path.join(OUT, "teams.json"), {str(k): dict(n=v["name"], f=v["full"], ab=v["abbr"], c=v["color"], l=v["logo"]) for k, v in tinfo.items()})
     rr = R.sort_values("em", ascending=False)
     write_json(os.path.join(OUT, "ratings.json"), dict(updated=now.isoformat(), season=season, mu=r1(meta["mu"], 2), tau=r1(meta["tau"], 2), home=r1(meta["h"] * 2 * meta["tau"] / 100, 2),
-               teams=[dict(id=int(t), em=r1(x.em, 2), o=r1(meta["mu"] + x.o, 1), d=r1(meta["mu"] - x.d, 1), t=r1(meta["tau"] + x.t, 1), g=int(x.games)) for t, x in rr.iterrows()]))
+               net_through=net_through, teams=[dict(id=int(t), net=(net or {}).get(t, {}).get("rank"), q1=(net or {}).get(t, {}).get("q1"), em=r1(x.em, 2), o=r1(meta["mu"] + x.o, 1), d=r1(meta["mu"] - x.d, 1), t=r1(meta["tau"] + x.t, 1), g=int(x.games)) for t, x in rr.iterrows()]))
     if len(up):
-        write_json(os.path.join(OUT, "upcoming.json"), dict(updated=now.isoformat(), season=season, blend_weight=r1(w, 3), blend_sigma=r1(sig_b, 2), blend_fit_games=n_fit,
+        write_json(os.path.join(OUT, "upcoming.json"), dict(updated=now.isoformat(), season=season, blend_weight=r1(w, 3), blend_sigma=r1(sig_b, 2), blend_fit_games=n_fit, out={str(k): v for k, v in (avail or {}).items()},
                    games=[game_row(r) for r in up.sort_values("start").itertuples()]))
     # ledger + accuracy
     L = ledger.copy() if len(ledger) else pd.DataFrame(columns=["game_id"])
@@ -279,15 +339,16 @@ def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games):
                            r1(r.home_pts, 0), r1(r.away_pts, 0)] for r in L[cols].sort_values("date", ascending=False).itertuples()]))
     # bracket
     try:
-        bracket(season, now, R, meta, teams_df)
+        bracket(season, now, R, meta, teams_df, games, net or {})
     except Exception as e:
         print("bracket failed:", e)
+        WARN.append(f"The bracket could not be rebuilt in the last update ({type(e).__name__}).")
     weeks = sorted(f[:-5] for f in os.listdir(os.path.join(OUT, "weeks"))) if os.path.isdir(os.path.join(OUT, "weeks")) else []
-    write_json(os.path.join(OUT, "meta.json"), dict(updated=now.isoformat(), season=season, games_ingested=int(len(games)), weeks=weeks,
+    write_json(os.path.join(OUT, "meta.json"), dict(updated=now.isoformat(), season=season, games_ingested=int(len(games)), weeks=weeks, warnings=WARN,
                params={k: v for k, v in DEFAULTS.items()}, backtest=json.load(open(os.path.join(ROOT, "model", "backtest_summary.json")))))
 
 
-def bracket(season, now, R, meta, teams_df):
+def bracket(season, now, R, meta, teams_df, games, net):
     real = None
     sel = CFG.get("selection_sunday", {}).get(str(season))
     if sel and pd.Timestamp(now.date()) > pd.Timestamp(sel):
@@ -295,18 +356,32 @@ def bracket(season, now, R, meta, teams_df):
         real = live.tournament_field([(d0 + timedelta(days=k)).strftime("%Y%m%d") for k in range(2, 6)])
         if len(real) < 64:
             real = None
+    odds = []
     if real is not None:
         field, kind = real, "official"
     else:
-        conf = live.conferences()
-        field, kind = project_field(R, conf), "projected"
+        conf = {t: c for t, c in live.conferences().items() if t in R.index}
+        net_rank = {t: v["rank"] for t, v in net.items()} if net else None
+        order_key = (lambda t: net_rank.get(t, 999)) if net_rank else (lambda t: -R.at[t, "em"])
+        auto_p = conf_tourney_odds(R, meta, DEFAULTS, conf, conf_records(games))
+        make_p, _ = field_odds(R, auto_p, conf, order_key)
+        best = {}
+        for t, c in conf.items():
+            if c not in best or auto_p.get(t, 0) > auto_p.get(best[c], 0):
+                best[c] = t
+        field, kind = project_field(R, conf, net_rank, autos=list(best.values())), "projected"
+        odds = [dict(id=int(t), conf=conf[t], auto=r1(auto_p.get(t, 0), 4), make=r1(make_p.get(t, 0), 4),
+                     net=net_rank.get(t) if net_rank else None)
+                for t in sorted(make_p, key=lambda t: -make_p[t]) if make_p[t] >= 0.005]
     pairs = tuple(tuple(x) for x in CFG.get("final_four_pairs", {}).get(str(season), [["East", "West"], ["South", "Midwest"]]))
     probs, picks = simulate(field, R, meta, DEFAULTS, n_sims=CFG["bracket"]["n_sims"], team_sd=CFG["bracket"]["team_sd"], f4_pairs=pairs)
     write_json(os.path.join(OUT, "bracket.json"), dict(updated=now.isoformat(), season=season, kind=kind, final_four_pairs=pairs,
+               seeding="NET" if (net and kind == "projected") else ("official" if kind == "official" else "model rating"),
+               field_odds=odds,
                teams=[dict(id=int(r.team_id), seed=int(r.seed), region=r.region, **({"bid": r.bid} if "bid" in probs else {}),
                            **{c: r1(getattr(r, c), 4) for c in ["R64", "R32", "S16", "E8", "F4", "Final", "Champ"]}) for r in probs.itertuples()],
                picks=[dict(round=r["round"], region=r["region"], a=int(r["a"]), b=int(r["b"]), w=int(r["winner"]), p=r1(r["p"], 3)) for r in picks.to_dict("records")]))
-    print(f"bracket: {kind} field simulated")
+    print(f"bracket: {kind} field simulated ({'NET' if net else 'rating'} order)")
 
 
 if __name__ == "__main__":

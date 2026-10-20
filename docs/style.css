@@ -73,3 +73,5 @@ tr:hover td{background:var(--soft)}
 .cal .track em{position:absolute;top:-3px;width:3px;height:18px;background:var(--leather)}
 @media (max-width:600px){.game{grid-template-columns:1fr}.nums{text-align:left}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.notice.warn{border-left-color:var(--bad)}
+.meta.out{color:var(--bad)}
