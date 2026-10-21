@@ -73,7 +73,7 @@ function tile(t, games) {
       <span class="tl-p ${pw >= .5 ? "fav" : "dog"}">${pct(pw)}</span><span class="tl-m">${m >= 0 ? "Wins by " + m.toFixed(1) : "Loses by " + (-m).toFixed(1)}</span>
       <span class="tl-bar"><i style="width:${(pw * 100).toFixed(0)}%;background:${col}"></i></span></li>`;
   }).join("");
-  const outs = OUTS[t.id] ? `<div class="tl-out">Missed last game: ${OUTS[t.id].map(p => esc(p.name)).join(", ")}</div>` : "";
+  const outs = OUTS[t.id] ? `<div class="tl-out">Missed last game: ${OUTS[t.id].map(p => esc(p.name)).join(", ")} (about ${(OUTS[t.id].reduce((s, p) => s + (p.gs || 0), 0) * ABS_COEF).toFixed(1)} pts, included)</div>` : "";
   return `<article class="tile" style="--tc:${col}">
     <header><span class="tl-rank">${t.rank}</span>${chg}${tm.l ? `<img src="${esc(tm.l)}" alt="" width="34" height="34" loading="lazy">` : ""}
       <div><h3>${esc(tm.n)}</h3><span class="muted">${esc(short(t.conf))}</span></div></header>
@@ -87,9 +87,11 @@ function tile(t, games) {
 }
 const fmtShort = d => d ? new Date(d + "T12:00:00").toLocaleDateString(undefined, {weekday: "short", month: "numeric", day: "numeric"}) : "";
 let OUTS = {};
+const ABS_COEF = 0.1266;
 function outNote(id) {
   const o = OUTS[id]; if (!o || !o.length) return "";
-  return `<div class="meta out">${esc(T(id).n)} missed its last game without ${o.map(p => `${esc(p.name)} (${p.mpg} min a game)`).join(" and ")}. The prediction does not adjust for this.</div>`;
+  const pts = o.reduce((s, p) => s + (p.gs || 0), 0) * ABS_COEF;
+  return `<div class="meta out">${esc(T(id).n)} missed its last game without ${o.map(p => `${esc(p.name)} (${p.mpg} min a game)`).join(" and ")}. If still out, that costs about ${pts.toFixed(1)} points, already included in the prediction.</div>`;
 }
 function gameRow(g) {
   const p = g.bp ?? g.mp, m = g.bm ?? g.mm;
@@ -132,6 +134,8 @@ async function results() {
       ${row("Betting line", o.market, "Same games, line converted to a probability")}
       ${row("Blend", o.blend, "Same games")}
     </tbody></table></div>
+    <h2>Closing line value</h2>
+    ${o.clv || acc.clv ? (() => { const c = acc.clv; return c && c.n ? `<p>In ${c.n} games where the model disagreed with the opening betting line by a point or more, the line moved before tip in ${c.moved}. It moved toward the model's number ${pct(c.toward, 1)} of the time, by ${c.avg_pts >= 0 ? "+" : ""}${c.avg_pts} points on average. Above 50% means the market tends to come around to the model, a sign of real skill that shows up long before win-loss records settle.</p>` : `<p class="muted">Appears once opening and closing lines have been captured for games where the model disagreed with the market.</p>`; })() : `<p class="muted">Appears once opening and closing lines have been captured for games where the model disagreed with the market.</p>`}
     <h2>By week</h2>
     <div class="tablewrap"><table><thead><tr><th class="l">Week of</th><th>Games</th><th>Winners</th><th>Log loss</th><th>Margin miss</th><th class="l">Winners, model alone</th></tr></thead><tbody>
       ${acc.weeks.slice().reverse().map(w => w.official ? `<tr><td class="l">${w.week_of}</td><td>${w.official.n}</td><td>${pct(w.official.acc, 1)}</td><td>${w.official.logloss.toFixed(3)}</td><td>${w.official.mae.toFixed(2)}</td><td class="l">${pct(w.model?.acc, 1)}</td></tr>` : "").join("")}
@@ -350,7 +354,7 @@ async function method() {
   <h2>7. From a margin to a win probability</h2>
   <p>Hal Stern (1991) showed game margins scatter around the expected margin in a near-normal curve, and Pomeroy switched KenPom to margin-based probabilities in 2016. Faster games have more possessions and so more randomness, so the spread grows with pace:</p>
   ${TEX(String.raw`P(A\text{ wins})=\Phi\!\left(\frac{\hat M}{\sigma}\right),\qquad \sigma=\sigma_0\sqrt{\widehat{\text{Poss}}/68}`, 1)}
-  <p>σ₀ = 11.25 points was fitted on the tuning seasons. Pomeroy's data show real margins have too few 1 point games, so the curve is slightly less exact for spreads near zero than for win chances.</p>
+  <p>σ₀ = ${meta?.stage2?.sigma0 ?? 11.1} points was fitted on 2014 to 2026 together with the second stage below. Pomeroy's data show real margins have too few 1 point games, so the curve is slightly less exact for spreads near zero than for win chances.</p>
   <p><b>Feedback from real results.</b> As this season's games are graded, σ₀ is re-estimated from the model's actual misses and blended with the backtest value, so the probabilities stay calibrated to how this season is really playing:</p>
   ${TEX(String.raw`\sigma_0^{\text{live}}=\sqrt{\frac{n\cdot\text{MSE}_{\text{season}}+k\,\sigma_0^2}{n+k}},\qquad k=1000\text{ games}`, 1)}
 
@@ -365,9 +369,22 @@ async function method() {
   <p>That shift size was chosen by scoring round-by-round odds against 12 real tournaments (2014 to 2026). Kvam and Sokol (2006) found most of what predicts tournament success is already visible by mid-February, and the testing here agreed: refitting daily during March and using a separate tournament σ both added nothing.</p>
 
   <h2>10. What was tested and left out</h2>
-  <p>The literature consistently finds that adjusted efficiency carries most of the signal. Lopez and Matthews found adjusted efficiencies beat raw ones and that interaction terms made predictions worse. Pomeroy (2015) showed offense controls about 83% of three point percentage, so opponent three point shooting is treated as luck and not used. Dean Oliver's Four Factors are a breakdown of efficiency rather than extra information, so they are not separate inputs. Missing players are flagged on the site but not yet used in predictions, because no published college study measures how much that improves accuracy.</p>
+  <p>The literature consistently finds that adjusted efficiency carries most of the signal. Lopez and Matthews found adjusted efficiencies beat raw ones and that interaction terms made predictions worse. Pomeroy (2015) showed offense controls about 83% of three point percentage, so opponent three point shooting is treated as luck and not used. Dean Oliver's Four Factors are a breakdown of efficiency rather than extra information, so they are not separate inputs. Two ideas were tested here and rejected: capping blowout margins (every cap from 15 to 25 points made predictions worse on the tuning seasons) and days of rest (no gain on the holdout, and the fitted effect had the wrong sign).</p>
 
-  <h2>11. Tested on the past</h2>
+  <h2>11. Second stage: Elo, travel, altitude and missing players</h2>
+  <p>The rating model's margin is combined with four more signals in a final regression. It was fitted on 2014 to 2020 and scored on the untouched 2022 to 2026 seasons; once it proved out, the weights below were refitted on all seasons for live use:</p>
+  ${TEX(String.raw`M=\beta_0\hat M_{\text{ratings}}+\beta_1\hat M_{\text{Elo}}+\beta_2\,\Delta\text{km}+\beta_3\,\text{Alt}+\beta_4\,\Delta\text{GS}_{\text{missing}}`, 1)}
+  ${meta?.stage2 ? `<dl class="kv"><dt>Rating model weight</dt><dd>${meta.stage2.coef.model}</dd>
+    <dt>Elo weight</dt><dd>${meta.stage2.coef.elo_margin}</dd>
+    <dt>Per 1,000 km of extra visitor travel</dt><dd>${meta.stage2.coef.travel_diff} points</dd>
+    <dt>Home at altitude, lowland visitor</dt><dd>${meta.stage2.coef.alt_adv} points</dd>
+    <dt>Per point of missing game score</dt><dd>${meta.stage2.coef.abs_diff} points</dd></dl>` : ""}
+  <p><b>Elo.</b> A second, independent rating that moves game by game with a margin-of-victory multiplier, the other major family of rating systems in the literature. Lopez and Matthews won their Kaggle contest by blending different forecasts, and the blend here lands at about 86% ratings and 14% Elo.</p>
+  <p><b>Travel and altitude.</b> Pomeroy links the long decline of home court to easier travel and notes altitude teams keep larger home edges. Each team's home city comes from its home games and venues are placed with a US city coordinate table. The visitor's extra distance and a high-altitude home floor (Wyoming, Air Force, Colorado, New Mexico, Utah, Nevada, Montana State, Idaho State, Northern Arizona, Southern Utah) each add a fitted amount.</p>
+  <p><b>Missing players.</b> Each player's value is his season average Hollinger game score. When a regular (20+ minutes a team game) missed his team's previous game, the same signal available before tip, his value counts against the team.</p>
+  ${meta?.stage2 ? `<p>On the untouched holdout the second stage cut log loss from ${meta.stage2.holdout.logloss_base} to ${meta.stage2.holdout.logloss_new} (95% bootstrap interval for the gain: ${meta.stage2.holdout.ci[0]} to ${meta.stage2.holdout.ci[1]}, so the improvement is not noise), raised winners picked from ${pct(meta.stage2.holdout.acc_base, 1)} to ${pct(meta.stage2.holdout.acc_new, 1)}, and improved NCAA tournament log loss from ${meta.stage2.holdout.tourney_base} to ${meta.stage2.holdout.tourney_new}. The backtest table below is the rating model alone, before this stage.</p>` : ""}
+
+  <h2>12. Tested on the past</h2>
   <p>The model was replayed week by week, refitting every Monday with only the games played before it, exactly as it runs live. Settings were chosen using 2014 to 2020 only; 2022 to 2026 is an untouched test.</p>
   ${bt ? `<div class="tablewrap"><table>${head}<tbody>
     <tr><td colspan="7" class="l"><b>Untouched test seasons, 2022 to 2026</b></td></tr>${s(bt.holdout)}

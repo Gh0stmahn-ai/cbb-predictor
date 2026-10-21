@@ -16,6 +16,14 @@ def _team_index(games, prior):
 def fit(games, asof, prior=None, p=DEFAULTS):
     """Fit ratings using games strictly before `asof`. prior: DataFrame index team_id cols o,d,t (deviations)."""
     g = games[games.date < asof]
+    cap = p.get("cap")
+    if cap and len(g):
+        # compress blowouts: margin beyond `cap` counts only `cap_keep` as much (Pomeroy-style diminishing returns)
+        g = g.copy()
+        m = g.home_pts - g.away_pts
+        excess = (m.abs() - cap).clip(lower=0) * (1 - p.get("cap_keep", 0.5)) * np.sign(m)
+        g["home_pts"] = g.home_pts - excess / 2
+        g["away_pts"] = g.away_pts + excess / 2
     idx = _team_index(g, prior)
     T = len(idx)
     if len(g) == 0:

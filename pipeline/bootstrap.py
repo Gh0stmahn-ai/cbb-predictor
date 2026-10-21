@@ -29,6 +29,14 @@ def main():
             if s in seasons[-3:]:
                 last[["o", "d", "t", "em", "games"]].to_csv(os.path.join(STATE, f"finals_{s}.csv"))
                 print("bootstrap: finals", s, len(last))
+    ep = os.path.join(STATE, f"elo_start_{cur}.json")
+    if not os.path.exists(ep):
+        from model.elo import run_elo, ELO
+        g = pd.concat([load_season(s) for s in seasons], ignore_index=True)
+        _, R = run_elo(g, ELO)
+        R = {str(int(t)): 1500 + ELO["carry"] * (r - 1500) for t, r in R.items()}
+        json.dump(R, open(ep, "w"))
+        print("bootstrap: Elo season start", len(R))
     for s in (cur - 2, cur - 1):
         path = os.path.join(STATE, f"player_minutes_{s}.csv")
         if os.path.exists(path):

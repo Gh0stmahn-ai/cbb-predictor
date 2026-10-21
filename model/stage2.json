@@ -1,0 +1,41 @@
+{
+ "cols": [
+  "elo_margin",
+  "travel_diff",
+  "alt_adv",
+  "abs_diff"
+ ],
+ "coef": {
+  "model": 0.856,
+  "elo_margin": 0.1419,
+  "travel_diff": 0.3249,
+  "alt_adv": 0.5018,
+  "abs_diff": -0.1266
+ },
+ "sigma0": 11.099,
+ "elo": {
+  "k": 18,
+  "carry": 0.9,
+  "home": 75,
+  "scale": 24.9,
+  "new": 1350
+ },
+ "holdout": {
+  "logloss_base": 0.5356,
+  "logloss_new": 0.5342,
+  "rmse_base": 11.557,
+  "rmse_new": 11.534,
+  "ci": [
+   0.00065,
+   0.00207
+  ],
+  "acc_base": 0.7192,
+  "acc_new": 0.721,
+  "tourney_base": 0.5433,
+  "tourney_new": 0.5414
+ },
+ "rejected": {
+  "blowout_cap": "RMSE 11.189 uncapped vs 11.199 to 11.292 capped on 2014 to 2020",
+  "rest_days": "no holdout gain, coefficient wrong sign"
+ }
+}

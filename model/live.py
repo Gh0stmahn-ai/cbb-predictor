@@ -94,6 +94,8 @@ def scoreboard(date_str):
                  home_rank=(h.get("curatedRank") or {}).get("current"), away_rank=(a.get("curatedRank") or {}).get("current"),
                  neutral=bool(c.get("neutralSite")), conf_game=bool(c.get("conferenceCompetition")),
                  notes=notes, state=st.get("state"), completed=bool(st.get("completed")),
+                 venue_city=((c.get("venue") or {}).get("address") or {}).get("city"),
+                 venue_state=((c.get("venue") or {}).get("address") or {}).get("state"),
                  home_pts=float(h["score"]) if st.get("completed") else None,
                  away_pts=float(a["score"]) if st.get("completed") else None)
         g["odds"] = _parse_odds(c, g["home_abbr"], g["away_abbr"])
@@ -106,6 +108,25 @@ def _stat(stats, key):
         if s["name"] == key:
             return s.get("displayValue")
     return None
+
+
+def _game_score(names, st):
+    """Hollinger game score from an ESPN player stat line."""
+    v = dict(zip(names, st))
+    def num(k):
+        try:
+            return float(v.get(k) or 0)
+        except ValueError:
+            return 0.0
+    def made_att(k):
+        try:
+            m, a = str(v.get(k) or "0-0").split("-")
+            return float(m), float(a)
+        except ValueError:
+            return 0.0, 0.0
+    fgm, fga = made_att("FG"); ftm, fta = made_att("FT")
+    return (num("PTS") + 0.4 * fgm - 0.7 * fga - 0.4 * (fta - ftm) + 0.7 * num("OREB") + 0.3 * num("DREB")
+            + num("STL") + 0.7 * num("AST") + 0.7 * num("BLK") - 0.4 * num("PF") - num("TO"))
 
 
 def boxscore(game_id):
@@ -139,7 +160,8 @@ def boxscore(game_id):
                 except (ValueError, IndexError):
                     mins = 0.0
                 players.append(dict(team_id=tid, athlete_id=int(a["athlete"]["id"]), name=a["athlete"].get("displayName"),
-                                    minutes=0.0 if a.get("didNotPlay") else mins, starter=bool(a.get("starter"))))
+                                    minutes=0.0 if a.get("didNotPlay") else mins, starter=bool(a.get("starter")),
+                                    gs=0.0 if a.get("didNotPlay") else _game_score(names, st)))
     return dict(home_poss_est=out["home"], away_poss_est=out["away"], poss=(out["home"] + out["away"]) / 2, players=players)
 
 
