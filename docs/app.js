@@ -34,31 +34,58 @@ function splitBar(aId, hId, pHome) {
 }
 function setNav(r) { document.querySelectorAll("nav a").forEach(a => a.classList.toggle("on", a.dataset.r === r)); }
 
-/* ---------------- This week ---------------- */
+/* ---------------- This week: team tiles ---------------- */
+const short = c => (c || "").replace(/ Conference$/, "").replace(/^Conference /, "");
 async function home() {
-  const up = await load("upcoming");
-  if (!up || !up.games.length) {
-    view.innerHTML = `<h1>This week</h1><p class="lede">No games on the schedule for the next seven days. The season opens in early November; predictions appear here as soon as games are on the calendar.</p>${await preseasonTop()}`;
-    return;
-  }
-  OUTS = up.out || {};
-  const lined = up.games.filter(g => g.sp != null).length;
+  const [r, up] = await Promise.all([load("ratings"), load("upcoming")]);
+  if (!r) { view.innerHTML = `<h1>This week</h1><p class="muted">Ratings appear after the first update.</p>`; return; }
+  OUTS = (up && up.out) || {};
+  const byTeam = {};
+  ((up && up.games) || []).forEach(g => { (byTeam[g.h] ||= []).push(g); (byTeam[g.a] ||= []).push(g); });
+  const confs = [...new Set(r.teams.map(t => short(t.conf)).filter(Boolean))].sort();
+  const n = (up && up.games.length) || 0;
   view.innerHTML = `<h1>This week</h1>
-    <p class="lede">Projected margin, total, and win chance for every Division I game in the next seven days. Where a betting line exists, the posted pick blends the model with the market; otherwise it is the model alone.</p>
+    <p class="lede">Every Division I team in rating order, with its record, projected finish, and win chances for each game in the next seven days${n ? ` (${n} games)` : ""}. Rank movement is since last Monday.</p>
     <div class="controls"><input type="search" id="q" placeholder="Find a team" aria-label="Find a team">
-    <button class="chip" id="onlyLined" aria-pressed="false">Games with a line (${lined})</button></div>
-    <div id="slate"></div>`;
+      <select id="cf" aria-label="Conference"><option value="">All conferences</option>${confs.map(c => `<option>${esc(c)}</option>`).join("")}</select>
+      <button class="chip" id="t25" aria-pressed="false">Top 25</button>
+      <button class="chip" id="play" aria-pressed="false">Playing this week</button></div>
+    <div id="tiles" class="tiles"></div>`;
   const draw = () => {
-    const q = $("#q").value.trim().toLowerCase(), ol = $("#onlyLined").getAttribute("aria-pressed") === "true";
-    const gs = up.games.filter(g => (!q || (g.hn + " " + g.an).toLowerCase().includes(q)) && (!ol || g.sp != null));
-    const days = {};
-    gs.forEach(g => (days[g.date] ||= []).push(g));
-    $("#slate").innerHTML = Object.keys(days).sort().map(d => `<section class="day"><h3>${fmtDay(d)} <span class="muted">(${days[d].length})</span></h3>${days[d].map(gameRow).join("")}</section>`).join("") || `<p class="muted">No games match that search.</p>`;
+    const q = $("#q").value.trim().toLowerCase(), cf = $("#cf").value;
+    const top = $("#t25").getAttribute("aria-pressed") === "true", pl = $("#play").getAttribute("aria-pressed") === "true";
+    const list = r.teams.filter(t => (!q || T(t.id).n.toLowerCase().includes(q) || (T(t.id).f || "").toLowerCase().includes(q))
+      && (!cf || short(t.conf) === cf) && (!top || t.rank <= 25) && (!pl || byTeam[t.id]));
+    $("#tiles").innerHTML = list.map(t => tile(t, byTeam[t.id] || [])).join("") || `<p class="muted">No teams match.</p>`;
   };
-  $("#q").addEventListener("input", draw);
-  $("#onlyLined").addEventListener("click", e => { const b = e.currentTarget; b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); draw(); });
+  $("#q").addEventListener("input", draw); $("#cf").addEventListener("change", draw);
+  ["#t25", "#play"].forEach(s => $(s).addEventListener("click", e => { const b = e.currentTarget; b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); draw(); }));
   draw();
 }
+function tile(t, games) {
+  const tm = T(t.id), col = "#" + (tm.c || "6b7a99");
+  const chg = t.chg == null || t.chg === 0 ? "" : `<span class="chg ${t.chg > 0 ? "up" : "down"}">${t.chg > 0 ? "▲" : "▼"}${Math.abs(t.chg)}</span>`;
+  const last = t.last ? `<div class="tl-last"><span class="pill ${t.last.w ? "win" : "loss"}">${t.last.w ? "W" : "L"} ${esc(t.last.s)}</span> ${t.last.h === "away" ? "at" : "vs"} ${esc(T(t.last.o).n)} <span class="muted">${fmtShort(t.last.d)}</span></div>` : "";
+  const gs = games.slice().sort((x, y) => (x.start || "").localeCompare(y.start || "")).map(g => {
+    const home = g.h === t.id, opp = home ? g.a : g.h;
+    const p = g.bp ?? g.mp, pw = home ? p : 1 - p, m = (g.bm ?? g.mm) * (home ? 1 : -1);
+    return `<li><span class="tl-day">${fmtShort(g.date)}</span><span class="tl-opp">${g.n ? "vs" : home ? "vs" : "at"} ${esc(T(opp).n)}</span>
+      <span class="tl-p ${pw >= .5 ? "fav" : "dog"}">${pct(pw)}</span><span class="tl-m">${m >= 0 ? "Wins by " + m.toFixed(1) : "Loses by " + (-m).toFixed(1)}</span>
+      <span class="tl-bar"><i style="width:${(pw * 100).toFixed(0)}%;background:${col}"></i></span></li>`;
+  }).join("");
+  const outs = OUTS[t.id] ? `<div class="tl-out">Missed last game: ${OUTS[t.id].map(p => esc(p.name)).join(", ")}</div>` : "";
+  return `<article class="tile" style="--tc:${col}">
+    <header><span class="tl-rank">${t.rank}</span>${chg}${tm.l ? `<img src="${esc(tm.l)}" alt="" width="34" height="34" loading="lazy">` : ""}
+      <div><h3>${esc(tm.n)}</h3><span class="muted">${esc(short(t.conf))}</span></div></header>
+    <dl class="tl-stats"><div><dt>Record</dt><dd>${esc(t.rec)}</dd></div><div><dt>Conf</dt><dd>${esc(t.crec)}</dd></div>
+      <div><dt>Projected</dt><dd>${esc(t.proj || "-")}</dd></div><div><dt>NET</dt><dd>${t.net ?? "-"}</dd></div></dl>
+    <dl class="tl-stats"><div><dt>Net rating</dt><dd><b>${sgn(t.em)}</b></dd></div><div><dt>Offense</dt><dd>${t.o.toFixed(1)}</dd></div>
+      <div><dt>Defense</dt><dd>${t.d.toFixed(1)}</dd></div><div><dt>Pace</dt><dd>${t.t.toFixed(1)}</dd></div></dl>
+    ${last}${outs}
+    ${gs ? `<ul class="tl-games">${gs}</ul>` : `<p class="muted tl-none">No games in the next seven days.</p>`}
+  </article>`;
+}
+const fmtShort = d => d ? new Date(d + "T12:00:00").toLocaleDateString(undefined, {weekday: "short", month: "numeric", day: "numeric"}) : "";
 let OUTS = {};
 function outNote(id) {
   const o = OUTS[id]; if (!o || !o.length) return "";
@@ -149,6 +176,63 @@ function bindWeek(weeks) {
   s.addEventListener("change", go); go();
 }
 
+/* ---------------- Schedule ---------------- */
+async function schedule() {
+  const s = await load("schedule");
+  if (!s) { view.innerHTML = `<h1>Schedule</h1><p class="muted">The season schedule appears after the next update.</p>`; return; }
+  const G = s.games.map(x => ({id: x[0], date: x[1], start: x[2], h: x[3], a: x[4], n: x[5], conf: x[6], note: x[7], hp: x[8], ap: x[9], pm: x[10], pp: x[11], lk: x[12]}));
+  const dates = [...new Set(G.map(g => g.date))].sort();
+  const today = new Date().toLocaleDateString("en-CA", {timeZone: "America/New_York"});
+  let cur = dates.find(d => d >= today) || dates[dates.length - 1];
+  const graded = G.filter(g => g.lk && g.hp != null);
+  const right = graded.filter(g => (g.pp >= .5) === (g.hp > g.ap)).length;
+  const ll = graded.length ? graded.reduce((s, g) => { const y = g.hp > g.ap ? 1 : 0, p = Math.min(Math.max(g.pp, 1e-4), 1 - 1e-4); return s - (y * Math.log(p) + (1 - y) * Math.log(1 - p)); }, 0) / graded.length : null;
+  const played = G.filter(g => g.hp != null).length;
+  view.innerHTML = `<h1>Schedule</h1>
+    <p class="lede">All ${G.length.toLocaleString()} Division I games from opening night to Selection Sunday. Future games carry the model's current prediction, which updates as results come in. Each game's prediction is locked at tip and graded against the final score, and those results feed back into the model.</p>
+    <div class="scoreboard"><div><b>${played.toLocaleString()}</b><span>games played</span></div><div><b>${(G.length - played).toLocaleString()}</b><span>games left</span></div>
+      <div><b>${graded.length ? pct(right / graded.length, 1) : "-"}</b><span>winners picked, locked predictions (${graded.length})</span></div>
+      <div><b>${ll != null ? ll.toFixed(3) : "-"}</b><span>log loss, locked predictions</span></div></div>
+    <div class="controls"><button class="chip" id="prev" aria-label="Previous day">‹ Prev</button>
+      <input type="date" id="dp" min="${dates[0]}" max="${dates[dates.length - 1]}" aria-label="Date">
+      <button class="chip" id="next" aria-label="Next day">Next ›</button>
+      <input type="search" id="sq" placeholder="Or a team's full schedule" aria-label="Team schedule"></div>
+    <div id="sl"></div>`;
+  const row = g => {
+    const fav = g.pp == null ? null : g.pp >= .5 ? g.h : g.a, pf = g.pp == null ? null : Math.max(g.pp, 1 - g.pp);
+    let res = "";
+    if (g.hp != null) {
+      const hw = g.hp > g.ap;
+      res = `<b>${T(g.a).n} ${g.ap}, ${T(g.h).n} ${g.hp}</b> ` + (g.lk ? `<span class="pill ${((g.pp >= .5) === hw) ? "win" : "loss"}">${((g.pp >= .5) === hw) ? "Right" : "Wrong"}</span>` : `<span class="muted">no pre-game prediction recorded</span>`);
+    }
+    const pred = fav == null ? `<span class="muted">No prediction</span>` : `${esc(T(fav).n)} ${pct(pf)} <span class="muted">by ${Math.abs(g.pm).toFixed(1)}${g.lk ? ", locked at tip" : g.hp == null ? ", current" : ""}</span>`;
+    return `<div class="game"><div class="match">${teamCell(g.a)}<span class="at">${g.n ? "vs" : "at"}</span>${teamCell(g.h)}</div>
+      <div class="nums">${g.hp == null || g.lk ? pred : ""}</div>
+      ${g.hp == null && g.pp != null ? splitBar(g.a, g.h, g.pp) : ""}
+      <div class="meta">${g.start && g.hp == null ? fmtTime(g.start) + ", " : ""}${g.conf ? "Conference game" : "Non-conference"}${g.n ? ", neutral site" : ""}${g.note ? ", " + esc(g.note) : ""}</div>
+      ${res ? `<div class="meta">${res}</div>` : ""}</div>`;
+  };
+  const drawDay = () => {
+    $("#dp").value = cur;
+    const day = G.filter(g => g.date === cur);
+    $("#sl").innerHTML = `<h3>${fmtDay(cur)} <span class="muted">(${day.length} games)</span></h3>` + (day.map(row).join("") || `<p class="muted">No Division I games this day.</p>`);
+  };
+  const drawTeam = q => {
+    const ids = Object.keys(TEAMS).filter(k => (TEAMS[k].n + " " + (TEAMS[k].f || "")).toLowerCase().includes(q)).map(Number);
+    if (!ids.length) { $("#sl").innerHTML = `<p class="muted">No team matches.</p>`; return; }
+    const id = ids[0], gs = G.filter(g => g.h === id || g.a === id);
+    const done = gs.filter(g => g.hp != null), w = done.filter(g => (g.h === id) === (g.hp > g.ap)).length;
+    const expW = gs.filter(g => g.hp == null && g.pp != null).reduce((s, g) => s + (g.h === id ? g.pp : 1 - g.pp), 0);
+    $("#sl").innerHTML = `<h3>${teamCell(id)} full schedule</h3><p class="muted">${w}-${done.length - w} so far against Division I; the model expects about ${expW.toFixed(1)} more wins in ${gs.length - done.length} remaining scheduled games.</p>` +
+      gs.map(g => `<h3 class="sd">${fmtDay(g.date)}</h3>` + row(g)).join("");
+  };
+  const step = k => { const i = dates.indexOf(cur); cur = dates[Math.min(Math.max(i + k, 0), dates.length - 1)]; drawDay(); };
+  $("#prev").addEventListener("click", () => step(-1)); $("#next").addEventListener("click", () => step(1));
+  $("#dp").addEventListener("change", e => { cur = dates.find(d => d >= e.target.value) || cur; drawDay(); });
+  $("#sq").addEventListener("input", e => { const q = e.target.value.trim().toLowerCase(); q.length >= 3 ? drawTeam(q) : drawDay(); });
+  drawDay();
+}
+
 /* ---------------- Ratings ---------------- */
 function ratingsTable(list, r, compact) {
   return `<div class="tablewrap"><table class="rt"><thead><tr><th>#</th><th class="l" data-k="name">Team</th><th data-k="net">NET</th><th class="l">Quad 1</th><th data-k="em">Net rating</th><th data-k="o">Offense</th><th data-k="d">Defense</th><th data-k="t">Pace</th>${compact ? "" : `<th data-k="g">Games</th>`}</tr></thead><tbody>
@@ -211,34 +295,111 @@ async function bracket() {
 }
 
 /* ---------------- Method ---------------- */
+const TEX = (s, d) => `<span class="${d ? "eq" : ""}" data-tex="${esc(s)}" data-d="${d ? 1 : 0}">${esc(s)}</span>`;
+async function renderTex() {
+  for (let k = 0; k < 40 && !window.katex; k++) await new Promise(r => setTimeout(r, 100));
+  if (!window.katex) return;
+  document.querySelectorAll("[data-tex]").forEach(el => { try { katex.render(el.dataset.tex, el, {displayMode: el.dataset.d === "1", throwOnError: false}); } catch {} });
+}
+const ref = (label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`;
 async function method() {
-  const meta = await load("meta");
-  const bt = meta?.backtest;
+  const [meta, r] = await Promise.all([load("meta"), load("ratings")]);
+  const bt = meta?.backtest, P = meta?.params || {};
   const s = m => m ? `<tr><td>${m.n.toLocaleString()}</td><td>${pct(m.accuracy, 1)}</td><td>${m.logloss.toFixed(3)}</td><td>${m.brier.toFixed(3)}</td><td>${m.margin_mae.toFixed(2)}</td><td>${m.margin_rmse.toFixed(2)}</td><td>${m.total_mae.toFixed(2)}</td></tr>` : "";
   const head = `<thead><tr><th>Games</th><th>Winners</th><th>Log loss</th><th>Brier</th><th>Margin MAE</th><th>Margin RMSE</th><th>Total MAE</th></tr></thead>`;
-  view.innerHTML = `<h1>How it works</h1>
-    <p class="lede">A tempo-free rating model in the tradition of Dean Oliver and Ken Pomeroy, tuned on past seasons and tested on seasons it never saw.</p>
-    <h2>The model</h2>
-    <p>Every Division I game is converted to points per 100 possessions. A regularized regression then solves for each team's offense, defense, and pace at once, so a team's numbers already account for who it played and where. Home court is fitted from the data each season, and teams listed as home at neutral sites get their own smaller term.</p>
-    <p>Before a season starts, each team begins from last season's rating, adjusted for the share of minutes that return and for transfers coming in from other programs. That starting point carries the weight of about two and a half games and fades as real results arrive.</p>
-    <p>A game's projected margin is the gap in net ratings scaled by expected possessions. The margin becomes a win chance through a normal curve whose spread grows with pace, fitted to past results.</p>
-    <h2>Betting lines</h2>
-    <p>Lines are captured from public sources twice a day before tip. Where one exists, the posted pick blends the model with the line, because the closing line is the strongest single public forecast in the research. The blend starts at 30% model and 70% market and is refitted from this site's own graded games once about 1,500 have a line. The Results page grades the model, the line, and the blend separately.</p>
-    <h2>Tested on the past</h2>
-    <p>The model was replayed week by week, refitting every Monday with only the games played before it, exactly as it runs live. Settings were chosen using 2014 through 2020 only; 2022 through 2026 is an untouched test.</p>
-    ${bt ? `<div class="tablewrap"><table>${head}<tbody>
-      <tr><td colspan="7" class="l"><b>Untouched test seasons, 2022 to 2026</b></td></tr>${s(bt.holdout)}
-      <tr><td colspan="7" class="l"><b>NCAA tournament games, 2014 to 2026</b></td></tr>${s(bt.ncaa_tournament)}
-      <tr><td colspan="7" class="l"><b>All seasons, 2014 to 2026</b></td></tr>${s(bt.all)}
-    </tbody></table></div>
-    <h3>Calibration</h3><p class="muted">When the model says a team wins 75% of the time, how often does it? Gray bar is the predicted chance, orange mark is what happened.</p>
-    <div class="cal">${(bt.calibration || []).map(c => `<span>${pct(c.pred)}</span><div class="track"><i style="width:${c.pred*100}%"></i><em style="left:calc(${c.act*100}% - 1px)"></em></div><span>${pct(c.act)} won</span>`).join("")}</div>` : ""}
-    <h2>Limits</h2>
-    <p>No model can promise a perfect bracket. Even with exactly correct probabilities, the chance of calling all 63 tournament games is far below one in a million. The goal here is honest, well calibrated odds for every game and every round.</p>
-    <p class="muted">The model does not yet see injuries or suspensions, and the projected bracket before Selection Sunday ranks teams by rating, not by the committee's résumé criteria. Data: ESPN public endpoints and the sportsdataverse archive.</p>`;
+  view.innerHTML = `<div class="method"><h1>How the model works</h1>
+  <p class="lede">A tempo-free, opponent-adjusted rating model built from the published research on college basketball prediction, tuned on 2014 to 2020 and tested on 2022 to 2026, seasons it never saw. Every choice below cites the work it comes from, and every setting was kept only if it improved out-of-sample accuracy.</p>
+
+  <h2>Live settings right now</h2>
+  <dl class="kv"><dt>League average efficiency</dt><dd>${r?.mu ?? "-"} points per 100 possessions</dd>
+  <dt>League average pace</dt><dd>${r?.tau ?? "-"} possessions per game</dd>
+  <dt>Home court</dt><dd>${r?.home ?? "-"} points (fitted from this season's games)</dd>
+  <dt>Margin spread, σ₀</dt><dd>${r?.sigma ?? "-"} points${r?.sigma_games ? ` (recalibrated on ${r.sigma_games} graded games)` : " (backtest value until 100 games are graded)"}</dd>
+  <dt>Preseason prior weight</dt><dd>${P.prior_games ?? 2.5} games</dd></dl>
+
+  <h2>1. Count possessions, not points</h2>
+  <p>Teams play at very different speeds, so raw scores mix quality with pace. Following Dean Oliver's <i>Basketball on Paper</i> (2004) and the standard set out by Kubatko, Oliver, Pelton and Rosenbaum (2007), each game is converted to possessions from the box score, averaged across both teams:</p>
+  ${TEX(String.raw`\text{Poss}=\tfrac12\Big[(\text{FGA}-\text{ORB}+\text{TO}+0.44\,\text{FTA})_A+(\text{FGA}-\text{ORB}+\text{TO}+0.44\,\text{FTA})_B\Big]`, 1)}
+  <p>Efficiency is then points per 100 possessions. Pomeroy notes the free throw coefficient moves possession counts by only about 1% between common choices, so the standard 0.44 is used.</p>
+
+  <h2>2. Adjust every game for opponent and venue</h2>
+  <p>Each team game is one observation: the offense's points per 100 possessions. It is modeled as the league average on that date, plus the offense's strength, minus the opposing defense's strength, plus home court:</p>
+  ${TEX(String.raw`y_g = 100\,\frac{\text{Pts}_g}{\text{Poss}_g} = \mu(t_g) + o_i - d_j + h\,\ell_g + \varepsilon_g,\qquad \ell_g\in\{+1,0,-1\}`, 1)}
+  <p>All teams are solved at once with a regularized least squares fit, the approach Kenneth Massey introduced for sports ratings (1997), in the additive offense and defense form Ken Pomeroy adopted in 2016:</p>
+  ${TEX(String.raw`\min_{o,d,h}\;\sum_g w_g\,(y_g-\hat y_g)^2+\lambda\sum_i\big(o_i-o_i^{\text{prior}}\big)^2+\lambda\sum_j\big(d_j-d_j^{\text{prior}}\big)^2,\qquad \lambda = k\,\bar w`, 1)}
+  <p>The penalty pulls each team toward its preseason prior with the weight of <b>k = ${P.prior_games ?? 2.5} games</b>, so the prior's share falls automatically as real games arrive, roughly <i>k / (k + games played)</i>. Net rating is <i>o + d</i>: points per 100 possessions better than an average team on a neutral floor.</p>
+  <p class="cite">Tested: weighting recent games more (half-lives from 20 to 120 days) made predictions worse on the tuning seasons, so every game counts equally, consistent with Pomeroy reducing recency weight in 2016.</p>
+
+  <h2>3. Home court, fitted rather than assumed</h2>
+  <p>Pomeroy found an average home edge of 3.75 points in 2002 to 2009 and later measured only 2.78 points in conference games, and attributes the long decline to easier travel and slower pace. Single-venue estimates are mostly noise: a team measured at 7.6 points regressed to 4.0 in later years. So this model fits one league-wide home term from the current season's games, plus a small separate term for the team listed as home at a neutral site. A 2021 Samford University analysis found home teams won almost 5 points less often in the nearly fanless 2020 to 2021 season, so that season is treated as an outlier in testing.</p>
+
+  <h2>4. Pace</h2>
+  ${TEX(String.raw`\text{Poss}_g = \tau(t_g) + \tau_i + \tau_j + \eta_g`, 1)}
+  <p>Pace is fitted the same way. Adding a within-season trend for both pace and efficiency removed a 2 point overestimate of totals late in the season, when games slow down.</p>
+
+  <h2>5. The preseason prior</h2>
+  <p>Without a prior, early ratings are biased and swing wildly; Pomeroy showed early-season deviations predict later moves when no prior is used. Each team starts from last season's rating carried over at ${P.carry ?? 0.92}, then adjusted for roster change. The roster adjustment is a regression fitted on 2013 to 2026, predicting a team's season-end rating from:</p>
+  ${TEX(String.raw`\text{EM}_s=\beta_0+\beta_1\text{EM}_{s-1}+\beta_2\,\text{EM}_{s-1}\!\cdot\!\text{RM}+\beta_3\text{RM}+\beta_4\text{TV}+\beta_5\text{TM}+\beta_6\text{EM}_{s-2}`, 1)}
+  <p>RM is the share of last season's minutes that return, TV is the value of incoming transfers (each transfer's minute share times his old team's rating), and TM is incoming transfer minutes. Half of this roster signal is blended into the carryover prior, the mix that tested best. On the 2022 to 2026 holdout the roster model cut preseason rating error by 11% and improved November log loss from 0.483 to 0.481. Hickman and Metz (2024) found betting markets misprice roster turnover and coaching changes only for the first few weeks of a season, which is exactly the window this prior targets.</p>
+
+  <h2>6. From ratings to a game projection</h2>
+  ${TEX(String.raw`\widehat{\text{Poss}}=\tau+\tau_A+\tau_B`, 1)}
+  ${TEX(String.raw`\widehat{\text{Pts}}_A=\frac{\widehat{\text{Poss}}}{100}\big(\mu+o_A-d_B+h\ell\big),\qquad \widehat{\text{Pts}}_B=\frac{\widehat{\text{Poss}}}{100}\big(\mu+o_B-d_A-h\ell\big)`, 1)}
+  ${TEX(String.raw`\hat M=\widehat{\text{Pts}}_A-\widehat{\text{Pts}}_B,\qquad \hat T=\widehat{\text{Pts}}_A+\widehat{\text{Pts}}_B`, 1)}
+
+  <h2>7. From a margin to a win probability</h2>
+  <p>Hal Stern (1991) showed game margins scatter around the expected margin in a near-normal curve, and Pomeroy switched KenPom to margin-based probabilities in 2016. Faster games have more possessions and so more randomness, so the spread grows with pace:</p>
+  ${TEX(String.raw`P(A\text{ wins})=\Phi\!\left(\frac{\hat M}{\sigma}\right),\qquad \sigma=\sigma_0\sqrt{\widehat{\text{Poss}}/68}`, 1)}
+  <p>σ₀ = 11.25 points was fitted on the tuning seasons. Pomeroy's data show real margins have too few 1 point games, so the curve is slightly less exact for spreads near zero than for win chances.</p>
+  <p><b>Feedback from real results.</b> As this season's games are graded, σ₀ is re-estimated from the model's actual misses and blended with the backtest value, so the probabilities stay calibrated to how this season is really playing:</p>
+  ${TEX(String.raw`\sigma_0^{\text{live}}=\sqrt{\frac{n\cdot\text{MSE}_{\text{season}}+k\,\sigma_0^2}{n+k}},\qquad k=1000\text{ games}`, 1)}
+
+  <h2>8. Using the betting market</h2>
+  <p>The closing point spread is the strongest public forecast in the research: Harville (1980) and Stern (1991) used it as the benchmark, Gandar and coauthors (1998) showed line moves from open to close make it more accurate, and Lopez and Matthews (2015) won the 2014 Kaggle March Madness contest by combining a spread-based model (31%) with an efficiency model (69%). Lines are captured before tip three times a day. Where one exists, the posted pick blends the two:</p>
+  ${TEX(String.raw`M_{\text{blend}}=w\,\hat M+(1-w)(-\text{spread}),\qquad w=\frac{\sum x\,(a-m)}{\sum x^2},\;x=\hat M-m`, 1)}
+  <p>Here <i>a</i> is the actual margin and <i>m</i> the market's. The weight starts at w = 0.3 and is refitted from this site's own graded games once about 1,500 of them have a line. The Results page grades the model, the market and the blend separately.</p>
+
+  <h2>9. Season, conference tournaments and the bracket</h2>
+  <p>Every remaining scheduled game is simulated 2,000 times with the probabilities above, giving each team's projected record and conference record. Projected conference standings seed every conference tournament, which is then simulated 5,000 times for automatic bid odds. At-large spots and seeds follow the NCAA's NET ranking (the committee's main sorting tool, adopted in 2018) once it is published, and model ratings before then. The bracket is simulated 50,000 times. In each simulation every team's strength gets one random shift that lasts the whole tournament:</p>
+  ${TEX(String.raw`\text{EM}_i^{(s)}=\text{EM}_i+u_i^{(s)},\qquad u_i^{(s)}\sim\mathcal N(0,\,1.0^2)`, 1)}
+  <p>That shift size was chosen by scoring round-by-round odds against 12 real tournaments (2014 to 2026). Kvam and Sokol (2006) found most of what predicts tournament success is already visible by mid-February, and the testing here agreed: refitting daily during March and using a separate tournament σ both added nothing.</p>
+
+  <h2>10. What was tested and left out</h2>
+  <p>The literature consistently finds that adjusted efficiency carries most of the signal. Lopez and Matthews found adjusted efficiencies beat raw ones and that interaction terms made predictions worse. Pomeroy (2015) showed offense controls about 83% of three point percentage, so opponent three point shooting is treated as luck and not used. Dean Oliver's Four Factors are a breakdown of efficiency rather than extra information, so they are not separate inputs. Missing players are flagged on the site but not yet used in predictions, because no published college study measures how much that improves accuracy.</p>
+
+  <h2>11. Tested on the past</h2>
+  <p>The model was replayed week by week, refitting every Monday with only the games played before it, exactly as it runs live. Settings were chosen using 2014 to 2020 only; 2022 to 2026 is an untouched test.</p>
+  ${bt ? `<div class="tablewrap"><table>${head}<tbody>
+    <tr><td colspan="7" class="l"><b>Untouched test seasons, 2022 to 2026</b></td></tr>${s(bt.holdout)}
+    <tr><td colspan="7" class="l"><b>NCAA tournament games, 2014 to 2026</b></td></tr>${s(bt.ncaa_tournament)}
+    <tr><td colspan="7" class="l"><b>All seasons, 2014 to 2026</b></td></tr>${s(bt.all)}</tbody></table></div>
+  <p class="muted">For comparison, Lopez and Matthews' winning Kaggle efficiency model scored 0.487 log loss on late-season games from 2003 to 2013 and 0.529 on the 2014 tournament.</p>
+  <h3>Calibration</h3><p class="muted">When the model says a team wins 75% of the time, how often does it? Gray bar is the predicted chance, orange mark is what happened.</p>
+  <div class="cal">${(bt.calibration || []).map(c => `<span>${pct(c.pred)}</span><div class="track"><i style="width:${c.pred*100}%"></i><em style="left:calc(${c.act*100}% - 1px)"></em></div><span>${pct(c.act)} won</span>`).join("")}</div>` : ""}
+
+  <h2>Limits</h2>
+  <p>No model can promise a perfect bracket. Even with exactly correct probabilities, the chance of calling all 63 tournament games is far below one in a million, and Lopez and Matthews showed that even true probabilities win a large contest only about one time in eight. The goal is honest, well calibrated odds for every game and round.</p>
+
+  <h2>References</h2>
+  <ol class="refs">
+    <li>Oliver, D. (2004). <i>Basketball on Paper</i>. Brassey's.</li>
+    <li>Kubatko, J., Oliver, D., Pelton, K., Rosenbaum, D. (2007). ${ref("A starting point for analyzing basketball statistics", "https://doi.org/10.2202/1559-0410.1070")}. <i>Journal of Quantitative Analysis in Sports</i> 3(1).</li>
+    <li>Massey, K. (1997). ${ref("Statistical models applied to the rating of sports teams", "https://masseyratings.com/theory/massey97.pdf")}. Bluefield College.</li>
+    <li>Pomeroy, K. (2016). ${ref("Ratings methodology update", "https://kenpom.com/blog/ratings-methodology-update/")}; ${ref("How to measure home court advantage", "https://kenpom.com/blog/how-to-measure-home-court-advantage/")}; ${ref("Preseason ratings: why weight", "https://kenpom.com/blog/preseason-ratings-why-weight/")}; ${ref("Offense vs. defense: 3-point percentage", "https://kenpom.com/blog/offense-vs-defense-3point-percentage/")}; ${ref("The missing 1-point games", "https://kenpom.com/blog/?p=268")}.</li>
+    <li>Stern, H. (1991). On the probability of winning a football game. <i>The American Statistician</i> 45, 179 to 183.</li>
+    <li>Harville, D. (1980). Predictions for NFL games via linear-model methodology. <i>Journal of the American Statistical Association</i> 75, 516 to 524.</li>
+    <li>Kvam, P., Sokol, J. (2006). A logistic regression/Markov chain model for NCAA basketball. <i>Naval Research Logistics</i> 53, 788 to 803. ${ref("LRMC", "https://www2.isye.gatech.edu/~jsokol/lrmc/about_lrmc.html")}</li>
+    <li>Lopez, M., Matthews, G. (2015). ${ref("Building an NCAA men's basketball predictive model and quantifying its success", "https://arxiv.org/abs/1412.0248")}. <i>Journal of Quantitative Analysis in Sports</i> 11(1).</li>
+    <li>Gandar, J., Dare, W., Brown, C., Zuber, R. (1998). Informed traders and price variations in the betting market for professional basketball games. <i>Journal of Finance</i> 53(1).</li>
+    <li>Hickman, D., Metz, N. (2024). ${ref("How quickly do markets incorporate new information? Evidence from the NCAA men's basketball betting market", "https://verso.uidaho.edu/esploro/outputs/journalArticle/How-quickly-do-markets-incorporate-new/996683436201851")}. <i>Applied Economics</i>.</li>
+    <li>NCAA (2020). ${ref("The NET, explained", "https://www.ncaa.com/news/basketball-men/article/2020-05-12/net-explained-ncaa-adopts-new-college-basketball-ranking-replace-rpi")}.</li>
+    <li>Samford University Center for Sports Analytics (2021). ${ref("Did minimal crowds in 2020 to 2021 impact home team performance?", "https://www.samford.edu/sports-analytics/fans/2021/Did-Minimal-Crowds-in-2020-2021-Impact-College-Basketball-Home-Team-Performance")}</li>
+  </ol>
+  <p class="muted">Data: ESPN public endpoints, the sportsdataverse archive, and NCAA.com.</p></div>`;
+  renderTex();
 }
 
-const routes = {"": home, results, ratings, bracket, method};
+const routes = {"": home, schedule, results, ratings, bracket, method};
 async function route() {
   const r = location.hash.replace(/^#\/?/, "");
   setNav(r in routes ? r : "");

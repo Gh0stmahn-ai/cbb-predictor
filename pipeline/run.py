@@ -223,6 +223,98 @@ def conf_records(games):
     return (w.reindex(n.index).fillna(0) / n).to_dict()
 
 
+SCHED_COLS = ["game_id", "date", "start", "home_id", "away_id", "home_name", "away_name", "neutral", "conf_game",
+              "notes", "season_type", "state", "home_pts", "away_pts"]
+
+
+def build_schedule(season, today, d1, ahead):
+    """Full Division I schedule, opening night through Selection Sunday.
+    Fully refetched on Mondays (or when missing); otherwise the next 7 days are refreshed from `ahead`."""
+    path, metap = p_(f"schedule_{season}.csv"), p_(f"schedule_{season}.json")
+    info = json.load(open(metap)) if os.path.exists(metap) else {}
+    stale = (not os.path.exists(path)) or today.weekday() == 0 and info.get("fetched") != today.date().isoformat()
+    sched = pd.read_csv(path) if os.path.exists(path) else pd.DataFrame(columns=SCHED_COLS)
+    if stale:
+        start = pd.Timestamp(CFG["season_start"][str(season)])
+        end = pd.Timestamp(CFG["selection_sunday"][str(season)])
+        rows, day = [], start
+        while day <= end:
+            try:
+                rows += [x for x in live.scoreboard(day.strftime("%Y%m%d")) if x["home_id"] in d1 and x["away_id"] in d1]
+            except Exception as e:
+                WARN.append(f"Part of the season schedule could not be refreshed ({day.date()}).")
+            day += timedelta(days=1)
+        if rows:
+            sched = pd.DataFrame(rows)[SCHED_COLS]
+            json.dump(dict(fetched=today.date().isoformat(), games=len(sched)), open(metap, "w"))
+            print(f"schedule: {len(sched)} games fetched")
+    if ahead:
+        a = pd.DataFrame(ahead)[SCHED_COLS]
+        sched = pd.concat([sched[~sched.game_id.isin(a.game_id)], a], ignore_index=True)
+    sched = sched.drop_duplicates("game_id", keep="last").sort_values(["date", "start"]).reset_index(drop=True)
+    sched.to_csv(path, index=False)
+    return sched
+
+
+def records(games):
+    """Division I record and conference record from completed games."""
+    rec = {}
+    for r in games.itertuples():
+        hw = r.home_pts > r.away_pts
+        for t, w in ((r.home_id, hw), (r.away_id, not hw)):
+            d = rec.setdefault(int(t), [0, 0, 0, 0])
+            d[0 if w else 1] += 1
+            if r.conf_game:
+                d[2 if w else 3] += 1
+    return rec
+
+
+def season_sim(sched, games, R, meta, p, n_sims=2000, seed=3):
+    """Monte Carlo of every unplayed scheduled game. Returns per team projected W, L, conf W, conf L."""
+    done = set(games.game_id.astype(int))
+    rem = sched[~sched.game_id.astype(int).isin(done) & sched.home_id.isin(R.index) & sched.away_id.isin(R.index)]
+    rem = rem[~rem.notes.fillna("").str.upper().str.contains("CHAMPIONSHIP|NIT|CBI|CROWN")]
+    rec = records(games)
+    out = {t: dict(w=v[0], l=v[1], cw=v[2], cl=v[3]) for t, v in rec.items()}
+    if len(rem):
+        _, _, ph, _ = predict(R, meta, rem.home_id.values, rem.away_id.values, rem.neutral.astype(bool).values, p)
+        rng = np.random.default_rng(seed)
+        hw = rng.random((n_sims, len(rem))) < ph[None, :]
+        exp_h = hw.mean(0)
+        conf = rem.conf_game.astype(bool).values
+        for i, (h, a) in enumerate(zip(rem.home_id.values, rem.away_id.values)):
+            for t, w in ((int(h), exp_h[i]), (int(a), 1 - exp_h[i])):
+                d = out.setdefault(t, dict(w=0, l=0, cw=0, cl=0))
+                d["w"] += w; d["l"] += 1 - w
+                if conf[i]:
+                    d["cw"] += w; d["cl"] += 1 - w
+    return out
+
+
+def live_sigma(ledger):
+    """Feedback: recalibrate the margin spread from this season's graded games, shrunk toward the backtest value."""
+    s0, k = DEFAULTS["sigma0"], CFG.get("sigma_prior_games", 1000)
+    if not len(ledger) or "home_pts" not in ledger:
+        return s0, 0
+    d = ledger.dropna(subset=["home_pts", "model_margin"])
+    if len(d) < 100:
+        return s0, len(d)
+    mse = float(np.mean((d.home_pts - d.away_pts - d.model_margin) ** 2))
+    return float(np.sqrt((len(d) * mse + k * s0 ** 2) / (len(d) + k))), len(d)
+
+
+def rank_history(season, today, R, is_monday):
+    path = p_(f"rank_history_{season}.csv")
+    h = pd.read_csv(path) if os.path.exists(path) else pd.DataFrame(columns=["date", "team_id", "rank", "em"])
+    ranks = pd.Series(np.arange(1, len(R) + 1), index=R.sort_values("em", ascending=False).index)
+    prev = h[pd.to_datetime(h.date) <= today - timedelta(days=6)]
+    prev = prev[prev.date == prev.date.max()].set_index("team_id")["rank"] if len(prev) else pd.Series(dtype=float)
+    if is_monday and (h.empty or h.date.max() != today.date().isoformat()):
+        h = pd.concat([h, pd.DataFrame(dict(date=today.date().isoformat(), team_id=ranks.index, rank=ranks.values, em=R.em.reindex(ranks.index).round(2).values))])
+        h.to_csv(path, index=False)
+    return ranks, prev
+
+
 # ---------------- main daily run ----------------
 def daily(asof=None, season=None, weekly=None):
     now = datetime.now(timezone.utc) if asof is None else datetime.fromisoformat(asof).replace(hour=14, tzinfo=timezone.utc)
@@ -248,6 +340,9 @@ def daily(asof=None, season=None, weekly=None):
     ledger_path = p_(f"ledger_{season}.csv")
     ledger = pd.read_csv(ledger_path) if os.path.exists(ledger_path) else pd.DataFrame()
     ledger = grade(ledger, games)
+    # feedback: recalibrate the win-probability spread from this season's graded games
+    sig_live, n_sig = live_sigma(ledger)
+    DEFAULTS["sigma0"] = sig_live
     w, sig_b, n_fit = blend_weight(ledger)
     if len(up):
         m, tot, ph, poss = predict(R, meta, up.home_id.values, up.away_id.values, up.neutral.values, DEFAULTS)
@@ -279,6 +374,12 @@ def daily(asof=None, season=None, weekly=None):
         write_json(week_path, dict(week_of=week_of, frozen_at=now.isoformat(), season=season,
                                    games=[game_row(r) for r in wk.itertuples()]))
         print("weekly snapshot frozen:", week_path)
+    # full season schedule: predict every game, grade every played one, simulate the rest
+    sched = build_schedule(season, today, d1, ahead)
+    proj = season_sim(sched, games, R, meta, DEFAULTS)
+    is_mon = today.weekday() == 0 if weekly is None else weekly
+    ranks, prev_ranks = rank_history(season, today, R, is_mon)
+    extras = dict(sched=sched, proj=proj, ranks=ranks, prev_ranks=prev_ranks, sigma=(sig_live, n_sig))
     net, net_through = net_ranks(season, [dict(id=t, location=r.location, displayName=r.full, shortDisplayName=r["name"], abbreviation=r.abbr) for t, r in teams_df.iterrows()])
     avail = availability(season)
     # line capture health: games starting later today should have lines by the afternoon runs
@@ -286,7 +387,7 @@ def daily(asof=None, season=None, weekly=None):
         todays = up[(pd.to_datetime(up.date).dt.date == today.date()) & (up.state == "pre")]
         if len(todays) >= 5 and todays.home_spread.notna().sum() == 0:
             WARN.append(f"No betting lines were found for today's {len(todays)} games, so posted picks are model-only until lines return.")
-    publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, net, avail, net_through)
+    publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, net, avail, net_through, extras)
 
 
 def game_row(r):
@@ -307,12 +408,55 @@ def metrics(df, pcol, mcol):
                 mae=r1(np.mean(np.abs(act - d[mcol])), 2))
 
 
-def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, net=None, avail=None, net_through=None):
+def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, net=None, avail=None, net_through=None, extras=None):
+    extras = extras or {}
     tinfo = teams_df.to_dict(orient="index")
     write_json(os.path.join(OUT, "teams.json"), {str(k): dict(n=v["name"], f=v["full"], ab=v["abbr"], c=v["color"], l=v["logo"]) for k, v in tinfo.items()})
     rr = R.sort_values("em", ascending=False)
-    write_json(os.path.join(OUT, "ratings.json"), dict(updated=now.isoformat(), season=season, mu=r1(meta["mu"], 2), tau=r1(meta["tau"], 2), home=r1(meta["h"] * 2 * meta["tau"] / 100, 2),
-               net_through=net_through, teams=[dict(id=int(t), net=(net or {}).get(t, {}).get("rank"), q1=(net or {}).get(t, {}).get("q1"), em=r1(x.em, 2), o=r1(meta["mu"] + x.o, 1), d=r1(meta["mu"] - x.d, 1), t=r1(meta["tau"] + x.t, 1), g=int(x.games)) for t, x in rr.iterrows()]))
+    try:
+        conf_of = live.conferences()
+    except Exception:
+        conf_of = {}
+    rec = records(games)
+    proj = extras.get("proj", {})
+    prev = extras.get("prev_ranks", pd.Series(dtype=float))
+    last = {}
+    for r in games.sort_values("date").itertuples():
+        for t, o, me, op, home in ((r.home_id, r.away_id, r.home_pts, r.away_pts, True), (r.away_id, r.home_id, r.away_pts, r.home_pts, False)):
+            last[int(t)] = dict(o=int(o), s=f"{int(me)}-{int(op)}", w=bool(me > op), h=("vs" if r.neutral else ("home" if home else "away")), d=str(r.date)[:10])
+    tiles = []
+    for i, (t, x) in enumerate(rr.iterrows(), start=1):
+        t = int(t); rc = rec.get(t, [0, 0, 0, 0]); pj = proj.get(t)
+        tiles.append(dict(id=t, rank=i, chg=(int(prev[t] - i) if t in prev.index else None),
+                          conf=conf_of.get(t), net=(net or {}).get(t, {}).get("rank"), q1=(net or {}).get(t, {}).get("q1"),
+                          em=r1(x.em, 2), o=r1(meta["mu"] + x.o, 1), d=r1(meta["mu"] - x.d, 1), t=r1(meta["tau"] + x.t, 1), g=int(x.games),
+                          rec=f"{rc[0]}-{rc[1]}", crec=f"{rc[2]}-{rc[3]}",
+                          proj=(f"{pj['w']:.0f}-{pj['l']:.0f}" if pj else None), pcrec=(f"{pj['cw']:.0f}-{pj['cl']:.0f}" if pj else None),
+                          last=last.get(t)))
+    write_json(os.path.join(OUT, "ratings.json"), dict(updated=now.isoformat(), season=season, mu=r1(meta["mu"], 2), tau=r1(meta["tau"], 2),
+               home=r1(meta["h"] * 2 * meta["tau"] / 100, 2), net_through=net_through,
+               sigma=r1(extras.get("sigma", (DEFAULTS["sigma0"], 0))[0], 2), sigma_games=extras.get("sigma", (0, 0))[1], teams=tiles))
+    sched = extras.get("sched")
+    if sched is not None and len(sched):
+        sc = sched.copy()
+        res = games.drop_duplicates("game_id").set_index("game_id")
+        sc["hp"] = sc.game_id.map(res.home_pts); sc["ap"] = sc.game_id.map(res.away_pts)
+        ok = sc.home_id.isin(R.index) & sc.away_id.isin(R.index)
+        m, tot, ph, _ = predict(R, meta, sc.home_id.values, sc.away_id.values, sc.neutral.astype(bool).values, DEFAULTS)
+        sc["pm"], sc["pp"] = np.where(ok, m, np.nan), np.where(ok, ph, np.nan)
+        sc["lk"] = False
+        if len(ledger):
+            L = ledger.drop_duplicates("game_id", keep="last").set_index("game_id")
+            lp = L.blend_p.fillna(L.model_p); lm = L.blend_margin.fillna(L.model_margin)
+            has = sc.game_id.isin(L.index)
+            sc.loc[has, "pp"] = sc.loc[has, "game_id"].map(lp).values
+            sc.loc[has, "pm"] = sc.loc[has, "game_id"].map(lm).values
+            sc.loc[has, "lk"] = True
+        write_json(os.path.join(OUT, "schedule.json"), dict(updated=now.isoformat(), season=season,
+                   cols=["id", "date", "start", "h", "a", "n", "conf", "note", "hp", "ap", "pm", "pp", "locked"],
+                   games=[[int(r.game_id), r.date, r.start, int(r.home_id), int(r.away_id), bool(r.neutral), bool(r.conf_game),
+                           (r.notes if isinstance(r.notes, str) else ""), r1(r.hp, 0), r1(r.ap, 0), r1(r.pm), r1(r.pp, 3), bool(r.lk)]
+                          for r in sc.itertuples()]))
     if len(up):
         write_json(os.path.join(OUT, "upcoming.json"), dict(updated=now.isoformat(), season=season, blend_weight=r1(w, 3), blend_sigma=r1(sig_b, 2), blend_fit_games=n_fit, out={str(k): v for k, v in (avail or {}).items()},
                    games=[game_row(r) for r in up.sort_values("start").itertuples()]))
@@ -339,16 +483,16 @@ def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, 
                            r1(r.home_pts, 0), r1(r.away_pts, 0)] for r in L[cols].sort_values("date", ascending=False).itertuples()]))
     # bracket
     try:
-        bracket(season, now, R, meta, teams_df, games, net or {})
+        bracket(season, now, R, meta, teams_df, games, net or {}, extras.get("proj"))
     except Exception as e:
         print("bracket failed:", e)
         WARN.append(f"The bracket could not be rebuilt in the last update ({type(e).__name__}).")
     weeks = sorted(f[:-5] for f in os.listdir(os.path.join(OUT, "weeks"))) if os.path.isdir(os.path.join(OUT, "weeks")) else []
     write_json(os.path.join(OUT, "meta.json"), dict(updated=now.isoformat(), season=season, games_ingested=int(len(games)), weeks=weeks, warnings=WARN,
-               params={k: v for k, v in DEFAULTS.items()}, backtest=json.load(open(os.path.join(ROOT, "model", "backtest_summary.json")))))
+               params={k: v for k, v in DEFAULTS.items()}, sigma_live=r1(extras.get("sigma", (0, 0))[0], 2), sigma_games=extras.get("sigma", (0, 0))[1], backtest=json.load(open(os.path.join(ROOT, "model", "backtest_summary.json")))))
 
 
-def bracket(season, now, R, meta, teams_df, games, net):
+def bracket(season, now, R, meta, teams_df, games, net, proj=None):
     real = None
     sel = CFG.get("selection_sunday", {}).get(str(season))
     if sel and pd.Timestamp(now.date()) > pd.Timestamp(sel):
@@ -363,7 +507,8 @@ def bracket(season, now, R, meta, teams_df, games, net):
         conf = {t: c for t, c in live.conferences().items() if t in R.index}
         net_rank = {t: v["rank"] for t, v in net.items()} if net else None
         order_key = (lambda t: net_rank.get(t, 999)) if net_rank else (lambda t: -R.at[t, "em"])
-        auto_p = conf_tourney_odds(R, meta, DEFAULTS, conf, conf_records(games))
+        cpct = ({t: v["cw"] / max(v["cw"] + v["cl"], 1e-9) for t, v in proj.items() if v["cw"] + v["cl"] > 0} if proj else conf_records(games))
+        auto_p = conf_tourney_odds(R, meta, DEFAULTS, conf, cpct)
         make_p, _ = field_odds(R, auto_p, conf, order_key)
         best = {}
         for t, c in conf.items():
