@@ -31,8 +31,8 @@
     ]
   },
   "blend": {
-    "model_weight_default": 0.3,
-    "sigma_default": 10.8,
+    "model_weight_default": 0.437,
+    "sigma_default": 10.14,
     "min_games_to_fit": 1500
   },
   "bracket": {

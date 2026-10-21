@@ -37,5 +37,37 @@
  "rejected": {
   "blowout_cap": "RMSE 11.189 uncapped vs 11.199 to 11.292 capped on 2014 to 2020",
   "rest_days": "no holdout gain, coefficient wrong sign"
+ },
+ "with_torvik": {
+  "coef": {
+   "model": 0.5043,
+   "elo_margin": 0.0955,
+   "travel_diff": 1.034,
+   "alt_adv": 1.0482,
+   "abs_diff": -0.1197,
+   "torvik_margin": 0.4673
+  },
+  "sigma0": 10.881,
+  "trained": "2015 to 2025 (Torvik archive seasons)",
+  "holdout": {
+   "logloss_without": 0.5355,
+   "logloss_with": 0.5312,
+   "n": 21952,
+   "ci": [
+    0.00287,
+    0.00583
+   ]
+  }
+ },
+ "market_blend": {
+  "model_weight": 0.437,
+  "sigma": 10.142,
+  "holdout": {
+   "weight_fit_2015_2020": 0.526,
+   "logloss_line": 0.5123,
+   "logloss_blend": 0.5097,
+   "n": 17903
+  },
+  "source": "CollegeBasketballData.com lines, 2015 to 2025, sportsbooks preferred over consensus"
  }
 }

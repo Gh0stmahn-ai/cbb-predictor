@@ -17,9 +17,11 @@ from model.prior import roster_features, build_prior
 from model.bracket import project_field, simulate, conf_tourney_odds, field_odds
 from model import net as netmod
 from model import elo as elomod
+from model import external
 from model.context import km, HIGH_ALT, _st
 STAGE2 = json.load(open(os.path.join(ROOT, "model", "stage2.json")))
 DEFAULTS["sigma0"] = STAGE2["sigma0"]
+SIGMA_SCALE = 1.0
 from model import live
 
 STATE = os.path.join(ROOT, "state")
@@ -107,12 +109,20 @@ def ingest(season, asof, d1):
     return g
 
 
-def capture_lines(season, now, games_ahead):
+def capture_lines(season, now, games_ahead, espn_teams=None):
     path = p_(f"lines_{season}.csv")
     old = pd.read_csv(path) if os.path.exists(path) else pd.DataFrame()
     rows = []
+    # backup source: CollegeBasketballData.com, used only where ESPN shows no line
+    backup = {}
+    if espn_teams and games_ahead:
+        dates = sorted(x["date"] for x in games_ahead)
+        for h, a, d, sp in external.cbbd_lines(season, dates[0], (pd.Timestamp(dates[-1]) + timedelta(days=1)).strftime("%Y-%m-%d"), espn_teams):
+            backup[(h, a, d)] = sp
     for x in games_ahead:
-        o = x.get("odds") or {}
+        o = dict(x.get("odds") or {})
+        if o.get("home_spread") is None and (x["home_id"], x["away_id"], x["date"]) in backup:
+            o = dict(home_spread=backup[(x["home_id"], x["away_id"], x["date"])], provider="CollegeBasketballData", details=None)
         if x["state"] != "pre" or o.get("home_spread") is None:
             continue
         rows.append(dict(game_id=x["game_id"], captured_at=now.isoformat(), home_spread=o.get("home_spread"),
@@ -266,7 +276,7 @@ def team_homes(sched):
     return out
 
 
-def stage2(df, R_elo, homes, absent):
+def stage2(df, R_elo, homes, absent, torvik=None):
     """Final margin: research-tested second stage (model/stage2.json) on top of the rating model.
     Inputs per game: base model margin, Elo margin, extra travel by the visitor, altitude, missing-player value."""
     c = STAGE2["coef"]
@@ -282,9 +292,21 @@ def stage2(df, R_elo, homes, absent):
         venue_alt = (str(getattr(r, "venue_city", "")), _st(getattr(r, "venue_state", ""))) in HIGH_ALT
         alt.append(1.0 if (not r.neutral and venue_alt and not aa.get("alt", False)) else 0.0)
     ab = np.array([absent.get(int(h), 0.0) - absent.get(int(a), 0.0) for h, a in zip(df.home_id, df.away_id)])
-    final = (c["model"] * df.base_margin.values + c["elo_margin"] * em + c["travel_diff"] * np.array(travel)
-             + c["alt_adv"] * np.array(alt) + c["abs_diff"] * ab)
-    return final, em
+    feats = dict(model=df.base_margin.values, elo_margin=em, travel_diff=np.array(travel), alt_adv=np.array(alt), abs_diff=ab)
+    final = sum(c[k] * v for k, v in feats.items())
+    sigma = np.full(len(df), STAGE2["sigma0"])
+    torvik = torvik or {}
+    wt = STAGE2.get("with_torvik")
+    if torvik and wt:
+        poss = df["poss_hat"].values if "poss_hat" in df else np.full(len(df), 68.0)
+        th = np.array([torvik.get(int(h), np.nan) for h in df.home_id]); ta = np.array([torvik.get(int(a), np.nan) for a in df.away_id])
+        has = ~np.isnan(th) & ~np.isnan(ta)
+        tm = np.where(has, (th - ta) * poss / 100, 0.0)
+        ct = wt["coef"]
+        with_t = sum(ct[k] * v for k, v in feats.items()) + ct["torvik_margin"] * tm
+        final = np.where(has, with_t, final)
+        sigma = np.where(has, wt["sigma0"], sigma)
+    return final, em, sigma
 
 
 def build_schedule(season, today, d1, ahead):
@@ -396,7 +418,7 @@ def daily(asof=None, season=None, weekly=None):
     ahead = []
     for k in range(7):
         ahead += [x for x in live.scoreboard((today + timedelta(days=k)).strftime("%Y%m%d")) if x["home_id"] in d1 and x["away_id"] in d1]
-    lines = capture_lines(season, now, ahead)
+    lines = capture_lines(season, now, ahead, [dict(id=t, location=r.location, displayName=r.full, shortDisplayName=r["name"], abbreviation=r.abbr) for t, r in teams_df.iterrows()])
     up = pd.DataFrame(ahead)
     # context for the second stage: schedule venues, team home cities, Elo, missing players
     sched = build_schedule(season, today, d1, ahead)
@@ -411,13 +433,17 @@ def daily(asof=None, season=None, weekly=None):
     ledger = grade(ledger, games)
     # feedback: recalibrate the win-probability spread from this season's graded games
     sig_live, n_sig = live_sigma(ledger)
+    global SIGMA_SCALE
+    SIGMA_SCALE = sig_live / STAGE2["sigma0"]
     DEFAULTS["sigma0"] = sig_live
+    torvik, tv_note = external.torvik_current(season, [dict(id=t, location=r.location, displayName=r.full, shortDisplayName=r["name"], abbreviation=r.abbr) for t, r in teams_df.iterrows()])
+    print("torvik:", tv_note)
     w, sig_b, n_fit = blend_weight(ledger)
     if len(up):
         m, tot, ph, poss = predict(R, meta, up.home_id.values, up.away_id.values, up.neutral.values, DEFAULTS)
-        up["base_margin"] = m
-        m, em = stage2(up, R_elo, homes, absent)
-        ph = norm.cdf(m / (DEFAULTS["sigma0"] * np.sqrt(poss / 68.0)))
+        up["base_margin"] = m; up["poss_hat"] = poss
+        m, em, sg = stage2(up, R_elo, homes, absent, torvik)
+        ph = norm.cdf(m / (sg * SIGMA_SCALE * np.sqrt(poss / 68.0)))
         up["model_margin"], up["model_total"], up["model_p"], up["elo_margin"] = m, tot, ph, em
         up["home_spread"] = up.game_id.map(lines.home_spread) if len(lines) else np.nan
         up["total_line"] = up.game_id.map(lines.total) if len(lines) else np.nan
@@ -450,7 +476,8 @@ def daily(asof=None, season=None, weekly=None):
     proj = season_sim(sched, games, R, meta, DEFAULTS)
     is_mon = today.weekday() == 0 if weekly is None else weekly
     ranks, prev_ranks = rank_history(season, today, R, is_mon)
-    extras = dict(sched=sched, proj=proj, ranks=ranks, prev_ranks=prev_ranks, sigma=(sig_live, n_sig), R_elo=R_elo, homes=homes, absent=absent)
+    extras = dict(sched=sched, proj=proj, ranks=ranks, prev_ranks=prev_ranks, sigma=(sig_live, n_sig), R_elo=R_elo, homes=homes, absent=absent,
+                  torvik=torvik, torvik_note=tv_note)
     net, net_through = net_ranks(season, [dict(id=t, location=r.location, displayName=r.full, shortDisplayName=r["name"], abbreviation=r.abbr) for t, r in teams_df.iterrows()])
     # line capture health: games starting later today should have lines by the afternoon runs
     if len(up) and now.hour >= 20:
@@ -533,10 +560,10 @@ def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, 
         sc["hp"] = sc.game_id.map(res.home_pts); sc["ap"] = sc.game_id.map(res.away_pts)
         ok = sc.home_id.isin(R.index) & sc.away_id.isin(R.index)
         m, tot, ph, poss = predict(R, meta, sc.home_id.values, sc.away_id.values, sc.neutral.astype(bool).values, DEFAULTS)
-        sc["base_margin"] = m
+        sc["base_margin"] = m; sc["poss_hat"] = poss
         if "R_elo" in extras:
-            m, _ = stage2(sc, extras["R_elo"], extras["homes"], extras["absent"])
-            ph = norm.cdf(m / (DEFAULTS["sigma0"] * np.sqrt(poss / 68.0)))
+            m, _, sg = stage2(sc, extras["R_elo"], extras["homes"], extras["absent"], extras.get("torvik"))
+            ph = norm.cdf(m / (sg * SIGMA_SCALE * np.sqrt(poss / 68.0)))
         sc["pm"], sc["pp"] = np.where(ok, m, np.nan), np.where(ok, ph, np.nan)
         sc["lk"] = False
         if len(ledger):
@@ -584,7 +611,7 @@ def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, 
         WARN.append(f"The bracket could not be rebuilt in the last update ({type(e).__name__}).")
     weeks = sorted(f[:-5] for f in os.listdir(os.path.join(OUT, "weeks"))) if os.path.isdir(os.path.join(OUT, "weeks")) else []
     write_json(os.path.join(OUT, "meta.json"), dict(updated=now.isoformat(), season=season, games_ingested=int(len(games)), weeks=weeks, warnings=WARN,
-               params={k: v for k, v in DEFAULTS.items()}, sigma_live=r1(extras.get("sigma", (0, 0))[0], 2), sigma_games=extras.get("sigma", (0, 0))[1], stage2=STAGE2, backtest=json.load(open(os.path.join(ROOT, "model", "backtest_summary.json")))))
+               params={k: v for k, v in DEFAULTS.items()}, sigma_live=r1(extras.get("sigma", (0, 0))[0], 2), sigma_games=extras.get("sigma", (0, 0))[1], stage2=STAGE2, torvik_note=extras.get("torvik_note"), backtest=json.load(open(os.path.join(ROOT, "model", "backtest_summary.json")))))
 
 
 def bracket(season, now, R, meta, teams_df, games, net, proj=None):
