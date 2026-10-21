@@ -359,11 +359,35 @@ def season_sim(sched, games, R, meta, p, n_sims=2000, seed=3):
     rem = rem[~rem.notes.fillna("").str.upper().str.contains("CHAMPIONSHIP|NIT|CBI|CROWN")]
     rec = records(games)
     out = {t: dict(w=v[0], l=v[1], cw=v[2], cl=v[3]) for t, v in rec.items()}
+    title = {}
     if len(rem):
         _, _, ph, _ = predict(R, meta, rem.home_id.values, rem.away_id.values, rem.neutral.astype(bool).values, p)
         rng = np.random.default_rng(seed)
         hw = rng.random((n_sims, len(rem))) < ph[None, :]
         exp_h = hw.mean(0)
+        # regular-season conference title odds (outright or shared), from simulated conference wins
+        try:
+            conf_of = live.conferences()
+            teams = sorted(set(rec) | set(rem.home_id.astype(int)) | set(rem.away_id.astype(int)))
+            ix = {t: i for i, t in enumerate(teams)}
+            cw = np.zeros((n_sims, len(teams)))
+            for t, v in rec.items():
+                cw[:, ix[t]] += v[2]
+            cg = rem.conf_game.astype(bool).values
+            for i in np.where(cg)[0]:
+                h, a = int(rem.home_id.values[i]), int(rem.away_id.values[i])
+                cw[:, ix[h]] += hw[:, i]; cw[:, ix[a]] += ~hw[:, i]
+            by = {}
+            for t in teams:
+                if t in conf_of:
+                    by.setdefault(conf_of[t], []).append(ix[t])
+            for c, idx in by.items():
+                best = cw[:, idx].max(1, keepdims=True)
+                share = (cw[:, idx] >= best - 1e-9).mean(0)
+                for k, j in enumerate(idx):
+                    title[teams[j]] = float(share[k])
+        except Exception as e:
+            print("title odds failed:", e)
         conf = rem.conf_game.astype(bool).values
         for i, (h, a) in enumerate(zip(rem.home_id.values, rem.away_id.values)):
             for t, w in ((int(h), exp_h[i]), (int(a), 1 - exp_h[i])):
@@ -371,6 +395,8 @@ def season_sim(sched, games, R, meta, p, n_sims=2000, seed=3):
                 d["w"] += w; d["l"] += 1 - w
                 if conf[i]:
                     d["cw"] += w; d["cl"] += 1 - w
+    for t, v in title.items():
+        out.setdefault(t, dict(w=0, l=0, cw=0, cl=0))["title"] = v
     return out
 
 
@@ -396,6 +422,37 @@ def rank_history(season, today, R, is_monday):
         h = pd.concat([h, pd.DataFrame(dict(date=today.date().isoformat(), team_id=ranks.index, rank=ranks.values, em=R.em.reindex(ranks.index).round(2).values))])
         h.to_csv(path, index=False)
     return ranks, prev
+
+
+def rating_history(season, today, R):
+    """One row per team per day the pipeline runs; feeds the team-page trend charts."""
+    path = p_(f"rating_history_{season}.csv")
+    h = pd.read_csv(path) if os.path.exists(path) else pd.DataFrame(columns=["date", "team_id", "em"])
+    d = today.date().isoformat()
+    h = h[h.date != d]
+    h = pd.concat([h, pd.DataFrame(dict(date=d, team_id=R.index.astype(int), em=R.em.round(2).values))], ignore_index=True)
+    h.to_csv(path, index=False)
+    dates = sorted(h.date.unique())
+    piv = h.pivot_table(index="team_id", columns="date", values="em").reindex(columns=dates)
+    return dict(dates=dates, teams={str(int(t)): [None if pd.isna(v) else round(float(v), 1) for v in row] for t, row in piv.iterrows()})
+
+
+def rotation(season):
+    """Top players per team by minutes per team game, with game score per game."""
+    pp = p_(f"players_{season}.csv")
+    if not os.path.exists(pp):
+        return {}
+    pl = pd.read_csv(pp)
+    out = {}
+    for tid, d in pl.groupby("team_id"):
+        n = d.game_id.nunique()
+        agg = d.groupby(["athlete_id", "name"]).agg(mins=("minutes", "sum"), gp=("minutes", lambda x: int((x > 0).sum())),
+                                                     gs=("gs", "sum") if "gs" in d else ("minutes", "size")).reset_index()
+        agg["mpg"] = agg.mins / n
+        agg["gsg"] = agg.gs / agg.gp.clip(lower=1)
+        top = agg.sort_values("mpg", ascending=False).head(9)
+        out[str(int(tid))] = [dict(n=r.name, mpg=round(float(r.mpg), 1), gp=int(r.gp), gs=round(float(r.gsg), 1)) for r in top.itertuples()]
+    return out
 
 
 # ---------------- main daily run ----------------
@@ -476,8 +533,9 @@ def daily(asof=None, season=None, weekly=None):
     proj = season_sim(sched, games, R, meta, DEFAULTS)
     is_mon = today.weekday() == 0 if weekly is None else weekly
     ranks, prev_ranks = rank_history(season, today, R, is_mon)
+    hist = rating_history(season, today, R)
     extras = dict(sched=sched, proj=proj, ranks=ranks, prev_ranks=prev_ranks, sigma=(sig_live, n_sig), R_elo=R_elo, homes=homes, absent=absent,
-                  torvik=torvik, torvik_note=tv_note)
+                  torvik=torvik, torvik_note=tv_note, hist=hist)
     net, net_through = net_ranks(season, [dict(id=t, location=r.location, displayName=r.full, shortDisplayName=r["name"], abbreviation=r.abbr) for t, r in teams_df.iterrows()])
     # line capture health: games starting later today should have lines by the afternoon runs
     if len(up) and now.hour >= 20:
@@ -492,6 +550,20 @@ def game_row(r):
                 hn=r.home_name, an=r.away_name, n=bool(r.neutral), note=r.notes or "",
                 mm=r1(r.model_margin), mt=r1(r.model_total), mp=r1(r.model_p, 3),
                 sp=r1(r.home_spread), tl=r1(r.total_line), bm=r1(r.blend_margin), bp=r1(r.blend_p, 3))
+
+
+def vs_market(L):
+    """Running record of the model against the betting line when they disagree by 2+ points:
+    did the final margin land on the model's side of the line?"""
+    d = L.dropna(subset=["home_spread", "home_pts", "model_margin"]) if len(L) else L
+    if not len(d):
+        return dict(n=0)
+    mkt = -d.home_spread; dis = d.model_margin - mkt
+    d = d[dis.abs() >= 2]; mkt = -d.home_spread; dis = d.model_margin - mkt
+    res = (d.home_pts - d.away_pts) - mkt
+    push = res == 0
+    right = (np.sign(res) == np.sign(dis)) & ~push
+    return dict(n=int(len(d)), right=int(right.sum()), wrong=int((~right & ~push).sum()), push=int(push.sum()))
 
 
 def clv(season, ledger):
@@ -548,11 +620,19 @@ def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, 
                           conf=conf_of.get(t), net=(net or {}).get(t, {}).get("rank"), q1=(net or {}).get(t, {}).get("q1"),
                           em=r1(x.em, 2), o=r1(meta["mu"] + x.o, 1), d=r1(meta["mu"] - x.d, 1), t=r1(meta["tau"] + x.t, 1), g=int(x.games),
                           rec=f"{rc[0]}-{rc[1]}", crec=f"{rc[2]}-{rc[3]}",
+                          elo=r1(extras.get("R_elo", {}).get(t), 1), tv=r1(extras.get("torvik", {}).get(t), 2),
+                          lat=r1(extras.get("homes", {}).get(t, {}).get("lat"), 3), lon=r1(extras.get("homes", {}).get(t, {}).get("lon"), 3),
+                          alt=bool(extras.get("homes", {}).get(t, {}).get("alt", False)), ab=r1(extras.get("absent", {}).get(t, 0.0), 1),
+                          title=r1((pj or {}).get("title"), 4),
                           proj=(f"{pj['w']:.0f}-{pj['l']:.0f}" if pj else None), pcrec=(f"{pj['cw']:.0f}-{pj['cl']:.0f}" if pj else None),
                           last=last.get(t)))
     write_json(os.path.join(OUT, "ratings.json"), dict(updated=now.isoformat(), season=season, mu=r1(meta["mu"], 2), tau=r1(meta["tau"], 2),
-               home=r1(meta["h"] * 2 * meta["tau"] / 100, 2), net_through=net_through,
+               home=r1(meta["h"] * 2 * meta["tau"] / 100, 2), net_through=net_through, h=r1(meta["h"], 4), hn=r1(meta.get("hn", 0.0), 4),
+               sigma_scale=r1(SIGMA_SCALE, 4), elo=dict(elomod.ELO),
                sigma=r1(extras.get("sigma", (DEFAULTS["sigma0"], 0))[0], 2), sigma_games=extras.get("sigma", (0, 0))[1], teams=tiles))
+    if extras.get("hist"):
+        write_json(os.path.join(OUT, "history.json"), extras["hist"])
+    write_json(os.path.join(OUT, "rotation.json"), rotation(season))
     sched = extras.get("sched")
     if sched is not None and len(sched):
         sc = sched.copy()
@@ -596,6 +676,7 @@ def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, 
                    weeks=[dict(week_of=k, official=metrics(v, "official_p", "official_m"), model=metrics(v, "model_p", "model_margin"))
                           for k, v in L.groupby("week_of")])
         acc["clv"] = clv(season, ledger)
+        acc["vs_market"] = vs_market(L)
         write_json(os.path.join(OUT, "accuracy.json"), acc)
         cols = ["game_id", "date", "home_id", "away_id", "home_name", "away_name", "neutral", "model_margin", "model_p",
                 "home_spread", "blend_p", "official_p", "home_pts", "away_pts"]

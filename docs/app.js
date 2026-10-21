@@ -19,7 +19,7 @@ let TEAMS = {};
 const T = id => TEAMS[id] || {n: String(id), c: "6b7a99"};
 function teamCell(id) {
   const t = T(id);
-  return `<span class="team">${t.l ? `<img src="${esc(t.l)}" alt="" loading="lazy" width="20" height="20">` : ""}${esc(t.n)}</span>`;
+  return `<a class="team" href="#/team/${id}">${t.l ? `<img src="${esc(t.l)}" alt="" loading="lazy" width="20" height="20">` : ""}${esc(t.n)}</a>`;
 }
 function hex(c) { const n = parseInt((c || "6b7a99").slice(0, 6), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
 function close(a, b) { const x = hex(a), y = hex(b); return Math.hypot(x[0]-y[0], x[1]-y[1], x[2]-y[2]) < 90; }
@@ -76,7 +76,7 @@ function tile(t, games) {
   const outs = OUTS[t.id] ? `<div class="tl-out">Missed last game: ${OUTS[t.id].map(p => esc(p.name)).join(", ")} (about ${(OUTS[t.id].reduce((s, p) => s + (p.gs || 0), 0) * ABS_COEF).toFixed(1)} pts, included)</div>` : "";
   return `<article class="tile" style="--tc:${col}">
     <header><span class="tl-rank">${t.rank}</span>${chg}${tm.l ? `<img src="${esc(tm.l)}" alt="" width="34" height="34" loading="lazy">` : ""}
-      <div><h3>${esc(tm.n)}</h3><span class="muted">${esc(short(t.conf))}</span></div></header>
+      <div><h3><a href="#/team/${t.id}">${esc(tm.n)}</a></h3><span class="muted">${esc(short(t.conf))}</span></div></header>
     <dl class="tl-stats"><div><dt>Record</dt><dd>${esc(t.rec)}</dd></div><div><dt>Conf</dt><dd>${esc(t.crec)}</dd></div>
       <div><dt>Projected</dt><dd>${esc(t.proj || "-")}</dd></div><div><dt>NET</dt><dd>${t.net ?? "-"}</dd></div></dl>
     <dl class="tl-stats"><div><dt>Net rating</dt><dd><b>${sgn(t.em)}</b></dd></div><div><dt>Offense</dt><dd>${t.o.toFixed(1)}</dd></div>
@@ -235,6 +235,169 @@ async function schedule() {
   $("#dp").addEventListener("change", e => { cur = dates.find(d => d >= e.target.value) || cur; drawDay(); });
   $("#sq").addEventListener("input", e => { const q = e.target.value.trim().toLowerCase(); q.length >= 3 ? drawTeam(q) : drawDay(); });
   drawDay();
+}
+
+
+/* ---------------- shared math for the calculator ---------------- */
+function Phi(x) { const t = 1 / (1 + 0.2316419 * Math.abs(x)); const d = 0.3989423 * Math.exp(-x * x / 2);
+  const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return x > 0 ? 1 - p : p; }
+function kmDist(a, b) { if (a.lat == null || b.lat == null) return 0; const r = Math.PI / 180;
+  const h = Math.sin((b.lat - a.lat) * r / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin((b.lon - a.lon) * r / 2) ** 2;
+  return 6371 * 2 * Math.asin(Math.sqrt(h)); }
+/* Same model as the site's predictions: rating projection, then the tested second stage. */
+function project(r, meta, H, A, neutral) {
+  const mu = r.mu, tau = r.tau, x = t => ({o: t.o - mu, d: mu - t.d, t: t.t - tau});
+  const h = x(H), a = x(A), poss = tau + h.t + a.t, loc = neutral ? 0 : r.h;
+  const base = poss / 100 * ((h.o - a.d + loc) - (a.o - h.d - loc));
+  const total = poss / 100 * (2 * mu + h.o - a.d + a.o - h.d);
+  const E = r.elo, eloM = ((H.elo ?? E.new) - (A.elo ?? E.new) + (neutral ? 0 : E.home)) / E.scale;
+  const travel = neutral ? 0 : kmDist(A, H) / 1000, alt = !neutral && H.alt && !A.alt ? 1 : 0, ab = (H.ab || 0) - (A.ab || 0);
+  const S = meta.stage2, useT = H.tv != null && A.tv != null && S.with_torvik;
+  const c = useT ? S.with_torvik.coef : S.coef, tvM = useT ? (H.tv - A.tv) * poss / 100 : 0;
+  const parts = [["This site's ratings", c.model * base], ["Elo", c.elo_margin * eloM], ...(useT ? [["Torvik", c.torvik_margin * tvM]] : []),
+    ["Visitor travel", c.travel_diff * travel], ["Altitude", c.alt_adv * alt], ["Missing players", c.abs_diff * ab]];
+  const m = parts.reduce((s, p) => s + p[1], 0);
+  const sig = (useT ? S.with_torvik.sigma0 : S.sigma0) * (r.sigma_scale || 1) * Math.sqrt(poss / 68);
+  return {m, total, p: Phi(m / sig), poss, parts, travel, useT};
+}
+
+/* ---------------- Matchup calculator ---------------- */
+async function matchup() {
+  const [r, meta] = await Promise.all([load("ratings"), load("meta")]);
+  if (!r || !meta?.stage2) { view.innerHTML = `<h1>Matchup</h1><p class="muted">Available after the next update.</p>`; return; }
+  const byId = Object.fromEntries(r.teams.map(t => [t.id, t]));
+  const opts = r.teams.slice().sort((a, b) => T(a.id).n.localeCompare(T(b.id).n)).map(t => `<option value="${t.id}">${esc(T(t.id).n)}</option>`).join("");
+  const q = new URLSearchParams(location.hash.split("?")[1] || "");
+  view.innerHTML = `<h1>Matchup</h1>
+    <p class="lede">Pick any two Division I teams and a site. The projection uses exactly the same model as every prediction on this site, with today's ratings.</p>
+    <div class="controls calc"><label>Team<select id="ta">${opts}</select></label><label>Opponent<select id="tb">${opts}</select></label>
+      <label>Site<select id="site"><option value="a">First team at home</option><option value="b">Opponent at home</option><option value="n">Neutral court</option></select></label></div>
+    <div id="res"></div>`;
+  $("#ta").value = q.get("a") || r.teams[0].id; $("#tb").value = q.get("b") || r.teams[1].id; $("#site").value = q.get("s") || "n";
+  const draw = () => {
+    const ia = +$("#ta").value, ib = +$("#tb").value, s = $("#site").value;
+    if (ia === ib) { $("#res").innerHTML = `<p class="muted">Pick two different teams.</p>`; return; }
+    const homeIsA = s !== "b", H = byId[homeIsA ? ia : ib], A = byId[homeIsA ? ib : ia], P = project(r, meta, H, A, s === "n");
+    const pA = homeIsA ? P.p : 1 - P.p, mA = homeIsA ? P.m : -P.m;
+    const fav = mA >= 0 ? ia : ib, ptsA = (P.total + mA) / 2, ptsB = (P.total - mA) / 2;
+    $("#res").innerHTML = `<div class="scoreboard"><div><b>${pct(pA)}</b><span>${esc(T(ia).n)} wins</span></div><div><b>${pct(1 - pA)}</b><span>${esc(T(ib).n)} wins</span></div>
+      <div><b>${esc(T(fav).n)} by ${Math.abs(mA).toFixed(1)}</b><span>projected margin</span></div><div><b>${ptsA.toFixed(0)} to ${ptsB.toFixed(0)}</b><span>projected score, total ${P.total.toFixed(1)}</span></div></div>
+      ${splitBar(ib, ia, pA)}
+      <h2>Where the margin comes from</h2><p class="muted">Points toward ${esc(T(H.id).n)} (the ${s === "n" ? "listed" : "home"} team); negative favors ${esc(T(A.id).n)}. About ${P.poss.toFixed(0)} possessions expected.</p>
+      <div class="tablewrap"><table><tbody>${P.parts.map(([k, v]) => `<tr><td class="l">${k}</td><td>${sgn(v)}</td></tr>`).join("")}
+      <tr><td class="l"><b>Total</b></td><td><b>${sgn(P.m)}</b></td></tr></tbody></table></div>
+      ${s === "n" ? `<p class="muted">Neutral sites have no home edge and no travel term, since the venue is not specified.</p>` : ""}
+      ${!P.useT ? `<p class="muted">Torvik's ratings are not available for one or both teams yet, so the fallback weights are used.</p>` : ""}`;
+    history.replaceState(null, "", `#/matchup?a=${ia}&b=${ib}&s=${s}`);
+  };
+  ["#ta", "#tb", "#site"].forEach(x => $(x).addEventListener("change", draw)); draw();
+}
+
+/* ---------------- Team page ---------------- */
+function trendSVG(dates, vals, color) {
+  const pts = vals.map((v, i) => [i, v]).filter(p => p[1] != null);
+  if (pts.length < 2) return `<p class="muted">The trend chart fills in as the season goes on (${pts.length} data point${pts.length === 1 ? "" : "s"} so far).</p>`;
+  const W = 640, Hh = 180, pad = 32, xs = i => pad + i * (W - 2 * pad) / Math.max(dates.length - 1, 1);
+  const lo = Math.min(...pts.map(p => p[1])), hi = Math.max(...pts.map(p => p[1])), span = Math.max(hi - lo, 4);
+  const ys = v => Hh - pad - (v - lo + span * 0.1) * (Hh - 2 * pad) / (span * 1.2);
+  const path = pts.map((p, k) => `${k ? "L" : "M"}${xs(p[0]).toFixed(1)},${ys(p[1]).toFixed(1)}`).join("");
+  return `<div class="tablewrap"><svg viewBox="0 0 ${W} ${Hh}" class="trend" role="img" aria-label="Net rating over the season">
+    <line x1="${pad}" x2="${W - pad}" y1="${ys(lo)}" y2="${ys(lo)}" class="axis"/><line x1="${pad}" x2="${W - pad}" y1="${ys(hi)}" y2="${ys(hi)}" class="axis"/>
+    <text x="4" y="${ys(hi) + 4}">${sgn(hi)}</text><text x="4" y="${ys(lo) + 4}">${sgn(lo)}</text>
+    <text x="${pad}" y="${Hh - 6}">${esc(dates[0])}</text><text x="${W - pad}" y="${Hh - 6}" text-anchor="end">${esc(dates[dates.length - 1])}</text>
+    <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5"/></svg></div>`;
+}
+async function teamPage(id) {
+  const [r, s, hist, rot, br, up] = await Promise.all([load("ratings"), load("schedule"), load("history"), load("rotation"), load("bracket"), load("upcoming")]);
+  const t = r?.teams.find(x => x.id === id);
+  if (!t) { view.innerHTML = `<p>Team not found.</p>`; return; }
+  OUTS = (up && up.out) || {};
+  const tm = T(id), col = "#" + (tm.c || "1b2a4a"), emOf = Object.fromEntries(r.teams.map(x => [x.id, x.em]));
+  const G = (s?.games || []).filter(x => x[3] === id || x[4] === id).map(x => ({id: x[0], date: x[1], start: x[2], h: x[3], a: x[4], n: x[5], conf: x[6], hp: x[8], ap: x[9], pm: x[10], pp: x[11], lk: x[12]}));
+  const played = G.filter(g => g.hp != null), left = G.filter(g => g.hp == null);
+  const opp = g => g.h === id ? g.a : g.h, avg = arr => arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : null;
+  const sosP = avg(played.map(g => emOf[opp(g)]).filter(v => v != null)), sosR = avg(left.map(g => emOf[opp(g)]).filter(v => v != null));
+  const bt = br?.teams.find(x => x.id === id), fo = br?.field_odds?.find(x => x.id === id);
+  const row = g => { const home = g.h === id, o = opp(g), pw = g.pp == null ? null : home ? g.pp : 1 - g.pp;
+    let res = "";
+    if (g.hp != null) { const my = home ? g.hp : g.ap, th = home ? g.ap : g.hp, w = my > th;
+      res = `<span class="pill ${w ? "win" : "loss"}">${w ? "W" : "L"} ${my}-${th}</span>${g.lk ? ` <span class="muted">pick ${pct(Math.max(pw, 1 - pw))} ${(pw >= .5) === w ? "right" : "wrong"}</span>` : ""}`; }
+    else if (pw != null) res = `<b class="${pw >= .5 ? "fav" : "dog"}">${pct(pw)}</b>`;
+    return `<tr><td class="l">${fmtShort(g.date)}</td><td class="l">${g.n ? "vs" : home ? "vs" : "at"} ${teamCell(o)}${g.conf ? "" : ' <span class="muted">non-conf</span>'}</td><td class="l">${res}</td></tr>`; };
+  view.innerHTML = `<div class="teamhead" style="--tc:${col}">${tm.l ? `<img src="${esc(tm.l)}" alt="" width="64" height="64">` : ""}
+      <div><h1>${esc(tm.f || tm.n)}</h1><p class="muted">${esc(short(t.conf))}, rated #${t.rank}${t.net ? `, NET #${t.net}` : ""}</p></div></div>
+    <dl class="tl-stats wide"><div><dt>Record</dt><dd>${esc(t.rec)}</dd></div><div><dt>Conference</dt><dd>${esc(t.crec)}</dd></div>
+      <div><dt>Projected</dt><dd>${esc(t.proj || "-")}</dd></div><div><dt>Proj conf</dt><dd>${esc(t.pcrec || "-")}</dd></div>
+      <div><dt>Conf title</dt><dd>${t.title != null ? pct(t.title) : "-"}</dd></div><div><dt>Quad 1</dt><dd>${esc(t.q1 || "-")}</dd></div>
+      <div><dt>Net rating</dt><dd><b>${sgn(t.em)}</b></dd></div><div><dt>Offense</dt><dd>${t.o.toFixed(1)}</dd></div>
+      <div><dt>Defense</dt><dd>${t.d.toFixed(1)}</dd></div><div><dt>Pace</dt><dd>${t.t.toFixed(1)}</dd></div>
+      <div><dt>Elo</dt><dd>${t.elo ?? "-"}</dd></div><div><dt>Torvik</dt><dd>${t.tv != null ? sgn(t.tv) : "-"}</dd></div></dl>
+    ${outNote(id)}
+    <h2>Net rating this season</h2>${trendSVG(hist?.dates || [], hist?.teams?.[id] || [], col)}
+    <h2>Strength of schedule</h2><p>Average opponent net rating: <b>${sosP != null ? sgn(sosP) : "-"}</b> in games played, <b>${sosR != null ? sgn(sosR) : "-"}</b> in games left.</p>
+    ${bt || fo ? `<h2>March</h2><p>${fo ? `Chance to make the field: <b>${pct(fo.make, 1)}</b> (automatic bid ${pct(fo.auto, 1)}). ` : ""}${bt ? `In the current ${br.kind} bracket: ${bt.seed} seed in the ${esc(bt.region)}, Sweet 16 ${pct(bt.S16, 1)}, Final Four ${pct(bt.F4, 1)}, title ${pct(bt.Champ, 1)}.` : ""}</p>` : ""}
+    <h2>Schedule and results</h2><div class="tablewrap"><table><tbody>${G.map(row).join("") || `<tr><td class="l muted">No games scheduled.</td></tr>`}</tbody></table></div>
+    <h2>Rotation</h2>${rot?.[id] ? `<div class="tablewrap"><table><thead><tr><th class="l">Player</th><th>Minutes per team game</th><th>Games played</th><th>Game score per game</th></tr></thead><tbody>
+      ${rot[id].map(p => `<tr><td class="l">${esc(p.n)}</td><td>${p.mpg}</td><td>${p.gp}</td><td>${p.gs}</td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">Player minutes appear after the team's first games.</p>`}
+    <p><a href="#/matchup?a=${id}">Run a matchup with ${esc(tm.n)}</a></p>`;
+}
+
+/* ---------------- Standings ---------------- */
+async function standings() {
+  const [r, br] = await Promise.all([load("ratings"), load("bracket")]);
+  if (!r) { view.innerHTML = `<h1>Standings</h1><p class="muted">Available after the next update.</p>`; return; }
+  const auto = Object.fromEntries((br?.field_odds || []).map(x => [x.id, x]));
+  const confs = [...new Set(r.teams.map(t => short(t.conf)).filter(Boolean))].sort();
+  const q = new URLSearchParams(location.hash.split("?")[1] || "");
+  view.innerHTML = `<h1>Conference standings</h1>
+    <p class="lede">Current records against Division I opponents, projected final records from simulating every remaining game 2,000 times, and each team's chance to win or share the regular-season conference title.</p>
+    <div class="controls"><select id="cs" aria-label="Conference">${confs.map(c => `<option>${esc(c)}</option>`).join("")}</select></div><div id="st"></div>`;
+  $("#cs").value = q.get("c") && confs.includes(q.get("c")) ? q.get("c") : (confs.includes("Big Ten") ? "Big Ten" : confs[0]);
+  const num = s => { const [w, l] = (s || "0-0").split("-").map(Number); return w / Math.max(w + l, 1); };
+  const draw = () => {
+    const c = $("#cs").value, list = r.teams.filter(t => short(t.conf) === c).sort((a, b) => num(b.pcrec) - num(a.pcrec) || b.em - a.em);
+    $("#st").innerHTML = `<div class="tablewrap"><table><thead><tr><th class="l">Team</th><th>Conf</th><th>Overall</th><th>Proj conf</th><th>Proj overall</th><th>Title odds</th><th>Auto bid</th><th>Make field</th><th>Rating rank</th></tr></thead><tbody>
+      ${list.map(t => `<tr><td class="l">${teamCell(t.id)}</td><td>${esc(t.crec)}</td><td>${esc(t.rec)}</td><td>${esc(t.pcrec || "-")}</td><td>${esc(t.proj || "-")}</td>
+        <td><b>${t.title != null ? pct(t.title, 1) : "-"}</b></td><td>${auto[t.id] ? pct(auto[t.id].auto, 1) : "-"}</td><td>${auto[t.id] ? pct(auto[t.id].make, 1) : "-"}</td><td>${t.rank}</td></tr>`).join("")}
+      </tbody></table></div><p class="muted">Title odds count shared titles for every team that ties, so a conference can add up to more than 100%.</p>`;
+    history.replaceState(null, "", `#/standings?c=${encodeURIComponent(c)}`);
+  };
+  $("#cs").addEventListener("change", draw); draw();
+}
+
+/* ---------------- Games worth watching ---------------- */
+async function watch() {
+  const [r, up] = await Promise.all([load("ratings"), load("upcoming")]);
+  if (!r || !up || !up.games.length) { view.innerHTML = `<h1>Worth watching</h1><p class="lede">The best games of the week appear here once games are on the calendar.</p>`; return; }
+  OUTS = up.out || {};
+  const em = Object.fromEntries(r.teams.map(t => [t.id, t.em])), rank = Object.fromEntries(r.teams.map(t => [t.id, t.rank]));
+  const gs = up.games.map(g => { const p = g.bp ?? g.mp, close = 1 - Math.abs(2 * p - 1), q = ((em[g.h] ?? -10) + (em[g.a] ?? -10)) / 2;
+    return {...g, p, score: q + 15 * close, close}; });
+  const best = gs.slice().sort((a, b) => b.score - a.score).slice(0, 12);
+  const upsets = gs.filter(g => { const fav = g.p >= .5 ? g.h : g.a, dogP = Math.min(g.p, 1 - g.p); return rank[fav] <= 40 && dogP >= .35; })
+    .sort((a, b) => Math.min(b.p, 1 - b.p) - Math.min(a.p, 1 - a.p));
+  view.innerHTML = `<h1>Worth watching</h1>
+    <p class="lede">This week's best games, ranked by how good both teams are and how close the model expects it to be, plus upset alerts: a top-40 team whose opponent has at least a 35% chance.</p>
+    <h2>Best games</h2>${best.map(gameRow).join("")}
+    <h2>Upset alerts</h2>${upsets.length ? upsets.map(gameRow).join("") : `<p class="muted">No upset alerts this week.</p>`}`;
+}
+
+/* ---------------- Model vs market ---------------- */
+async function market() {
+  const [up, acc] = await Promise.all([load("upcoming"), load("accuracy")]);
+  const g = (up?.games || []).filter(x => x.sp != null).map(x => ({...x, mkt: -x.sp, dis: x.mm - (-x.sp)})).sort((a, b) => Math.abs(b.dis) - Math.abs(a.dis));
+  const vm = acc?.vs_market, c = acc?.clv;
+  view.innerHTML = `<h1>Model against the market</h1>
+    <p class="lede">Where this site's model and the betting line disagree most this week, and how those disagreements have turned out. The posted picks elsewhere on the site already blend the two; this page shows the model alone so the disagreements are visible.</p>
+    <div class="scoreboard"><div><b>${vm && vm.n ? `${vm.right}-${vm.wrong}${vm.push ? "-" + vm.push : ""}` : "-"}</b><span>model side of the line, when off by 2+ points</span></div>
+      <div><b>${vm && vm.right + vm.wrong ? pct(vm.right / (vm.right + vm.wrong), 1) : "-"}</b><span>win rate (52.4% beats typical betting costs)</span></div>
+      <div><b>${c && c.n ? pct(c.toward, 1) : "-"}</b><span>lines that moved toward the model by tip</span></div></div>
+    <h2>Biggest disagreements this week</h2>
+    ${g.length ? `<div class="tablewrap"><table><thead><tr><th class="l">Game</th><th>Line</th><th>Model</th><th>Gap</th><th class="l">Model leans</th></tr></thead><tbody>
+      ${g.slice(0, 40).map(x => { const side = x.dis > 0 ? x.h : x.a, line = x.dis > 0 ? x.sp : -x.sp;
+        return `<tr><td class="l">${teamCell(x.a)} ${x.n ? "vs" : "at"} ${teamCell(x.h)}</td><td>${esc(T(x.h).ab || T(x.h).n)} ${sgn(x.sp)}</td><td>${esc(T(x.h).ab || T(x.h).n)} ${sgn(-x.mm)}</td><td><b>${Math.abs(x.dis).toFixed(1)}</b></td><td class="l">${esc(T(side).n)} ${sgn(line)}</td></tr>`; }).join("")}
+      </tbody></table></div>` : `<p class="muted">Lines usually post a day or two before tip. Disagreements show up here as they arrive.</p>`}
+    <p class="muted">For research and entertainment only. Historically the betting line alone is slightly more accurate than any single public model, which is why the site's posted picks blend the two.</p>`;
 }
 
 /* ---------------- Ratings ---------------- */
@@ -417,10 +580,10 @@ async function method() {
   renderTex();
 }
 
-const routes = {"": home, schedule, results, ratings, bracket, method};
+const routes = {"": home, schedule, matchup, standings, watch, market, results, ratings, bracket, method};
 async function route() {
-  const r = location.hash.replace(/^#\/?/, "");
-  setNav(r in routes ? r : "");
+  const full = location.hash.replace(/^#\/?/, ""), r = full.split("?")[0].split("/")[0], arg = full.split("?")[0].split("/")[1];
+  setNav(r in routes ? r : (r === "team" ? "team" : ""));
   TEAMS = (await load("teams")) || {};
   const meta = await load("meta");
   let warn = "";
@@ -431,7 +594,7 @@ async function route() {
     if (w.length) warn = `<div class="notice warn" role="status">${w.map(esc).join("<br>")}</div>`;
   }
   if (meta) $("#updated").textContent = `Updated ${new Date(meta.updated).toLocaleString()}, season ${meta.season - 1} to ${String(meta.season).slice(2)}, ${meta.games_ingested} games in the model`;
-  try { await (routes[r] || home)(); if (warn) view.insertAdjacentHTML("afterbegin", warn); } catch (e) { view.innerHTML = `<p>This page failed to load: ${esc(e.message)}. Try refreshing.</p>`; }
+  try { await (r === "team" ? () => teamPage(+arg) : (routes[r] || home))(); if (warn) view.insertAdjacentHTML("afterbegin", warn); } catch (e) { view.innerHTML = `<p>This page failed to load: ${esc(e.message)}. Try refreshing.</p>`; }
   window.scrollTo(0, 0);
 }
 addEventListener("hashchange", route);

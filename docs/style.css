@@ -103,3 +103,11 @@ h3.sd{font-size:1rem;margin:1rem 0 0}
 .refs li{margin:.3rem 0;font-size:.92rem}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:.2rem 1rem;font-size:.95rem;max-width:640px}
 .kv dt{color:var(--ink2)}.kv dd{margin:0;font-variant-numeric:tabular-nums}
+.calc label{display:flex;flex-direction:column;font:600 .85rem var(--cond);color:var(--ink2);gap:.2rem}
+.teamhead{display:flex;align-items:center;gap:1rem;border-left:6px solid var(--tc);padding-left:1rem;margin-bottom:1rem}
+.teamhead h1{margin:0}
+.tl-stats.wide{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));margin-bottom:1rem}
+.trend{width:100%;max-width:680px;height:auto}.trend text{font:12px var(--body);fill:var(--ink2)}.trend .axis{stroke:var(--rule);stroke-dasharray:3 3}
+b.fav{color:var(--good)}b.dog{color:var(--bad)}
+a.team{text-decoration:none;color:inherit}a.team:hover{text-decoration:underline}
+.tile h3 a{text-decoration:none;color:inherit}
