@@ -1,0 +1,37 @@
+name: Fetch external research data
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas pyarrow
+      - name: Fetch with secret keys
+        env:
+          CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
+          CBBDATA_API_KEY: ${{ secrets.CBBDATA_API_KEY }}
+          CBD_USER: ${{ secrets.CBD_USER }}
+          CBD_PW: ${{ secrets.CBD_PW }}
+        run: python pipeline/fetch_ext.py
+      - name: Commit data (never the keys)
+        run: |
+          git config user.name "cbb-predictor bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add state/ext
+          git diff --staged --quiet || git commit -m "Research data $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git pull --rebase
+          git push
