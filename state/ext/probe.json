@@ -1,0 +1,104 @@
+{
+ "cbbd": {
+  "sample": [
+   {
+    "gameId": 65907,
+    "season": 2014,
+    "seasonType": "regular",
+    "startDate": "2013-11-08T17:00:00.000Z",
+    "homeTeamId": 79,
+    "homeTeam": "Eastern Michigan",
+    "homeConference": "MAC",
+    "homeScore": 77,
+    "awayTeamId": 1250,
+    "awayTeam": "Albion",
+    "awayConference": null,
+    "awayScore": 45,
+    "lines": []
+   },
+   {
+    "gameId": 65908,
+    "season": 2014,
+    "seasonType": "regular",
+    "startDate": "2013-11-08T18:00:00.000Z",
+    "homeTeamId": 15,
+    "homeTeam": "Army",
+    "homeConference": "Patriot",
+    "homeScore": 68,
+    "awayTeamId": 2,
+    "awayTeam": "Air Force",
+    "awayConference": "Mountain West",
+    "awayScore": 79,
+    "lines": [
+     {
+      "provider": "consensus",
+      "spread": -2,
+      "overUnder": null,
+      "homeMoneyline": null,
+      "awayMoneyline": null,
+      "spreadOpen": null,
+      "overUnderOpen": null
+     },
+     {
+      "provider": "numberfire",
+      "spread": 3.5,
+      "overUnder": 142,
+      "homeMoneyline": null,
+      "awayMoneyline": null,
+      "spreadOpen": null,
+      "overUnderOpen": null
+     },
+     {
+      "provider": "teamrankings",
+      "spread": -3.5,
+      "overUnder": 142,
+      "homeMoneyline": -172,
+      "awayMoneyline": 152,
+      "spreadOpen": null,
+      "overUnderOpen": null
+     }
+    ]
+   }
+  ],
+  "calls": 65,
+  "rows": 164675,
+  "with_spread": 147543,
+  "providers": {
+   "teamrankings": 54784,
+   "consensus": 41238,
+   "numberfire": 33907,
+   "ESPN BET": 17963,
+   "Bovada": 4977,
+   "Draft Kings": 4526
+  }
+ },
+ "cbbdata": {
+  "login": "ok",
+  "columns": [
+   "rank",
+   "team",
+   "conf",
+   "record",
+   "barthag",
+   "adj_o",
+   "adj_o_rk",
+   "adj_d",
+   "adj_d_rk",
+   "adj_tempo",
+   "adj_tempo_rk",
+   "proj_record",
+   "proj_conf_record",
+   "wab",
+   "wab_rk",
+   "date",
+   "year",
+   "rec",
+   "proj_rec",
+   "proj_conf_rec",
+   "cur_rk",
+   "change"
+  ],
+  "sample": [],
+  "rows": 605687
+ }
+}
