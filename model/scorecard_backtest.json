@@ -1,0 +1,101 @@
+{
+ "method": "Model ratings only (no NET), real conference tournament champions, projected the day before the First Four",
+ "seasons": [
+  {
+   "in_field": 61,
+   "of": 68,
+   "exact_seed": 15,
+   "within_one": 40,
+   "season": 2014,
+   "autos_known": 31
+  },
+  {
+   "in_field": 62,
+   "of": 68,
+   "exact_seed": 20,
+   "within_one": 46,
+   "season": 2015,
+   "autos_known": 31
+  },
+  {
+   "in_field": 61,
+   "of": 68,
+   "exact_seed": 21,
+   "within_one": 37,
+   "season": 2016,
+   "autos_known": 31
+  },
+  {
+   "in_field": 60,
+   "of": 66,
+   "exact_seed": 22,
+   "within_one": 41,
+   "season": 2017,
+   "autos_known": 32
+  },
+  {
+   "in_field": 60,
+   "of": 68,
+   "exact_seed": 24,
+   "within_one": 43,
+   "season": 2018,
+   "autos_known": 32
+  },
+  {
+   "in_field": 60,
+   "of": 68,
+   "exact_seed": 23,
+   "within_one": 47,
+   "season": 2019,
+   "autos_known": 32
+  },
+  {
+   "in_field": 62,
+   "of": 68,
+   "exact_seed": 20,
+   "within_one": 46,
+   "season": 2021,
+   "autos_known": 31
+  },
+  {
+   "in_field": 58,
+   "of": 68,
+   "exact_seed": 21,
+   "within_one": 38,
+   "season": 2022,
+   "autos_known": 32
+  },
+  {
+   "in_field": 59,
+   "of": 68,
+   "exact_seed": 21,
+   "within_one": 40,
+   "season": 2023,
+   "autos_known": 31
+  },
+  {
+   "in_field": 61,
+   "of": 68,
+   "exact_seed": 24,
+   "within_one": 44,
+   "season": 2024,
+   "autos_known": 32
+  },
+  {
+   "in_field": 64,
+   "of": 68,
+   "exact_seed": 26,
+   "within_one": 49,
+   "season": 2025,
+   "autos_known": 31
+  },
+  {
+   "in_field": 64,
+   "of": 68,
+   "exact_seed": 38,
+   "within_one": 57,
+   "season": 2026,
+   "autos_known": 31
+  }
+ ]
+}

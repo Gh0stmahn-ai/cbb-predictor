@@ -111,3 +111,14 @@ h3.sd{font-size:1rem;margin:1rem 0 0}
 b.fav{color:var(--good)}b.dog{color:var(--bad)}
 a.team{text-decoration:none;color:inherit}a.team:hover{text-decoration:underline}
 .tile h3 a{text-decoration:none;color:inherit}
+.bgame{margin:.25rem 0 .55rem;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.bslot{display:flex;justify-content:space-between;gap:.4rem;width:100%;border:0;border-left:3px solid transparent;background:var(--soft);color:var(--ink);font:600 .92rem/1.3 var(--cond);padding:.22rem .45rem;cursor:pointer;text-align:left}
+.bslot+.bslot{border-top:1px solid var(--rule)}
+.bslot:hover{background:color-mix(in srgb,var(--leather) 12%,var(--soft))}
+.bslot.pick{border-left-color:var(--leather);background:color-mix(in srgb,var(--leather) 18%,var(--soft))}
+.bslot.empty{color:var(--ink2);cursor:default;font-weight:500}
+.bslot small{font:500 .78rem var(--body);color:var(--ink2)}
+.ffgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem 1rem}
+.rgrid.fin{grid-template-columns:repeat(2,minmax(200px,280px));min-width:0}
+.small{font-size:.8rem}
+td.fav{color:var(--good)}td.dog{color:var(--bad)}

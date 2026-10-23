@@ -103,3 +103,37 @@ def cbbd_lines(season, start, end, espn_teams):
         et = pd.Timestamp(g.get("startDate")).tz_convert("America/New_York").strftime("%Y-%m-%d")
         out.append((h, a, et, float(sp)))
     return out
+
+
+def cbbd_finals(season, start, end, espn_teams):
+    """Backup scores and possessions from CollegeBasketballData.com /games/teams for a date window.
+    Returns [dict(home_id, away_id, date, home_pts, away_pts, poss, neutral, conf_game)]."""
+    key = os.environ.get("CBBD_API_KEY", "").strip()
+    if not key:
+        return []
+    q = {"season": season, "startDateRange": start, "endDateRange": end}
+    try:
+        js = json.loads(_get("https://api.collegebasketballdata.com/games/teams?" + urllib.parse.urlencode(q), {"Authorization": f"Bearer {key}"}))
+    except Exception:
+        return []
+    ids = name_map([r.get("team") for r in js if r.get("team")] + [r.get("opponent") for r in js if r.get("opponent")], espn_teams)
+
+    def poss(s):
+        try:
+            return s["fieldGoals"]["attempted"] - s["rebounds"]["offensive"] + s["turnovers"]["total"] + 0.44 * s["freeThrows"]["attempted"]
+        except (KeyError, TypeError):
+            return None
+    out = []
+    for r in js:
+        if not r.get("isHome"):
+            continue
+        ts, os_ = r.get("teamStats") or {}, r.get("opponentStats") or {}
+        hp, ap = (ts.get("points") or {}).get("total"), (os_.get("points") or {}).get("total")
+        p1, p2 = poss(ts), poss(os_)
+        h, a = ids.get(r.get("team")), ids.get(r.get("opponent"))
+        if None in (hp, ap, p1, p2, h, a):
+            continue
+        et = pd.Timestamp(r.get("startDate")).tz_convert("America/New_York").strftime("%Y-%m-%d")
+        out.append(dict(home_id=h, away_id=a, date=et, home_pts=float(hp), away_pts=float(ap), poss=(p1 + p2) / 2,
+                        neutral=bool(r.get("neutralSite")), conf_game=bool(r.get("conferenceGame")), notes=r.get("notes") or ""))
+    return out

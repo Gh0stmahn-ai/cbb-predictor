@@ -400,6 +400,78 @@ async function market() {
     <p class="muted">For research and entertainment only. Historically the betting line alone is slightly more accurate than any single public model, which is why the site's posted picks blend the two.</p>`;
 }
 
+
+/* ---------------- Bracket builder + pool strategy ---------------- */
+const SEEDS = [1, 16, 8, 9, 5, 12, 4, 13, 6, 11, 3, 14, 7, 10, 2, 15];
+const RNAME = ["First Four", "First round", "Second round", "Sweet 16", "Elite Eight", "Final Four", "Championship"];
+async function builder() {
+  const [b, r, meta, pool] = await Promise.all([load("bracket"), load("ratings"), load("meta"), load("pool")]);
+  if (!b || !r || !meta?.stage2) { view.innerHTML = `<h1>Bracket builder</h1><p class="muted">Available after the next update.</p>`; return; }
+  const byId = Object.fromEntries(r.teams.map(t => [t.id, t])), info = Object.fromEntries(b.teams.map(t => [t.id, t]));
+  const regions = b.final_four_pairs.flat(), key = `cs_bracket_${b.season}_${b.kind}`;
+  const lines = {}; regions.forEach(reg => lines[reg] = SEEDS.map(s => b.teams.filter(t => t.region === reg && t.seed === s).map(t => t.id)));
+  let picks = {}; try { picks = JSON.parse(localStorage.getItem(key) || "{}"); } catch {}
+  const pw = (x, y) => { const P = project(r, meta, byId[x], byId[y], true); return P.p; }; // chance x beats y, neutral court
+  const games = [];
+  regions.forEach(reg => { lines[reg].forEach((l, i) => { if (l.length === 2) games.push({k: `${reg}|0|${i}`, lvl: 0, reg, src: () => l}); });
+    for (let L = 1; L <= 4; L++) for (let i = 0; i < 16 / 2 ** L; i++) games.push({k: `${reg}|${L}|${i}`, lvl: L, reg, i}); });
+  b.final_four_pairs.forEach((p, j) => games.push({k: `F4|${j}`, lvl: 5, reg: p.join("/"), pair: p}));
+  games.push({k: "F|0", lvl: 6, reg: ""});
+  const G = Object.fromEntries(games.map(g => [g.k, g]));
+  const lineTeam = (reg, i) => { const l = lines[reg][i]; return l.length === 2 ? picks[`${reg}|0|${i}`] : l[0]; };
+  const teams = g => {
+    if (g.lvl === 0) return g.src();
+    if (g.lvl === 1) return [lineTeam(g.reg, 2 * g.i), lineTeam(g.reg, 2 * g.i + 1)];
+    if (g.lvl <= 4) return [picks[`${g.reg}|${g.lvl - 1}|${2 * g.i}`], picks[`${g.reg}|${g.lvl - 1}|${2 * g.i + 1}`]];
+    if (g.lvl === 5) return [picks[`${g.pair[0]}|4|0`], picks[`${g.pair[1]}|4|0`]];
+    return [picks["F4|0"], picks["F4|1"]];
+  };
+  const validate = () => { let ch = true; while (ch) { ch = false; for (const g of games) { const p = picks[g.k]; if (p != null && !teams(g).includes(p)) { delete picks[g.k]; ch = true; } } } };
+  const fill = decide => { picks = {}; for (const g of games) { const [x, y] = teams(g); if (x != null && y != null) picks[g.k] = decide(x, y, g); } };
+  const fromLevels = lv => fill((x, y) => ((lv[x] || 0) >= (lv[y] || 0) ? x : y));
+  const save = () => { try { localStorage.setItem(key, JSON.stringify(picks)); } catch {} };
+  const box = g => { const [x, y] = teams(g), p = picks[g.k];
+    const row = t => { if (t == null) return `<div class="bslot empty">TBD</div>`;
+      const o = t === x ? y : x, prob = o != null ? pw(t, o) : null;
+      return `<button class="bslot ${p === t ? "pick" : ""}" data-g="${g.k}" data-t="${t}"><span>${info[t]?.seed ?? ""} ${esc(T(t).n)}</span>${prob != null ? `<small>${pct(prob)}</small>` : ""}</button>`; };
+    return `<div class="bgame">${row(x)}${row(y)}</div>`; };
+  const draw = () => {
+    validate(); save();
+    let prob = 1, n = 0; for (const g of games) { const [x, y] = teams(g), p = picks[g.k]; if (p != null && x != null && y != null) { prob *= pw(p, p === x ? y : x); n++; } }
+    const champ = picks["F|0"];
+    $("#bsum").innerHTML = `<div class="scoreboard"><div><b>${n} of ${games.length}</b><span>games picked</span></div>
+      <div><b>${champ ? esc(T(champ).n) : "-"}</b><span>your champion${champ && pool?.model_reach?.[champ] ? `, model gives ${pct(pool.model_reach[champ][5], 1)}` : ""}</span></div>
+      <div><b>${n ? (prob > 1e-3 ? pct(prob, 2) : "1 in " + Math.round(1 / prob).toLocaleString()) : "-"}</b><span>chance every pick so far is right</span></div></div>`;
+    $("#bff").innerHTML = games.filter(g => g.lvl === 0).map(g => `<div><div class="rhead">${esc(g.reg)} First Four</div>${box(g)}</div>`).join("");
+    $("#bregs").innerHTML = regions.map(reg => `<section class="region"><h3>${esc(reg)}</h3><div class="rgrid">${[1, 2, 3, 4].map(L =>
+      `<div class="rcol"><div class="rhead">${RNAME[L]}</div>${games.filter(g => g.reg === reg && g.lvl === L).map(box).join("")}</div>`).join("")}</div></section>`).join("");
+    $("#bfinal").innerHTML = `<div class="rgrid fin"><div class="rcol"><div class="rhead">Final Four</div>${games.filter(g => g.lvl === 5).map(g => `<div class="muted small">${esc(g.reg)}</div>${box(g)}`).join("")}</div>
+      <div class="rcol"><div class="rhead">Championship</div>${box(G["F|0"])}</div></div>`;
+    view.querySelectorAll(".bslot[data-t]").forEach(el => el.addEventListener("click", () => { picks[el.dataset.g] = +el.dataset.t; draw(); }));
+  };
+  const poolRows = pool ? pool.pool_sizes.map(K => { const s = pool.best[K], c = pool.chalk[K];
+    return `<tr><td>${K} entries</td><td class="l">${teamCell(s.champion)}</td><td class="l">${s.final_four.map(t => esc(T(t).n)).join(", ")}</td><td><b>${pct(s.win, 1)}</b></td><td>${pct(c.win, 1)}</td><td>${(s.win / Math.max(c.win, 1e-4)).toFixed(1)}x</td><td><button class="chip" data-pool="${K}">Load</button></td></tr>`; }).join("") : "";
+  view.innerHTML = `<h1>Bracket builder</h1>
+    <p class="lede">Click a team to advance it. Every pick shows the model's chance of winning that game if the matchup happens, and the bar at the top shows the chance your whole bracket is right so far. Picks save in this browser automatically.</p>
+    ${b.kind === "projected" ? `<div class="notice">This is the <b>projected</b> field. The real bracket replaces it on Selection Sunday, and picks reset then.</div>` : ""}
+    <div class="controls"><button class="chip" id="bmodel">Fill with model favorites</button><button class="chip" id="bclear">Clear</button><button class="chip" id="bcopy">Copy as text</button></div>
+    <div id="bsum"></div>
+    <h2>Pool strategy</h2>
+    <p>The most likely bracket is not the best pool entry. To win a pool you need to beat everyone else, so it pays to back a strong team the crowd is under-picking. This simulates the tournament ${pool ? "3,000" : ""} times, simulates thousands of opponents' brackets from ${pool?.source === "public" ? "real public pick rates" : "estimated public pick rates (the public tends to pile onto favorites; real pick rates from ESPN's bracket game replace this estimate in March)"}, and finds the bracket most likely to finish first under standard 10-20-40-80-160-320 scoring.</p>
+    ${pool ? `<div class="tablewrap"><table><thead><tr><th>Pool size</th><th class="l">Best champion</th><th class="l">Final Four</th><th>Chance to win pool</th><th>Picking all favorites</th><th>Edge</th><th></th></tr></thead><tbody>${poolRows}</tbody></table></div>
+    <h3>Title odds: model against the crowd</h3><p class="muted">Teams the model likes more than the public are the best value picks for big pools.</p>
+    <div class="tablewrap"><table><thead><tr><th class="l">Team</th><th>Model title chance</th><th>Public title picks${pool.source === "proxy" ? " (estimated)" : ""}</th><th>Value</th></tr></thead><tbody>
+      ${pool.champion_value.map(c => `<tr><td class="l">${teamCell(c.id)}</td><td>${pct(c.model, 1)}</td><td>${pct(c.public, 1)}</td><td class="${c.model > c.public ? "fav" : "dog"}">${(c.model / Math.max(c.public, 1e-4)).toFixed(2)}x</td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">Pool strategy appears after the next update.</p>`}
+    <h2>Your bracket</h2><div id="bff" class="ffgrid"></div><div id="bregs" class="regions"></div><h2>Final Four</h2><div id="bfinal"></div>`;
+  $("#bmodel").addEventListener("click", () => { fill((x, y) => pw(x, y) >= .5 ? x : y); draw(); });
+  $("#bclear").addEventListener("click", () => { picks = {}; draw(); });
+  $("#bcopy").addEventListener("click", async () => {
+    const txt = [0, 1, 2, 3, 4, 5, 6].map(L => { const gs = games.filter(g => g.lvl === L && picks[g.k] != null); return gs.length ? `${RNAME[L]}: ${gs.map(g => T(picks[g.k]).n).join(", ")}` : ""; }).filter(Boolean).join("\n");
+    try { await navigator.clipboard.writeText(txt); $("#bcopy").textContent = "Copied"; } catch { prompt("Copy your bracket:", txt); } });
+  view.querySelectorAll("[data-pool]").forEach(el => el.addEventListener("click", () => { fromLevels(Object.fromEntries(Object.entries(pool.best[el.dataset.pool].levels).map(([k, v]) => [+k, v]))); draw(); window.scrollTo(0, $("#bsum").offsetTop - 80); }));
+  draw();
+}
+
 /* ---------------- Ratings ---------------- */
 function ratingsTable(list, r, compact) {
   return `<div class="tablewrap"><table class="rt"><thead><tr><th>#</th><th class="l" data-k="name">Team</th><th data-k="net">NET</th><th class="l">Quad 1</th><th data-k="em">Net rating</th><th data-k="o">Offense</th><th data-k="d">Defense</th><th data-k="t">Pace</th>${compact ? "" : `<th data-k="g">Games</th>`}</tr></thead><tbody>
@@ -425,6 +497,15 @@ async function ratings() {
 
 /* ---------------- Bracket ---------------- */
 const RNDS = ["R64", "R32", "S16", "E8"];
+async function scorecard() {
+  const s = await load("scorecard"); const el = $("#scard"); if (!s || !el) return;
+  const row = c => `<tr><td>${c.season - 1} to ${String(c.season).slice(2)}</td><td>${c.in_field} of ${c.of}</td><td>${c.exact_seed}</td><td>${c.within_one}</td><td class="l muted">${c.seeding ? (c.seeding === "NET" ? "NET seeding, live" : "rating seeding, live") : "backtest"}</td></tr>`;
+  const bt = s.backtest?.seasons || [], avg = k => (bt.reduce((x, c) => x + c[k], 0) / Math.max(bt.length, 1)).toFixed(1);
+  el.innerHTML = `<h2>How the projected field has scored</h2>
+    <p class="muted">The projection made just before Selection Sunday, compared with the committee's actual field. The backtest uses model ratings and real conference champions only; live seasons also use the official NET. Averages over ${bt.length} backtest seasons: ${avg("in_field")} of 68 teams right, ${avg("exact_seed")} exact seeds, ${avg("within_one")} within one seed line.</p>
+    <div class="tablewrap"><table><thead><tr><th>Season</th><th>Teams in field</th><th>Exact seed</th><th>Within one seed</th><th class="l"></th></tr></thead><tbody>
+    ${(s.live || []).slice().reverse().map(row).join("")}${bt.slice().reverse().map(row).join("")}</tbody></table></div>`;
+}
 async function bracket() {
   const b = await load("bracket");
   if (!b) { view.innerHTML = `<h1>Bracket</h1><p class="muted">The bracket appears after the first pipeline run.</p>`; return; }
@@ -455,10 +536,12 @@ async function bracket() {
     <div class="tablewrap"><table><thead><tr><th class="l">Team</th><th class="l">Conference</th><th>${b.seeding === "NET" ? "NET" : "Rating rank"}</th><th>Automatic bid</th><th>Make the field</th></tr></thead><tbody>
       ${b.field_odds.map((t, i) => `<tr><td class="l">${teamCell(t.id)}</td><td class="l">${esc(t.conf)}</td><td>${t.net ?? "-"}</td><td>${pct(t.auto, 1)}</td><td><b>${t.make >= .995 ? ">99%" : pct(t.make, 1)}</b></td></tr>`).join("")}
     </tbody></table></div>` : ""}
+    <div id="scard"></div>
     <h2>Chance to reach each round</h2>
     <div class="tablewrap"><table><thead><tr><th>Seed</th><th class="l">Team</th><th class="l">Region</th><th>Second round</th><th>Sweet 16</th><th>Elite Eight</th><th>Final Four</th><th>Title game</th><th>Champion</th></tr></thead><tbody>
       ${champ.map(t => `<tr><td>${t.seed}</td><td class="l">${teamCell(t.id)}</td><td class="l">${esc(t.region)}</td>${["R32","S16","E8","F4","Final","Champ"].map(c => `<td>${t[c] < .001 ? "<0.1%" : pct(t[c], 1)}</td>`).join("")}</tr>`).join("")}
     </tbody></table></div>`;
+  scorecard();
 }
 
 /* ---------------- Method ---------------- */
@@ -580,7 +663,7 @@ async function method() {
   renderTex();
 }
 
-const routes = {"": home, schedule, matchup, standings, watch, market, results, ratings, bracket, method};
+const routes = {"": home, schedule, matchup, standings, watch, market, results, ratings, bracket, builder, method};
 async function route() {
   const full = location.hash.replace(/^#\/?/, ""), r = full.split("?")[0].split("/")[0], arg = full.split("?")[0].split("/")[1];
   setNav(r in routes ? r : (r === "team" ? "team" : ""));

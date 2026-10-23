@@ -226,3 +226,20 @@ def field_odds(R, auto_p, conf_of, order_key, n_at_large=None, n_sims=4000, seed
             elif k < n_al:
                 made[t] += 1; k += 1
     return {t: made[t] / n_sims for t in ranked}, {t: autos[t] / n_sims for t in ranked}
+
+
+def conference_champions(games, before=None):
+    """Winners of conference tournament finals (ESPN notes ending in ' - Final'), optionally before a date."""
+    g = games if before is None else games[pd.to_datetime(games.date) < pd.Timestamp(before)]
+    f = g[g.notes.fillna("").str.contains(r" - Final$", regex=True, case=False) & ~g.notes.fillna("").str.contains("NIT|CBI|Crown|Championship - National", regex=True, case=False)]
+    return {int(r.home_id if r.home_pts > r.away_pts else r.away_id) for r in f.itertuples()}
+
+
+def score_projection(proj, actual):
+    """proj/actual: DataFrame team_id, seed. Returns scorecard dict."""
+    p = proj.drop_duplicates("team_id").set_index("team_id").seed
+    a = actual.drop_duplicates("team_id").set_index("team_id").seed
+    both = p.index.intersection(a.index)
+    d = (p.reindex(both) - a.reindex(both)).abs()
+    return dict(in_field=int(len(both)), of=int(len(a)), exact_seed=int((d == 0).sum()), within_one=int((d <= 1).sum()),
+                missed=[int(t) for t in a.index.difference(p.index)], wrongly_in=[int(t) for t in p.index.difference(a.index)])

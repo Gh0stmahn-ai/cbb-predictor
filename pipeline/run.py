@@ -14,7 +14,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 from model.ratings import fit, predict, DEFAULTS, make_prior
 from model.prior import roster_features, build_prior
-from model.bracket import project_field, simulate, conf_tourney_odds, field_odds
+from model.bracket import project_field, simulate, conf_tourney_odds, field_odds, conference_champions, score_projection
+from model.pool import strategy as pool_strategy
 from model import net as netmod
 from model import elo as elomod
 from model import external
@@ -22,6 +23,7 @@ from model.context import km, HIGH_ALT, _st
 STAGE2 = json.load(open(os.path.join(ROOT, "model", "stage2.json")))
 DEFAULTS["sigma0"] = STAGE2["sigma0"]
 SIGMA_SCALE = 1.0
+ESPN_TEAMS = []
 from model import live
 
 STATE = os.path.join(ROOT, "state")
@@ -53,10 +55,20 @@ def _clean(x):
         return str(x)
 
 
-def write_json(path, obj):
+def write_json(path, obj, always=False):
+    """Write JSON; skip the write when only the 'updated' timestamp changed (keeps the git history small)."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
+    new = _clean(obj)
+    if not always and os.path.exists(path):
+        try:
+            old = json.load(open(path))
+            strip = lambda d: {k: v for k, v in d.items() if k != "updated"} if isinstance(d, dict) else d
+            if strip(old) == strip(new):
+                return
+        except Exception:
+            pass
     with open(path, "w") as f:
-        json.dump(_clean(obj), f, separators=(",", ":"), allow_nan=False)
+        json.dump(new, f, separators=(",", ":"), allow_nan=False)
 
 
 def r1(x, k=1):
@@ -78,15 +90,24 @@ def ingest(season, asof, d1):
     have = set(g.game_id.astype(int)) if len(g) else set()
     start = (g.date.max() - timedelta(days=2)) if len(g) else pd.Timestamp(CFG["season_start"][str(season)]) - timedelta(days=1)
     new, new_players = [], []
+    backup_days, backup_games = [], []
     day = pd.Timestamp(start)
     while day < asof:
-        for x in live.scoreboard(day.strftime("%Y%m%d")):
+        try:
+            board = live.scoreboard(day.strftime("%Y%m%d"))
+        except Exception:
+            backup_days.append(day.strftime("%Y-%m-%d")); day += timedelta(days=1); continue
+        for x in board:
             if not x["completed"] or x["game_id"] in have or x["season"] != season:
                 continue
             if x["home_id"] not in d1 or x["away_id"] not in d1:
                 continue
-            bx = live.boxscore(x["game_id"])
+            try:
+                bx = live.boxscore(x["game_id"])
+            except Exception:
+                bx = None
             if bx is None or not (40 < bx["poss"] < 110):
+                backup_games.append(x)
                 continue
             for pl in bx.get("players", []):
                 new_players.append(dict(game_id=x["game_id"], date=x["date"], **pl))
@@ -96,6 +117,31 @@ def ingest(season, asof, d1):
                             conf_game=x["conf_game"], notes=x["notes"], season_type=x["season_type"]))
             have.add(x["game_id"])
         day += timedelta(days=1)
+    # backup source: CollegeBasketballData.com for days ESPN failed and finished games with no ESPN box score
+    if (backup_days or backup_games) and ESPN_TEAMS:
+        days = sorted(set(backup_days) | {x["date"] for x in backup_games})
+        sched = pd.read_csv(p_(f"schedule_{season}.csv")) if os.path.exists(p_(f"schedule_{season}.csv")) else pd.DataFrame()
+        bk = external.cbbd_finals(season, days[0], (pd.Timestamp(days[-1]) + timedelta(days=1)).strftime("%Y-%m-%d"), ESPN_TEAMS)
+        used = 0
+        for b in bk:
+            if b["date"] not in days or not (40 < b["poss"] < 110):
+                continue
+            gid = None
+            for x in backup_games:
+                if x["date"] == b["date"] and {x["home_id"], x["away_id"]} == {b["home_id"], b["away_id"]}:
+                    gid = x["game_id"]
+            if gid is None and len(sched):
+                m = sched[(sched.date == b["date"]) & (((sched.home_id == b["home_id"]) & (sched.away_id == b["away_id"])) | ((sched.home_id == b["away_id"]) & (sched.away_id == b["home_id"])))]
+                gid = int(m.game_id.iloc[0]) if len(m) else None
+            if gid is None or gid in have:
+                continue
+            new.append(dict(game_id=gid, season=season, date=pd.Timestamp(b["date"]), home_id=b["home_id"], away_id=b["away_id"],
+                            home_name=None, away_name=None, home_pts=b["home_pts"], away_pts=b["away_pts"], poss=b["poss"],
+                            neutral=b["neutral"], conf_game=b["conf_game"], notes=b["notes"], season_type=2))
+            have.add(gid); used += 1
+        if used:
+            WARN.append(f"{used} game results came from the backup source (CollegeBasketballData.com) because ESPN data was unavailable.")
+        print(f"ingest: backup source added {used} games")
     if new:
         g = pd.concat([g, pd.DataFrame(new)], ignore_index=True)
         g.to_csv(p_(f"games_{season}.csv"), index=False)
@@ -455,16 +501,55 @@ def rotation(season):
     return out
 
 
+ARCHIVE_PATTERNS = ["games_{s}.csv", "ledger_{s}.csv", "lines_{s}.csv", "players_{s}.csv", "schedule_{s}.csv", "schedule_{s}.json",
+                    "rating_history_{s}.csv", "rank_history_{s}.csv", "prior_{s}.csv", "projected_field_{s}.json"]
+
+
+def housekeeping(season):
+    """Roll finished seasons out of the working files: per-season state goes into state/archive/season_YYYY.tar.gz,
+    and last season's Monday snapshots move to docs/data/archive/. Ratings needed for next season's prior stay put."""
+    import tarfile, glob
+    os.makedirs(p_("archive"), exist_ok=True)
+    for s in range(season - 6, season):
+        files = [p_(pat.format(s=s)) for pat in ARCHIVE_PATTERNS if os.path.exists(p_(pat.format(s=s)))]
+        if not files:
+            continue
+        tar, k = p_(os.path.join("archive", f"season_{s}.tar.gz")), 1
+        while os.path.exists(tar):  # never overwrite an existing archive
+            k += 1; tar = p_(os.path.join("archive", f"season_{s}_part{k}.tar.gz"))
+        with tarfile.open(tar, "w:gz") as t:
+            for f in files:
+                t.add(f, arcname=os.path.basename(f))
+        for f in files:
+            os.remove(f)
+        print(f"housekeeping: archived {len(files)} files from {s}")
+    start = pd.Timestamp(CFG["season_start"][str(season)])
+    wk = os.path.join(OUT, "weeks")
+    if os.path.isdir(wk):
+        for f in glob.glob(os.path.join(wk, "*.json")):
+            d = pd.Timestamp(os.path.basename(f)[:10])
+            if d < start - timedelta(days=7):
+                s = d.year + (1 if d.month >= 7 else 0)
+                dest = os.path.join(OUT, "archive", str(s), "weeks"); os.makedirs(dest, exist_ok=True)
+                os.replace(f, os.path.join(dest, os.path.basename(f)))
+
+
 # ---------------- main daily run ----------------
 def daily(asof=None, season=None, weekly=None):
     now = datetime.now(timezone.utc) if asof is None else datetime.fromisoformat(asof).replace(hour=14, tzinfo=timezone.utc)
     today = pd.Timestamp(now.date())
     teams_df = live.d1_teams()
+    global ESPN_TEAMS
+    ESPN_TEAMS = [dict(id=t, location=r.location, displayName=r.full, shortDisplayName=r["name"], abbreviation=r.abbr) for t, r in teams_df.iterrows()]
     d1 = set(teams_df.index)
     if season is None:
         sb = live.scoreboard(today.strftime("%Y%m%d"))
         season = sb[0]["season"] if sb else int(CFG["current_season"])
     season = int(season)
+    try:
+        housekeeping(season)
+    except Exception as e:
+        print("housekeeping failed:", e)
     games = ingest(season, today, d1)
     teams = set(teams_df.index)
     prior = season_prior(season, teams)
@@ -691,7 +776,7 @@ def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, 
         print("bracket failed:", e)
         WARN.append(f"The bracket could not be rebuilt in the last update ({type(e).__name__}).")
     weeks = sorted(f[:-5] for f in os.listdir(os.path.join(OUT, "weeks"))) if os.path.isdir(os.path.join(OUT, "weeks")) else []
-    write_json(os.path.join(OUT, "meta.json"), dict(updated=now.isoformat(), season=season, games_ingested=int(len(games)), weeks=weeks, warnings=WARN,
+    write_json(os.path.join(OUT, "meta.json"), always=True, obj=dict(updated=now.isoformat(), season=season, games_ingested=int(len(games)), weeks=weeks, warnings=WARN,
                params={k: v for k, v in DEFAULTS.items()}, sigma_live=r1(extras.get("sigma", (0, 0))[0], 2), sigma_games=extras.get("sigma", (0, 0))[1], stage2=STAGE2, torvik_note=extras.get("torvik_note"), backtest=json.load(open(os.path.join(ROOT, "model", "backtest_summary.json")))))
 
 
@@ -712,6 +797,11 @@ def bracket(season, now, R, meta, teams_df, games, net, proj=None):
         order_key = (lambda t: net_rank.get(t, 999)) if net_rank else (lambda t: -R.at[t, "em"])
         cpct = ({t: v["cw"] / max(v["cw"] + v["cl"], 1e-9) for t, v in proj.items() if v["cw"] + v["cl"] > 0} if proj else conf_records(games))
         auto_p = conf_tourney_odds(R, meta, DEFAULTS, conf, cpct)
+        # once a conference tournament final is played, its champion holds the automatic bid outright
+        champs = conference_champions(games) & set(conf)
+        for c in {conf[t] for t in champs}:
+            for t in [t for t in conf if conf[t] == c]:
+                auto_p[t] = 1.0 if t in champs else 0.0
         make_p, _ = field_odds(R, auto_p, conf, order_key)
         best = {}
         for t, c in conf.items():
@@ -722,6 +812,28 @@ def bracket(season, now, R, meta, teams_df, games, net, proj=None):
                      net=net_rank.get(t) if net_rank else None)
                 for t in sorted(make_p, key=lambda t: -make_p[t]) if make_p[t] >= 0.005]
     pairs = tuple(tuple(x) for x in CFG.get("final_four_pairs", {}).get(str(season), [["East", "West"], ["South", "Midwest"]]))
+    # projected-field scorecard: keep the latest projection; grade it once the official field appears
+    snap = p_(f"projected_field_{season}.json")
+    if kind == "projected":
+        json.dump(dict(date=now.date().isoformat(), seeding=("NET" if net else "rating"),
+                       teams=[dict(team_id=int(r.team_id), seed=int(r.seed), region=r.region) for r in field.itertuples()]), open(snap, "w"))
+    cards_path = p_("scorecards.json")
+    cards = json.load(open(cards_path)) if os.path.exists(cards_path) else {}
+    if kind == "official" and str(season) not in cards and os.path.exists(snap):
+        sp = json.load(open(snap))
+        card = score_projection(pd.DataFrame(sp["teams"]), field)
+        card.update(season=season, projected_on=sp["date"], seeding=sp["seeding"])
+        cards[str(season)] = card
+        json.dump(cards, open(cards_path, "w"))
+    write_json(os.path.join(OUT, "scorecard.json"), dict(live=list(cards.values()),
+               backtest=json.load(open(os.path.join(ROOT, "model", "scorecard_backtest.json")))))
+    # pool strategy for the current field
+    try:
+        pool = pool_strategy(field, R, meta, DEFAULTS, pairs, public=CFG.get("public_picks", {}).get(str(season)))
+        pool.update(updated=now.isoformat(), season=season, kind=kind)
+        write_json(os.path.join(OUT, "pool.json"), pool)
+    except Exception as e:
+        print("pool strategy failed:", e)
     probs, picks = simulate(field, R, meta, DEFAULTS, n_sims=CFG["bracket"]["n_sims"], team_sd=CFG["bracket"]["team_sd"], f4_pairs=pairs)
     write_json(os.path.join(OUT, "bracket.json"), dict(updated=now.isoformat(), season=season, kind=kind, final_four_pairs=pairs,
                seeding="NET" if (net and kind == "projected") else ("official" if kind == "official" else "model rating"),
