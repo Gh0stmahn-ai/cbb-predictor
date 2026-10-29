@@ -139,9 +139,9 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920410,2026-11-04,2026-11-05T00:00Z,2272,2379,High Point,MD Eastern,False,False,,2,pre,,,High Point,NC
 401920191,2026-11-04,2026-11-05T00:00Z,2603,2344,Saint Joseph's,Longwood,False,False,,2,pre,,,Philadelphia,PA
 401902276,2026-11-04,2026-11-05T00:00Z,2086,161,Butler,FDU,False,False,,2,pre,,,Indianapolis,IN
+401919028,2026-11-04,2026-11-05T00:30Z,2724,2463,Wichita St,CSU Northridge,False,False,,2,pre,,,Wichita,KS
 401928811,2026-11-04,2026-11-05T01:00Z,233,94,South Dakota,N Kentucky,False,False,,2,pre,,,Vermillion,SD
 401920798,2026-11-04,2026-11-05T01:00Z,2,2545,Auburn,SE Louisiana,False,False,,2,pre,,,Auburn,AL
-401919028,2026-11-04,2026-11-05T01:00Z,2724,2463,Wichita St,CSU Northridge,False,False,,2,pre,,,Wichita,KS
 401918052,2026-11-04,2026-11-05T02:00Z,25,2515,California,Radford,False,False,,2,pre,,,Berkeley,CA
 401917513,2026-11-04,2026-11-05T03:00Z,2541,270,Santa Clara,Milwaukee,False,False,,2,pre,,,Santa Clara,CA
 401917512,2026-11-04,2026-11-05T03:00Z,2608,2449,Saint Mary's,N Dakota St,False,False,,2,pre,,,Moraga,CA
