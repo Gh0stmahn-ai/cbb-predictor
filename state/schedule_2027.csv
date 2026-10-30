@@ -1,7 +1,6 @@
 game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,season_type,state,home_pts,away_pts,venue_city,venue_state
 401920982,2026-11-01,2026-11-01T14:30Z,222,87,Villanova,Notre Dame,True,False,Eternal City Tip-Off,2,pre,,,Rome,Italy
 401920409,2026-11-01,2026-11-02T04:59Z,2272,2335,High Point,Liberty,True,False,Field of 68 Opening Day Marathon,2,pre,,,Rock Hill,SC
-401921060,2026-11-02,2026-11-02T05:00Z,2539,2515,San Francisco,Radford,False,False,,2,pre,,,San Francisco,CA
 401920912,2026-11-02,2026-11-02T08:00Z,2459,2755,N Illinois,Grambling,True,False,Field of 68 Opening Day Marathon,2,pre,,,Rock Hill,SC
 401921422,2026-11-02,2026-11-02T11:00Z,2771,2026,Merrimack,App State,True,False,Field of 68 Opening Day Marathon,2,pre,,,Rock Hill,SC
 401911707,2026-11-02,2026-11-02T16:30Z,2634,93,Tennessee St,Murray St,True,False,Field of 68 Opening Day Marathon,2,pre,,,Sioux Falls,SD
@@ -109,6 +108,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401925878,2026-11-02,2026-11-03T03:00Z,36,147,Colorado St,Montana St,False,False,,2,pre,,,Fort Collins,CO
 401922029,2026-11-02,2026-11-03T03:00Z,2483,149,Oregon,Montana,False,False,,2,pre,,,Eugene,OR
 401921731,2026-11-02,2026-11-03T03:00Z,9,2193,Arizona St,ETSU,False,False,,2,pre,,,Tempe,AZ
+401921060,2026-11-02,2026-11-03T03:00Z,2539,2515,San Francisco,Radford,False,False,,2,pre,,,San Francisco,CA
 401920769,2026-11-02,2026-11-03T03:00Z,264,2142,Washington,Colgate,False,False,,2,pre,,,Seattle,WA
 401920716,2026-11-02,2026-11-03T03:00Z,24,331,Stanford,E Washington,False,False,,2,pre,,,Stanford,CA
 401917509,2026-11-02,2026-11-03T03:00Z,2541,119,Santa Clara,Towson,False,False,,2,pre,,,Santa Clara,CA
