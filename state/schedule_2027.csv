@@ -1,8 +1,8 @@
 game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,season_type,state,home_pts,away_pts,venue_city,venue_state
-401920982,2026-11-01,2026-11-01T14:30Z,222,87,Villanova,Notre Dame,True,False,Eternal City Tip-Off,2,pre,,,Rome,Italy
+401920982,2026-11-01,2026-11-01T14:30Z,222,87,Villanova,Notre Dame,True,False,Eternal City Tip-Off,2,post,72.0,74.0,Rome,Italy
 401920409,2026-11-01,2026-11-02T04:59Z,2272,2335,High Point,Liberty,True,False,Field of 68 Opening Day Marathon,2,pre,,,Rock Hill,SC
 401920912,2026-11-02,2026-11-02T08:00Z,2459,2755,N Illinois,Grambling,True,False,Field of 68 Opening Day Marathon,2,pre,,,Rock Hill,SC
-401921422,2026-11-02,2026-11-02T11:00Z,2771,2026,Merrimack,App State,True,False,Field of 68 Opening Day Marathon,2,pre,,,Rock Hill,SC
+401921422,2026-11-02,2026-11-02T11:00Z,2026,2771,App State,Merrimack,True,False,Field of 68 Opening Day Marathon,2,pre,,,Rock Hill,SC
 401911707,2026-11-02,2026-11-02T16:30Z,2634,93,Tennessee St,Murray St,True,False,Field of 68 Opening Day Marathon,2,pre,,,Sioux Falls,SD
 401911532,2026-11-02,2026-11-02T19:00Z,94,2638,N Kentucky,UTEP,True,False,Field of 68 Opening Day Marathon,2,pre,,,Sioux Falls,SD
 401911469,2026-11-02,2026-11-02T20:00Z,23,2636,San José St,UTSA,False,False,,2,pre,,,San Jose,CA
