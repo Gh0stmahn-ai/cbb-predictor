@@ -1,0 +1,3 @@
+game_id,date,start,home_id,away_id,home_name,away_name,neutral,notes,model_margin,model_total,model_p,home_spread,total_line,blend_margin,blend_p,locked_at,home_pts,away_pts
+401920982,2026-11-01,2026-11-01T14:30Z,222,87,Villanova,Notre Dame,True,Eternal City Tip-Off,7.3575126663250785,146.1974319299529,0.7529929235048658,-7.5,147.5,7.437733035184058,0.7683745298747247,2026-11-01T02:25:40.270792+00:00,,
+401920409,2026-11-01,2026-11-02T04:59Z,2272,2335,High Point,Liberty,True,Field of 68 Opening Day Marathon,6.15142062449837,155.40789027971,0.714001927666568,-7.5,154.5,6.910670812905787,0.7522305513841285,2026-11-01T02:25:40.270792+00:00,,
