@@ -76,11 +76,34 @@ def r1(x, k=1):
 
 
 # ---------------- ingestion ----------------
+GAME_TYPES = dict(game_id="int64", season="int64", home_id="int64", away_id="int64", home_pts="float64", away_pts="float64",
+                  poss="float64", season_type="int64")
+
+
+def normalize_games(g):
+    """Force consistent column types. A game table that starts empty (first day of a season) otherwise
+    carries text-typed columns into the rating fit, which then fails."""
+    if not len(g):
+        return g
+    g = g.copy()
+    for c, t in GAME_TYPES.items():
+        if c in g:
+            g[c] = pd.to_numeric(g[c], errors="coerce")
+    g = g.dropna(subset=["game_id", "home_id", "away_id", "home_pts", "away_pts", "poss"])
+    for c, t in GAME_TYPES.items():
+        if c in g and t == "int64":
+            g[c] = g[c].fillna(2 if c == "season_type" else 0).astype("int64")
+    for c in ("neutral", "conf_game"):
+        if c in g:
+            g[c] = g[c].map(lambda v: str(v).strip().lower() in ("true", "1", "1.0")).astype(bool)
+    g["date"] = pd.to_datetime(g["date"])
+    g["notes"] = g["notes"].fillna("") if "notes" in g else ""
+    return g.drop_duplicates("game_id", keep="last").sort_values("date").reset_index(drop=True)
+
 def load_games(season):
     path = p_(f"games_{season}.csv")
     if os.path.exists(path):
-        g = pd.read_csv(path, parse_dates=["date"])
-        return g
+        return normalize_games(pd.read_csv(path, parse_dates=["date"]))
     return pd.DataFrame(columns=["game_id", "season", "date", "home_id", "away_id", "home_name", "away_name", "home_pts",
                                  "away_pts", "poss", "neutral", "conf_game", "notes", "season_type"])
 
@@ -91,6 +114,9 @@ def ingest(season, asof, d1):
     start = (g.date.max() - timedelta(days=2)) if len(g) else pd.Timestamp(CFG["season_start"][str(season)]) - timedelta(days=1)
     new, new_players = [], []
     backup_days, backup_games = [], []
+    np_path = p_(f"games_nond1_{season}.csv")
+    nd_old = pd.read_csv(np_path) if os.path.exists(np_path) else pd.DataFrame()
+    nond, nond_have = [], set(nd_old.game_id.astype(int)) if len(nd_old) else set()
     day = pd.Timestamp(start)
     while day < asof:
         try:
@@ -101,6 +127,19 @@ def ingest(season, asof, d1):
             if not x["completed"] or x["game_id"] in have or x["season"] != season:
                 continue
             if x["home_id"] not in d1 or x["away_id"] not in d1:
+                # game against a non-Division I opponent: counts for records and player minutes, not ratings
+                if x["game_id"] not in nond_have and (x["home_id"] in d1 or x["away_id"] in d1):
+                    nond.append(dict(game_id=x["game_id"], season=season, date=x["date"], home_id=x["home_id"], away_id=x["away_id"],
+                                     home_name=x["home_name"], away_name=x["away_name"], home_pts=x["home_pts"], away_pts=x["away_pts"],
+                                     neutral=x["neutral"], conf_game=False, notes=x["notes"]))
+                    nond_have.add(x["game_id"])
+                    try:
+                        bx2 = live.boxscore(x["game_id"])
+                    except Exception:
+                        bx2 = None
+                    for pl in (bx2 or {}).get("players", []):
+                        if pl["team_id"] in d1:
+                            new_players.append(dict(game_id=x["game_id"], date=x["date"], **pl))
                 continue
             try:
                 bx = live.boxscore(x["game_id"])
@@ -142,17 +181,18 @@ def ingest(season, asof, d1):
         if used:
             WARN.append(f"{used} game results came from the backup source (CollegeBasketballData.com) because ESPN data was unavailable.")
         print(f"ingest: backup source added {used} games")
+    if nond:
+        pd.concat([nd_old, pd.DataFrame(nond)], ignore_index=True).drop_duplicates("game_id").to_csv(np_path, index=False)
+    print(f"ingest: {len(nond)} new games vs non-Division I opponents (records only)")
     if new:
-        g = pd.concat([g, pd.DataFrame(new)], ignore_index=True)
+        g = normalize_games(pd.concat([g, pd.DataFrame(new)], ignore_index=True))
         g.to_csv(p_(f"games_{season}.csv"), index=False)
     if new_players:
         pp = p_(f"players_{season}.csv")
         old = pd.read_csv(pp) if os.path.exists(pp) else pd.DataFrame()
         pd.concat([old, pd.DataFrame(new_players)], ignore_index=True).drop_duplicates(["game_id", "athlete_id"]).to_csv(pp, index=False)
     print(f"ingest: {len(new)} new games, {len(g)} total")
-    g["date"] = pd.to_datetime(g["date"])
-    g["neutral"] = g.neutral.astype(bool)
-    return g
+    return normalize_games(g)
 
 
 def capture_lines(season, now, games_ahead, espn_teams=None):
@@ -385,6 +425,19 @@ def build_schedule(season, today, d1, ahead):
     return sched
 
 
+def all_played(season, games):
+    """Every completed game involving a Division I team: rated games plus games against non-Division I opponents."""
+    path = p_(f"games_nond1_{season}.csv")
+    if not os.path.exists(path):
+        return games
+    nd = pd.read_csv(path)
+    for c in ("home_pts", "away_pts"):
+        nd[c] = pd.to_numeric(nd[c], errors="coerce")
+    nd = nd.dropna(subset=["home_pts", "away_pts"]).assign(conf_game=False, neutral=lambda d: d.neutral.astype(str).str.lower().isin(["true", "1"]))
+    nd["date"] = pd.to_datetime(nd.date)
+    return pd.concat([games, nd], ignore_index=True).drop_duplicates("game_id")
+
+
 def records(games):
     """Division I record and conference record from completed games."""
     rec = {}
@@ -398,12 +451,12 @@ def records(games):
     return rec
 
 
-def season_sim(sched, games, R, meta, p, n_sims=2000, seed=3):
+def season_sim(sched, games, R, meta, p, n_sims=2000, seed=3, played=None):
     """Monte Carlo of every unplayed scheduled game. Returns per team projected W, L, conf W, conf L."""
     done = set(games.game_id.astype(int))
     rem = sched[~sched.game_id.astype(int).isin(done) & sched.home_id.isin(R.index) & sched.away_id.isin(R.index)]
     rem = rem[~rem.notes.fillna("").str.upper().str.contains("CHAMPIONSHIP|NIT|CBI|CROWN")]
-    rec = records(games)
+    rec = records(played if played is not None else games)
     out = {t: dict(w=v[0], l=v[1], cw=v[2], cl=v[3]) for t, v in rec.items()}
     title = {}
     if len(rem):
@@ -615,12 +668,13 @@ def daily(asof=None, season=None, weekly=None):
                                    games=[game_row(r) for r in wk.itertuples()]))
         print("weekly snapshot frozen:", week_path)
     # full season: simulate every remaining game
-    proj = season_sim(sched, games, R, meta, DEFAULTS)
+    played = all_played(season, games)
+    proj = season_sim(sched, games, R, meta, DEFAULTS, played=played)
     is_mon = today.weekday() == 0 if weekly is None else weekly
     ranks, prev_ranks = rank_history(season, today, R, is_mon)
     hist = rating_history(season, today, R)
     extras = dict(sched=sched, proj=proj, ranks=ranks, prev_ranks=prev_ranks, sigma=(sig_live, n_sig), R_elo=R_elo, homes=homes, absent=absent,
-                  torvik=torvik, torvik_note=tv_note, hist=hist)
+                  torvik=torvik, torvik_note=tv_note, hist=hist, played=played)
     net, net_through = net_ranks(season, [dict(id=t, location=r.location, displayName=r.full, shortDisplayName=r["name"], abbreviation=r.abbr) for t, r in teams_df.iterrows()])
     # line capture health: games starting later today should have lines by the afternoon runs
     if len(up) and now.hour >= 20:
@@ -691,11 +745,13 @@ def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, 
         conf_of = live.conferences()
     except Exception:
         conf_of = {}
-    rec = records(games)
+    played = extras.get("played", games)
+    rec = records(played)
+    rec_d1 = records(games)
     proj = extras.get("proj", {})
     prev = extras.get("prev_ranks", pd.Series(dtype=float))
     last = {}
-    for r in games.sort_values("date").itertuples():
+    for r in played.sort_values("date").itertuples():
         for t, o, me, op, home in ((r.home_id, r.away_id, r.home_pts, r.away_pts, True), (r.away_id, r.home_id, r.away_pts, r.home_pts, False)):
             last[int(t)] = dict(o=int(o), s=f"{int(me)}-{int(op)}", w=bool(me > op), h=("vs" if r.neutral else ("home" if home else "away")), d=str(r.date)[:10])
     tiles = []
@@ -704,7 +760,7 @@ def publish(season, now, R, meta, teams_df, up, ledger, w, sig_b, n_fit, games, 
         tiles.append(dict(id=t, rank=i, chg=(int(prev[t] - i) if t in prev.index else None),
                           conf=conf_of.get(t), net=(net or {}).get(t, {}).get("rank"), q1=(net or {}).get(t, {}).get("q1"),
                           em=r1(x.em, 2), o=r1(meta["mu"] + x.o, 1), d=r1(meta["mu"] - x.d, 1), t=r1(meta["tau"] + x.t, 1), g=int(x.games),
-                          rec=f"{rc[0]}-{rc[1]}", crec=f"{rc[2]}-{rc[3]}",
+                          rec=f"{rc[0]}-{rc[1]}", crec=f"{rc[2]}-{rc[3]}", d1rec="{}-{}".format(*rec_d1.get(t, [0, 0])[:2]),
                           elo=r1(extras.get("R_elo", {}).get(t), 1), tv=r1(extras.get("torvik", {}).get(t), 2),
                           lat=r1(extras.get("homes", {}).get(t, {}).get("lat"), 3), lon=r1(extras.get("homes", {}).get(t, {}).get("lon"), 3),
                           alt=bool(extras.get("homes", {}).get(t, {}).get("alt", False)), ab=r1(extras.get("absent", {}).get(t, 0.0), 1),

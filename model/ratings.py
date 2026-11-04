@@ -16,7 +16,12 @@ def _team_index(games, prior):
 def fit(games, asof, prior=None, p=DEFAULTS):
     """Fit ratings using games strictly before `asof`. prior: DataFrame index team_id cols o,d,t (deviations)."""
     g = games[games.date < asof]
-    g = g.astype({"home_pts": float, "away_pts": float, "poss": float})
+    if len(g):  # defensive: rating math needs numbers, never text-typed columns
+        g = g.copy()
+        for c in ("home_pts", "away_pts", "poss"):
+            g[c] = pd.to_numeric(g[c], errors="coerce")
+        g = g.dropna(subset=["home_pts", "away_pts", "poss"])
+        g["neutral"] = g["neutral"].astype(bool)
     cap = p.get("cap")
     if cap and len(g):
         # compress blowouts: margin beyond `cap` counts only `cap_keep` as much (Pomeroy-style diminishing returns)

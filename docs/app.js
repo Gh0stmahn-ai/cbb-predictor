@@ -45,7 +45,7 @@ async function home() {
   const confs = [...new Set(r.teams.map(t => short(t.conf)).filter(Boolean))].sort();
   const n = (up && up.games.length) || 0;
   view.innerHTML = `<h1>This week</h1>
-    <p class="lede">Every Division I team in rating order, with its record, projected finish, and win chances for each game in the next seven days${n ? ` (${n} games)` : ""}. Rank movement is since last Monday.</p>
+    <p class="lede">Every Division I team in rating order, with its record, projected finish, and win chances for each game in the next seven days${n ? ` (${n} games)` : ""}. Rank movement is since last Monday. Records count every game; ratings and projected records use games between Division I teams.</p>
     <div class="controls"><input type="search" id="q" placeholder="Find a team" aria-label="Find a team">
       <select id="cf" aria-label="Conference"><option value="">All conferences</option>${confs.map(c => `<option>${esc(c)}</option>`).join("")}</select>
       <button class="chip" id="t25" aria-pressed="false">Top 25</button>
@@ -77,7 +77,7 @@ function tile(t, games) {
   return `<article class="tile" style="--tc:${col}">
     <header><span class="tl-rank">${t.rank}</span>${chg}${tm.l ? `<img src="${esc(tm.l)}" alt="" width="34" height="34" loading="lazy">` : ""}
       <div><h3><a href="#/team/${t.id}">${esc(tm.n)}</a></h3><span class="muted">${esc(short(t.conf))}</span></div></header>
-    <dl class="tl-stats"><div><dt>Record</dt><dd>${esc(t.rec)}</dd></div><div><dt>Conf</dt><dd>${esc(t.crec)}</dd></div>
+    <dl class="tl-stats"><div title="Against Division I: ${esc(t.d1rec || t.rec)}"><dt>Record</dt><dd>${esc(t.rec)}</dd></div><div><dt>Conf</dt><dd>${esc(t.crec)}</dd></div>
       <div><dt>Projected</dt><dd>${esc(t.proj || "-")}</dd></div><div><dt>NET</dt><dd>${t.net ?? "-"}</dd></div></dl>
     <dl class="tl-stats"><div><dt>Net rating</dt><dd><b>${sgn(t.em)}</b></dd></div><div><dt>Offense</dt><dd>${t.o.toFixed(1)}</dd></div>
       <div><dt>Defense</dt><dd>${t.d.toFixed(1)}</dd></div><div><dt>Pace</dt><dd>${t.t.toFixed(1)}</dd></div></dl>
@@ -350,7 +350,7 @@ async function standings() {
   const confs = [...new Set(r.teams.map(t => short(t.conf)).filter(Boolean))].sort();
   const q = new URLSearchParams(location.hash.split("?")[1] || "");
   view.innerHTML = `<h1>Conference standings</h1>
-    <p class="lede">Current records against Division I opponents, projected final records from simulating every remaining game 2,000 times, and each team's chance to win or share the regular-season conference title.</p>
+    <p class="lede">Current records (every game, including non-Division I opponents), projected final records from simulating every remaining game 2,000 times, and each team's chance to win or share the regular-season conference title.</p>
     <div class="controls"><select id="cs" aria-label="Conference">${confs.map(c => `<option>${esc(c)}</option>`).join("")}</select></div><div id="st"></div>`;
   $("#cs").value = q.get("c") && confs.includes(q.get("c")) ? q.get("c") : (confs.includes("Big Ten") ? "Big Ten" : confs[0]);
   const num = s => { const [w, l] = (s || "0-0").split("-").map(Number); return w / Math.max(w + l, 1); };
