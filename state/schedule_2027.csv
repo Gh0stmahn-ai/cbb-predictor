@@ -147,7 +147,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401917512,2026-11-04,2026-11-05T03:00Z,2608,2449,Saint Mary's,N Dakota St,False,False,,2,pre,,,Moraga,CA
 401925031,2026-11-05,2026-11-05T22:00Z,249,2377,North Texas,McNeese,False,False,,2,pre,,,Denton,TX
 401909726,2026-11-05,2026-11-05T23:00Z,238,154,Vanderbilt,Wake Forest,False,False,,2,pre,,,Nashville,TN
-401919732,2026-11-05,2026-11-05T23:00Z,2916,2130,Incarnate Word,Chicago St,False,False,,2,pre,,,San Antonio,TX
 401917177,2026-11-05,2026-11-05T23:00Z,213,236,Penn State,Chattanooga,False,False,,2,pre,,,University Park,PA
 401916287,2026-11-05,2026-11-05T23:00Z,84,91,Indiana,Bellarmine,False,False,,2,pre,,,Bloomington,IN
 401919804,2026-11-05,2026-11-05T23:30Z,2550,112358,Seton Hall,Long Island,False,False,,2,pre,,,Newark,NJ
@@ -167,6 +166,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920691,2026-11-05,2026-11-06T00:00Z,2217,261,Fairfield,Vermont,False,False,America East-Metro Challenge,2,pre,,,Fairfield,CT
 401920377,2026-11-05,2026-11-06T00:00Z,259,2382,Virginia Tech,Mercer,False,False,,2,pre,,,Blacksburg,VA
 401919823,2026-11-05,2026-11-06T00:00Z,87,2385,Notre Dame,Mercyhurst,False,False,,2,pre,,,South Bend,IN
+401919732,2026-11-05,2026-11-06T00:00Z,2916,2130,Incarnate Word,Chicago St,False,False,,2,pre,,,San Antonio,TX
 401911273,2026-11-05,2026-11-06T00:00Z,2612,2066,Saint Peter's,Binghamton,False,False,America East-Metro Challenge,2,pre,,,Jersey City,NJ
 401909717,2026-11-05,2026-11-06T00:00Z,183,2115,Syracuse,C Connecticut,False,False,,2,pre,,,Syracuse,NY
 401909706,2026-11-05,2026-11-06T00:00Z,221,2084,Pitt,Buffalo,False,False,,2,pre,,,Pittsburgh,PA
