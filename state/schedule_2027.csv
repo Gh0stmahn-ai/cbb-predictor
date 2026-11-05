@@ -413,17 +413,17 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401909492,2026-11-10,2026-11-11T02:00Z,2306,156,Kansas St,Creighton,False,False,,2,pre,,,Manhattan,KS
 401909786,2026-11-10,2026-11-11T02:30Z,96,2305,Kentucky,Kansas,True,False,State Farm Champions Classic,2,pre,,,Chicago,IL
 401930177,2026-11-11,2026-11-11T05:00Z,26,2029,UCLA,AR-Pine Bluff,False,False,,2,pre,,,Los Angeles,CA
-401925863,2026-11-11,2026-11-11T05:00Z,202,198,Tulsa,Oral Roberts,False,False,,2,pre,,,Tulsa,OK
-401925858,2026-11-11,2026-11-11T05:00Z,218,232,Temple,Charleston,False,False,,2,pre,,,Philadelphia,PA
-401921005,2026-11-11,2026-11-11T05:00Z,50,140,Florida A&M,Kansas City,True,False,Showdown in St. Pete,2,pre,,,St. Petersburg,FL
 401919759,2026-11-11,2026-11-11T16:30Z,2837,161,East Texas A&M,FDU,False,False,,2,pre,,,Commerce,TX
+401921005,2026-11-11,2026-11-11T17:00Z,50,140,Florida A&M,Kansas City,True,False,Showdown in St. Pete,2,pre,,,St. Petersburg,FL
 401920234,2026-11-11,2026-11-11T18:00Z,399,159,UAlbany,Dartmouth,False,False,,2,pre,,,Albany,NY
 401911519,2026-11-11,2026-11-11T19:00Z,302,2916,UC Davis,Incarnate Word,False,False,,2,pre,,,Davis,CA
 401918992,2026-11-11,2026-11-11T20:00Z,58,2603,South Florida,Saint Joseph's,True,False,Veterans Classic,2,pre,,,Annapolis,MD
 401911230,2026-11-11,2026-11-11T20:00Z,2005,2350,Air Force,Loyola Chicago,False,False,,2,pre,,,Colorado Springs,CO
+401918978,2026-11-11,2026-11-11T21:00Z,151,2448,East Carolina,NC A&T,False,False,,2,pre,,,Greenville,NC
 401925717,2026-11-11,2026-11-11T22:00Z,21,2065,San Diego St,Bethune,False,False,,2,pre,,,San Diego,CA
 401921181,2026-11-11,2026-11-11T22:30Z,2426,219,Navy,Penn,False,False,Veterans Classic,2,pre,,,Annapolis,MD
 401926202,2026-11-11,2026-11-11T23:00Z,2678,2428,VMI,NC Central,False,False,,2,pre,,,Lexington,VA
+401925858,2026-11-11,2026-11-11T23:30Z,218,232,Temple,Charleston,False,False,,2,pre,,,Philadelphia,PA
 401920680,2026-11-11,2026-11-12T00:00Z,2599,2142,St John's,Colgate,False,False,,2,pre,,,Queens,NY
 401909524,2026-11-11,2026-11-12T00:00Z,130,269,Michigan,Marquette,False,False,,2,pre,,,Ann Arbor,MI
 401926868,2026-11-11,2026-11-12T00:00Z,282,270,Indiana St,Milwaukee,False,False,,2,pre,,,Terre Haute,IN
@@ -436,7 +436,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920903,2026-11-11,2026-11-12T00:00Z,48,256,Delaware,James Madison,False,False,,2,pre,,,Newark,DE
 401920740,2026-11-11,2026-11-12T00:00Z,2193,2097,ETSU,Campbell,False,False,,2,pre,,,Johnson City,TN
 401920202,2026-11-11,2026-11-12T00:00Z,2670,2885,VCU,NJIT,False,False,,2,pre,,,Richmond,VA
-401918978,2026-11-11,2026-11-12T00:00Z,151,2448,East Carolina,NC A&T,False,False,,2,pre,,,Greenville,NC
 401918452,2026-11-11,2026-11-12T00:00Z,2226,2729,FAU,William & Mary,False,False,,2,pre,,,Boca Raton,FL
 401917901,2026-11-11,2026-11-12T00:00Z,2698,2427,West Georgia,UNC Asheville,False,False,,2,pre,,,Carrollton,GA
 401912209,2026-11-11,2026-11-12T00:00Z,2182,44,Drexel,American,False,False,,2,pre,,,Philadelphia,PA
@@ -446,11 +445,12 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401925702,2026-11-11,2026-11-12T01:00Z,248,55,Houston,Jax State,False,False,,2,pre,,,Houston,TX
 401928824,2026-11-11,2026-11-12T01:00Z,8,2523,Arkansas,Robert Morris,False,False,,2,pre,,,Fayetteville,AR
 401928996,2026-11-11,2026-11-12T01:00Z,2571,2674,S Dakota St,Valparaiso,False,False,,2,pre,,,Brookings,SD
+401925863,2026-11-11,2026-11-12T01:00Z,202,198,Tulsa,Oral Roberts,False,False,,2,pre,,,Tulsa,OK
 401921037,2026-11-11,2026-11-12T01:00Z,2572,2296,Southern Miss,Jackson St,False,False,,2,pre,,,Hattiesburg,MS
-401917963,2026-11-11,2026-11-12T01:00Z,2000,2617,Abilene Chrstn,SF Austin,False,False,,2,pre,,,Abilene,TX
 401917522,2026-11-11,2026-11-12T01:00Z,249,2541,North Texas,Santa Clara,False,False,,2,pre,,,Denton,TX
 401928814,2026-11-11,2026-11-12T02:00Z,68,2473,Boise St,Oakland,False,False,,2,pre,,,Boise,ID
 401925915,2026-11-11,2026-11-12T02:00Z,36,2502,Colorado St,Portland St,False,False,,2,pre,,,Fort Collins,CO
+401917963,2026-11-11,2026-11-12T02:00Z,2000,2617,Abilene Chrstn,SF Austin,False,False,,2,pre,,,Abilene,TX
 401911454,2026-11-11,2026-11-12T02:00Z,2540,2440,Santa Barbara,Nevada,False,False,,2,pre,,,Santa Barbara,CA
 401911346,2026-11-11,2026-11-12T02:00Z,2253,13,Grand Canyon,Cal Poly,False,False,,2,pre,,,Phoenix,AZ
 401925738,2026-11-11,2026-11-12T03:00Z,2483,2400,Oregon,Miss Valley St,False,False,,2,pre,,,Eugene,OR
