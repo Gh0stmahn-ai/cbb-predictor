@@ -240,12 +240,12 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401922261,2026-11-06,2026-11-07T02:00Z,36,70,Colorado St,Idaho,False,False,,2,pre,,,Fort Collins,CO
 401921732,2026-11-06,2026-11-07T02:00Z,9,2458,Arizona St,N Colorado,False,False,,2,pre,,,Tempe,AZ
 401909797,2026-11-06,2026-11-07T02:00Z,2306,2463,Kansas St,CSU Northridge,False,False,,2,pre,,,Manhattan,KS
+401929356,2026-11-06,2026-11-07T02:30Z,2501,250,Portland,UT Arlington,True,False,Rainbow Classic,2,pre,,,Honolulu,HI
 401920344,2026-11-06,2026-11-07T02:30Z,204,2856,Oregon St,CA Baptist,False,False,,2,pre,,,Corvallis,OR
 401917515,2026-11-06,2026-11-07T02:30Z,301,2627,San Diego,Tarleton St,False,False,,2,pre,,,San Diego,CA
 401921727,2026-11-06,2026-11-07T03:00Z,24,2473,Stanford,Oakland,False,False,,2,pre,,,Stanford,CA
 401921061,2026-11-06,2026-11-07T03:00Z,2539,2449,San Francisco,N Dakota St,False,False,,2,pre,,,San Francisco,CA
 401922219,2026-11-06,2026-11-07T03:30Z,26,2454,UCLA,North Florida,False,False,,2,pre,,,Los Angeles,CA
-401929356,2026-11-06,2026-11-07T03:30Z,2501,250,Portland,UT Arlington,True,False,Rainbow Classic,2,pre,,,Honolulu,HI
 401918948,2026-11-07,2026-11-07T17:00Z,97,2413,Louisville,Morehead St,False,False,,2,pre,,,Louisville,KY
 401925707,2026-11-07,2026-11-07T17:00Z,2737,155,Winthrop,North Dakota,False,False,,2,pre,,,Rock Hill,SC
 401921154,2026-11-07,2026-11-07T18:00Z,195,2448,Ohio,NC A&T,False,False,,2,pre,,,Athens,OH
