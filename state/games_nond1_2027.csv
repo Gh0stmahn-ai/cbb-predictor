@@ -90,3 +90,6 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401925939,2027,2026-11-04,3101,134743,Utah Tech,Grace U,103.0,52.0,False,False,
 401922030,2027,2026-11-04,149,131858,Montana,SalishKootenai,105.0,40.0,False,False,
 401917514,2027,2026-11-04,2351,2511,LMU,Queens,95.0,96.0,False,False,
+401920960,2027,2026-11-05,2413,3229,Morehead St,VA Lynchburg,114.0,60.0,False,False,
+401924948,2027,2026-11-05,322,247,Lafayette,King's,104.0,67.0,False,False,
+401912227,2027,2026-11-05,349,289,Army,Mt St Mary,118.0,41.0,False,False,
