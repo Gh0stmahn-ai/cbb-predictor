@@ -111,3 +111,4 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401911518,2027,2026-11-05,302,2381,UC Davis,Menlo,65.0,52.0,False,False,
 401920133,2027,2026-11-05,2934,128501,Bakersfield,Stanton,93.0,54.0,False,False,
 401929292,2027,2026-11-05,2492,3167,Pepperdine,La Sierra,106.0,66.0,False,False,
+401921153,2027,2026-11-03,2448,2684,NC A&T,Warren Wilson,92.0,53.0,False,False,
