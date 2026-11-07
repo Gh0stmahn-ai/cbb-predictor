@@ -246,9 +246,9 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401921727,2026-11-06,2026-11-07T03:00Z,24,2473,Stanford,Oakland,False,False,,2,pre,,,Stanford,CA
 401921061,2026-11-06,2026-11-07T03:00Z,2539,2449,San Francisco,N Dakota St,False,False,,2,pre,,,San Francisco,CA
 401922219,2026-11-06,2026-11-07T03:30Z,26,2454,UCLA,North Florida,False,False,,2,pre,,,Los Angeles,CA
-401918948,2026-11-07,2026-11-07T17:00Z,97,2413,Louisville,Morehead St,False,False,,2,pre,,,Louisville,KY
-401925707,2026-11-07,2026-11-07T17:00Z,2737,155,Winthrop,North Dakota,False,False,,2,pre,,,Rock Hill,SC
-401921154,2026-11-07,2026-11-07T18:00Z,195,2448,Ohio,NC A&T,False,False,,2,pre,,,Athens,OH
+401918948,2026-11-07,2026-11-07T17:00Z,97,2413,Louisville,Morehead St,False,False,,2,in,,,Louisville,KY
+401925707,2026-11-07,2026-11-07T17:00Z,2737,155,Winthrop,North Dakota,False,False,,2,in,,,Rock Hill,SC
+401921154,2026-11-07,2026-11-07T18:00Z,195,2448,Ohio,NC A&T,False,False,,2,in,,,Athens,OH
 401920856,2026-11-07,2026-11-07T19:00Z,276,2649,Marshall,Toledo,False,False,,2,pre,,,Huntington,WV
 401920770,2026-11-07,2026-11-07T19:00Z,2182,2142,Drexel,Colgate,False,False,,2,pre,,,Philadelphia,PA
 401920156,2026-11-07,2026-11-07T19:00Z,233,2239,South Dakota,Fullerton,False,False,,2,pre,,,Vermillion,SD
