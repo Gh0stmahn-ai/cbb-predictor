@@ -467,7 +467,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401928818,2026-11-12,2026-11-13T00:00Z,2870,2711,Purdue FW,W Michigan,False,False,,2,pre,,,Fort Wayne,IN
 401924876,2026-11-12,2026-11-13T00:00Z,2529,2115,Sacred Heart,C Connecticut,False,False,,2,pre,,,Fairfield,CT
 401924857,2026-11-12,2026-11-13T00:00Z,2514,2405,Quinnipiac,Monmouth,False,False,,2,pre,,,Hamden,CT
-401922250,2026-11-12,2026-11-13T00:00Z,2010,2697,Alabama A&M,West Florida,False,False,,2,pre,,,Huntsville,AL
 401921768,2026-11-12,2026-11-13T00:00Z,277,2382,West Virginia,Mercer,False,False,,2,pre,,,Morgantown,WV
 401920566,2026-11-12,2026-11-13T00:00Z,119,2352,Towson,Loyola MD,False,False,410 Invitational,2,pre,,,Towson,MD
 401920412,2026-11-12,2026-11-13T00:00Z,2272,253,High Point,Southern Utah,False,False,,2,pre,,,High Point,NC
@@ -475,6 +474,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920064,2026-11-12,2026-11-13T00:00Z,227,2379,Rhode Island,MD Eastern,False,False,,2,pre,,,Kingston,RI
 401911307,2026-11-12,2026-11-13T00:00Z,225,2099,Brown,Canisius,False,False,,2,pre,,,Providence,RI
 401911013,2026-11-12,2026-11-13T00:00Z,189,315,Bowling Green,Niagara,False,False,,2,pre,,,Bowling Green,OH
+401922250,2026-11-12,2026-11-13T01:00Z,2010,2697,Alabama A&M,West Florida,False,False,,2,pre,,,Huntsville,AL
 401919041,2026-11-12,2026-11-13T01:00Z,245,197,Texas A&M,Oklahoma St,False,False,,2,pre,,,College Station,TX
 401917524,2026-11-12,2026-11-13T01:00Z,6,2351,South Alabama,LMU,True,False,,2,pre,,,Pensacola,FL
 401916306,2026-11-12,2026-11-13T01:00Z,135,2582,Minnesota,Southern,False,False,,2,pre,,,Minneapolis,MN
