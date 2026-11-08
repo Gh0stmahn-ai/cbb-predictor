@@ -139,3 +139,13 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401929293,2027,2026-11-07,328,2437,Utah State,Omaha,90.0,56.0,False,False,
 401920192,2027,2026-11-07,2603,322,Saint Joseph's,Lafayette,67.0,57.0,False,False,
 401920062,2027,2026-11-07,227,2405,Rhode Island,Monmouth,84.0,66.0,True,False,Basketball Hall of Fame Tip-Off
+401926227,2027,2026-11-07,27,2172,UC Riverside,Denver,64.0,60.0,False,False,
+401928788,2027,2026-11-07,2250,166,Gonzaga,New Mexico St,109.0,68.0,False,False,
+401926112,2027,2026-11-07,231,2460,Furman,Northern Iowa,98.0,83.0,False,False,
+401921174,2027,2026-11-07,85,2630,IU Indy,UT Martin,75.0,74.0,False,False,
+401920411,2027,2026-11-07,2272,265,High Point,Washington St,83.0,71.0,False,False,
+401925106,2027,2026-11-07,292,2504,UT Rio Grande,Prairie View,68.0,63.0,False,False,
+401926825,2027,2026-11-07,45,2261,G Washington,Hampton,75.0,61.0,False,False,
+401924895,2027,2026-11-07,167,2464,New Mexico,N Arizona,94.0,65.0,False,False,
+401924843,2027,2026-11-07,315,2415,Niagara,Morgan St,67.0,73.0,False,False,
+401909532,2027,2026-11-07,158,2507,Nebraska,Providence,67.0,58.0,True,False,Basketball Hall of Fame Tip-Off
