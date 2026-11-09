@@ -353,9 +353,9 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401917978,2026-11-09,2026-11-10T01:00Z,245,2433,Texas A&M,UL Monroe,False,False,,2,pre,,,College Station,TX
 401906803,2026-11-09,2026-11-10T01:00Z,201,2453,Oklahoma,North Alabama,False,False,,2,pre,,,Norman,OK
 401926132,2026-11-09,2026-11-10T01:30Z,2509,2287,Purdue,Illinois St,False,False,,2,pre,,,West Lafayette,IN
+401920887,2026-11-09,2026-11-10T02:00Z,2429,2550,Charlotte,Seton Hall,True,False,,2,pre,,,Philadelphia,PA
 401920799,2026-11-09,2026-11-10T02:00Z,2,2026,Auburn,App State,False,False,,2,pre,,,Auburn,AL
 401909502,2026-11-09,2026-11-10T02:00Z,305,2010,DePaul,Alabama A&M,False,False,,2,pre,,,Chicago,IL
-401920887,2026-11-09,2026-11-10T02:30Z,2429,2550,Charlotte,Seton Hall,True,False,,2,pre,,,Philadelphia,PA
 401920718,2026-11-09,2026-11-10T02:30Z,204,331,Oregon St,E Washington,False,False,,2,pre,,,Corvallis,OR
 401925737,2026-11-09,2026-11-10T03:00Z,264,2400,Washington,Miss Valley St,False,False,,2,pre,,,Seattle,WA
 401921095,2026-11-09,2026-11-10T03:00Z,24,242,Stanford,Rice,False,False,,2,pre,,,Stanford,CA

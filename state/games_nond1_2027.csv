@@ -167,3 +167,4 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401924719,2027,2026-11-08,172,6319,Cornell,Keuka,99.0,59.0,False,False,
 401920355,2027,2026-11-08,80,108,Chicago,Harvard,47.0,63.0,False,False,
 401922262,2027,2026-11-08,70,124946,Idaho,Lincoln (CA),108.0,69.0,False,False,
+401930195,2027,2026-11-08,3246,2501,Bethesda,Portland,56.0,130.0,True,False,Rainbow Classic
