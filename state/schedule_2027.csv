@@ -326,7 +326,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401918053,2026-11-08,2026-11-09T01:30Z,248,25,Houston,California,True,False,Lake Tahoe Classic,2,pre,,,Stateline,NV
 401919029,2026-11-08,2026-11-09T04:00Z,30,2724,USC,Wichita St,True,False,Lake Tahoe Classic,2,pre,,,Stateline,NV
 401929002,2026-11-08,2026-11-09T04:00Z,62,250,Hawai'i,UT Arlington,False,False,Rainbow Classic,2,pre,,,Honolulu,HI
-401916315,2026-11-09,2026-11-09T23:00Z,194,276,Ohio State,Marshall,False,False,,2,pre,,,Columbus,OH
+401916315,2026-11-09,2026-11-09T23:00Z,194,276,Ohio State,Marshall,False,False,,2,in,,,Columbus,OH
 401921180,2026-11-09,2026-11-09T23:30Z,219,47,Penn,Howard,False,False,,2,pre,,,Philadelphia,PA
 401909718,2026-11-09,2026-11-09T23:30Z,84,183,Indiana,Syracuse,True,False,Bad Boy Mowers Series,2,pre,,,Indianapolis,IN
 401920686,2026-11-09,2026-11-10T00:00Z,41,2681,UConn,Wagner,False,False,,2,pre,,,Storrs,CT
@@ -392,7 +392,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401925107,2026-11-10,2026-11-11T00:30Z,292,326,UT Rio Grande,Texas St,False,False,,2,pre,,,Edinburg,TX
 401919003,2026-11-10,2026-11-11T00:30Z,2655,2447,Tulane,Nicholls,False,False,,2,pre,,,New Orleans,LA
 401913527,2026-11-10,2026-11-11T01:00Z,2641,356,Texas Tech,Illinois,False,False,,2,pre,,,Lubbock,TX
-401909773,2026-11-10,2026-11-11T01:00Z,66,2582,Iowa State,Southern,False,False,,2,pre,,,Ames,IA
 401927386,2026-11-10,2026-11-11T01:00Z,2460,2739,Northern Iowa,Green Bay,False,False,,2,pre,,,Cedar Falls,IA
 401926731,2026-11-10,2026-11-11T01:00Z,2032,2630,Arkansas St,UT Martin,False,False,,2,pre,,,Jonesboro,AR
 401925685,2026-11-10,2026-11-11T01:00Z,93,2016,Murray St,Alcorn St,False,False,,2,pre,,,Murray,KY
@@ -400,11 +399,12 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920704,2026-11-10,2026-11-11T01:00Z,288,2057,Lipscomb,Belmont,False,False,,2,pre,,,Nashville,TN
 401918969,2026-11-10,2026-11-11T01:00Z,2567,2504,SMU,Prairie View,False,False,,2,pre,,,Dallas,TX
 401911250,2026-11-10,2026-11-11T01:00Z,139,94,Saint Louis,N Kentucky,False,False,,2,pre,,,St. Louis,MO
+401909773,2026-11-10,2026-11-11T01:00Z,66,2582,Iowa State,Southern,False,False,,2,pre,,,Ames,IA
 401909752,2026-11-10,2026-11-11T01:00Z,239,43,Baylor,Yale,False,False,,2,pre,,,Waco,TX
 401920895,2026-11-10,2026-11-11T01:30Z,275,2217,Wisconsin,Fairfield,False,False,,2,pre,,,Madison,WI
 401920817,2026-11-10,2026-11-11T01:30Z,145,2545,Ole Miss,SE Louisiana,False,False,,2,pre,,,Oxford,MS
-401909740,2026-11-10,2026-11-11T02:00Z,12,2464,Arizona,N Arizona,False,False,,2,pre,,,Tucson,AZ
 401920425,2026-11-10,2026-11-11T02:00Z,258,2083,Virginia,Bucknell,False,False,,2,pre,,,Charlottesville,VA
+401909740,2026-11-10,2026-11-11T02:00Z,12,2464,Arizona,N Arizona,False,False,,2,pre,,,Tucson,AZ
 401921740,2026-11-10,2026-11-11T02:00Z,252,2511,BYU,Queens,False,False,,2,pre,,,Provo,UT
 401929180,2026-11-10,2026-11-11T02:00Z,278,2247,Fresno St,Georgia St,False,False,,2,pre,,,Fresno,CA
 401925940,2026-11-10,2026-11-11T02:00Z,328,3101,Utah State,Utah Tech,False,False,,2,pre,,,Logan,UT
@@ -453,8 +453,8 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401921037,2026-11-11,2026-11-12T01:00Z,2572,2296,Southern Miss,Jackson St,False,False,,2,pre,,,Hattiesburg,MS
 401917522,2026-11-11,2026-11-12T01:00Z,249,2541,North Texas,Santa Clara,False,False,,2,pre,,,Denton,TX
 401930177,2026-11-11,2026-11-12T02:00Z,26,2029,UCLA,AR-Pine Bluff,False,False,,2,pre,,,Los Angeles,CA
-401928814,2026-11-11,2026-11-12T02:00Z,68,2473,Boise St,Oakland,False,False,,2,pre,,,Boise,ID
 401926062,2026-11-11,2026-11-12T02:00Z,158,2815,Nebraska,Lindenwood,False,False,,2,pre,,,Lincoln,NE
+401928814,2026-11-11,2026-11-12T02:00Z,68,2473,Boise St,Oakland,False,False,,2,pre,,,Boise,ID
 401925915,2026-11-11,2026-11-12T02:00Z,36,2502,Colorado St,Portland St,False,False,,2,pre,,,Fort Collins,CO
 401917963,2026-11-11,2026-11-12T02:00Z,2000,2617,Abilene Chrstn,SF Austin,False,False,,2,pre,,,Abilene,TX
 401911454,2026-11-11,2026-11-12T02:00Z,2540,2440,Santa Barbara,Nevada,False,False,,2,pre,,,Santa Barbara,CA
@@ -498,8 +498,8 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401913528,2026-11-13,2026-11-14T00:00Z,356,2534,Illinois,Sam Houston,False,False,,2,pre,,,Champaign,IL
 401925755,2026-11-13,2026-11-14T00:00Z,127,2460,Michigan St,Northern Iowa,False,False,,2,pre,,,East Lansing,MI
 401906850,2026-11-13,2026-11-14T00:00Z,2633,2634,Tennessee,Tennessee St,False,False,,2,pre,,,Knoxville,TN
-401921803,2026-11-13,2026-11-14T00:00Z,96,2464,Kentucky,N Arizona,False,False,,2,pre,,,Lexington,KY
 401921825,2026-11-13,2026-11-14T00:00Z,238,2504,Vanderbilt,Prairie View,False,False,,2,pre,,,Nashville,TN
+401921803,2026-11-13,2026-11-14T00:00Z,96,2464,Kentucky,N Arizona,False,False,,2,pre,,,Lexington,KY
 401926133,2026-11-13,2026-11-14T00:00Z,2509,195,Purdue,Ohio,False,False,,2,pre,,,West Lafayette,IN
 401925820,2026-11-13,2026-11-14T00:00Z,2429,2026,Charlotte,App State,False,False,,2,pre,,,Charlotte,NC
 401924796,2026-11-13,2026-11-14T00:00Z,2329,2368,Lehigh,Marist,False,False,,2,pre,,,Bethlehem,PA
@@ -605,13 +605,13 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401917528,2026-11-14,2026-11-15T03:00Z,2547,304,Seattle U,Idaho St,False,False,,2,pre,,,Seattle,WA
 401911455,2026-11-14,2026-11-15T03:00Z,2440,3084,Nevada,Utah Valley,False,False,,2,pre,,,Reno,NV
 401918949,2026-11-15,2026-11-15T18:00Z,235,97,Memphis,Louisville,False,False,,2,pre,,,Memphis,TN
-401909774,2026-11-15,2026-11-15T18:00Z,66,315,Iowa State,Niagara,False,False,,2,pre,,,Ames,IA
 401926063,2026-11-15,2026-11-15T18:00Z,158,68,Nebraska,Boise St,True,False,,2,pre,,,Sioux Falls,SD
 401925896,2026-11-15,2026-11-15T18:00Z,2247,2450,Georgia St,Norfolk St,False,False,,2,pre,,,Atlanta,GA
 401924858,2026-11-15,2026-11-15T18:00Z,2115,2514,C Connecticut,Quinnipiac,False,False,,2,pre,,,New Britain,CT
 401920771,2026-11-15,2026-11-15T18:00Z,48,2142,Delaware,Colgate,False,False,,2,pre,,,Newark,DE
 401920235,2026-11-15,2026-11-15T18:00Z,104,159,Boston U,Dartmouth,False,False,,2,pre,,,Boston,MA
 401912210,2026-11-15,2026-11-15T18:00Z,44,108,American,Harvard,False,False,,2,pre,,,Washington,DC
+401909774,2026-11-15,2026-11-15T18:00Z,66,315,Iowa State,Niagara,False,False,,2,pre,,,Ames,IA
 401909554,2026-11-15,2026-11-15T18:30Z,103,160,Boston College,New Hampshire,False,False,,2,pre,,,Chestnut Hill,MA
 401918453,2026-11-15,2026-11-15T19:00Z,130,2729,Michigan,William & Mary,False,False,,2,pre,,,Ann Arbor,MI
 401925926,2026-11-15,2026-11-15T19:00Z,232,2569,Charleston,SC State,False,False,,2,pre,,,Charleston,SC
