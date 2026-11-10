@@ -625,7 +625,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401921168,2026-11-15,2026-11-15T20:00Z,2010,325,Alabama A&M,Cleveland St,False,False,,2,pre,,,Huntsville,AL
 401911251,2026-11-15,2026-11-15T20:00Z,139,2272,Saint Louis,High Point,False,False,,2,pre,,,St. Louis,MO
 401909493,2026-11-15,2026-11-15T20:00Z,2294,156,Iowa,Creighton,True,False,,2,pre,,,Des Moines,IA
-401928789,2026-11-15,2026-11-15T20:30Z,21,166,San Diego St,New Mexico St,True,False,Compete 4 Cause Classic,2,pre,,,Oceanside,CA
+401928789,2026-11-15,2026-11-15T21:00Z,21,166,San Diego St,New Mexico St,True,False,Compete 4 Cause Classic,2,pre,,,Oceanside,CA
 401919825,2026-11-15,2026-11-15T21:00Z,256,2385,James Madison,Mercyhurst,False,False,,2,pre,,,Harrisonburg,VA
 401917531,2026-11-15,2026-11-15T21:00Z,2351,2130,LMU,Chicago St,False,False,,2,pre,,,Los Angeles,CA
 401923393,2026-11-15,2026-11-15T21:30Z,88,2711,S Indiana,W Michigan,False,False,,2,pre,,,Evansville,IN
