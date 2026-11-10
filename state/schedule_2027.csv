@@ -464,7 +464,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401917523,2026-11-11,2026-11-12T03:00Z,299,279,Long Beach St,Pacific,False,False,,2,pre,,,Long Beach,CA
 401917521,2026-11-11,2026-11-12T03:00Z,2547,2636,Seattle U,UTSA,False,False,,2,pre,,,Seattle,WA
 401918054,2026-11-11,2026-11-12T04:00Z,25,30,California,USC,False,False,,2,pre,,,Berkeley,CA
-401922239,2026-11-12,2026-11-12T05:00Z,47,56,Howard,Stetson,False,False,,2,pre,,,Washington,DC
 401920073,2026-11-12,2026-11-12T20:00Z,2244,140,George Mason,Kansas City,True,False,Showdown in St. Pete,2,pre,,,St. Petersburg,FL
 401925631,2026-11-12,2026-11-12T23:00Z,2154,71,Coppin St,Bradley,True,False,Showdown in St. Pete,2,pre,,,St. Petersburg,FL
 401921086,2026-11-12,2026-11-12T23:00Z,2378,2415,UMBC,Morgan St,False,False,410 Invitational,2,pre,,,Baltimore,MD
@@ -473,6 +472,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401928818,2026-11-12,2026-11-13T00:00Z,2870,2711,Purdue FW,W Michigan,False,False,,2,pre,,,Fort Wayne,IN
 401924876,2026-11-12,2026-11-13T00:00Z,2529,2115,Sacred Heart,C Connecticut,False,False,,2,pre,,,Fairfield,CT
 401924857,2026-11-12,2026-11-13T00:00Z,2514,2405,Quinnipiac,Monmouth,False,False,,2,pre,,,Hamden,CT
+401922239,2026-11-12,2026-11-13T00:00Z,47,56,Howard,Stetson,False,False,,2,pre,,,Washington,DC
 401921768,2026-11-12,2026-11-13T00:00Z,277,2382,West Virginia,Mercer,False,False,,2,pre,,,Morgantown,WV
 401920566,2026-11-12,2026-11-13T00:00Z,119,2352,Towson,Loyola MD,False,False,410 Invitational,2,pre,,,Towson,MD
 401920412,2026-11-12,2026-11-13T00:00Z,2272,253,High Point,Southern Utah,False,False,,2,pre,,,High Point,NC
