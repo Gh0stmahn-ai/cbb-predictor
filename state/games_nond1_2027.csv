@@ -181,3 +181,6 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401919781,2027,2026-11-09,2330,347,Le Moyne,Elmira,109.0,39.0,False,False,
 401911008,2027,2026-11-09,2050,2855,Ball State,Brescia,89.0,64.0,False,False,
 401925032,2027,2026-11-09,2377,128256,McNeese,Biblical Stud,135.0,87.0,False,False,
+401929455,2027,2026-11-09,309,2573,Louisiana,Southern NO,56.0,39.0,False,False,
+401920766,2027,2026-11-09,2634,2225,Tennessee St,Fisk,123.0,73.0,False,False,
+401929357,2027,2026-11-09,3246,250,Bethesda,UT Arlington,65.0,116.0,True,False,Rainbow Classic
