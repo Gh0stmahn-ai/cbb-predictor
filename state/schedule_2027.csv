@@ -689,8 +689,8 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401909544,2026-11-17,2026-11-18T00:00Z,2752,325,Xavier,Cleveland St,False,False,,2,pre,,,Cincinnati,OH
 401909535,2026-11-17,2026-11-18T00:00Z,2507,2529,Providence,Sacred Heart,False,False,,2,pre,,,Providence,RI
 401902279,2026-11-17,2026-11-18T00:00Z,2086,2717,Butler,W Carolina,False,False,,2,pre,,,Indianapolis,IN
-401916289,2026-11-17,2026-11-18T00:30Z,84,8,Indiana,Arkansas,True,False,Bad Boy Mowers Series,2,pre,,,New York,NY
 401906761,2026-11-17,2026-11-18T00:30Z,333,338,Alabama,Kennesaw St,False,False,,2,pre,,,Tuscaloosa,AL
+401916289,2026-11-17,2026-11-18T00:30Z,84,8,Indiana,Arkansas,True,False,Bad Boy Mowers Series,2,pre,,,New York,NY
 401926781,2026-11-17,2026-11-18T00:30Z,2348,55,Louisiana Tech,Jax State,False,False,,2,pre,,,Ruston,LA
 401919018,2026-11-17,2026-11-18T00:30Z,5,2229,UAB,FIU,False,False,,2,pre,,,Birmingham,AL
 401911020,2026-11-17,2026-11-18T00:30Z,113,2803,UMass,Bryant,False,False,,2,pre,,,Amherst,MA
