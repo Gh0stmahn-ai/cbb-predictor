@@ -184,3 +184,11 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401929455,2027,2026-11-09,309,2573,Louisiana,Southern NO,56.0,39.0,False,False,
 401920766,2027,2026-11-09,2634,2225,Tennessee St,Fisk,123.0,73.0,False,False,
 401929357,2027,2026-11-09,3246,250,Bethesda,UT Arlington,65.0,116.0,True,False,Rainbow Classic
+401925888,2027,2026-11-10,2458,3141,N Colorado,Northern NM,102.0,52.0,False,False,
+401929354,2027,2026-11-10,2640,128256,Texas Southern,Biblical Stud,98.0,78.0,False,False,
+401926826,2027,2026-11-10,2261,3111,Hampton,Apprentice,67.0,56.0,False,False,
+401926162,2027,2026-11-10,2643,3229,The Citadel,VA Lynchburg,131.0,50.0,False,False,
+401924949,2027,2026-11-10,322,135043,Lafayette,Penn State Leh,89.0,46.0,False,False,
+401922045,2027,2026-11-10,2344,117,Longwood,St Mary's (MD),101.0,45.0,False,False,
+401925078,2027,2026-11-10,2466,2398,N'Western St,Millsaps,77.0,49.0,False,False,
+401917915,2027,2026-11-10,2110,3120,C Arkansas,Ecclesia,127.0,54.0,False,False,
