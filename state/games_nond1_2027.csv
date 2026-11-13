@@ -219,3 +219,5 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401923400,2027,2026-11-12,104,353,Boston U,J&W,100.0,74.0,False,False,
 401929447,2027,2026-11-12,324,3229,Coastal,VA Lynchburg,103.0,54.0,False,False,
 401926788,2027,2026-11-12,338,548,Kennesaw St,LaGrange,107.0,54.0,False,False,
+401920157,2027,2026-11-12,2239,124946,Fullerton,Lincoln (CA),101.0,71.0,False,False,
+401920296,2027,2026-11-12,2463,134743,CSU Northridge,Grace (CA),108.0,69.0,False,False,
