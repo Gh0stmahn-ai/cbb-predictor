@@ -217,3 +217,5 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401911391,2027,2026-11-11,2241,2215,Gardner-Webb,Erskine,88.0,66.0,False,False,
 401929625,2027,2026-11-11,300,124946,UC Irvine,Lincoln (CA),90.0,40.0,False,False,
 401923400,2027,2026-11-12,104,353,Boston U,J&W,100.0,74.0,False,False,
+401929447,2027,2026-11-12,324,3229,Coastal,VA Lynchburg,103.0,54.0,False,False,
+401926788,2027,2026-11-12,338,548,Kennesaw St,LaGrange,107.0,54.0,False,False,
