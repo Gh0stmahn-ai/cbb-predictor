@@ -544,13 +544,13 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401917525,2026-11-13,2026-11-14T03:00Z,2608,82,Saint Mary's,UIC,False,False,,2,pre,,,Moraga,CA
 401920345,2026-11-13,2026-11-14T03:30Z,2856,2029,CA Baptist,AR-Pine Bluff,False,False,,2,pre,,,Riverside,CA
 401924720,2026-11-14,2026-11-14T16:00Z,172,2430,Cornell,UNC Greensboro,False,False,,2,post,,,Ithaca,NY
-401919004,2026-11-14,2026-11-14T17:00Z,2006,2655,Akron,Tulane,False,False,,2,pre,,,Akron,OH
-401919847,2026-11-14,2026-11-14T18:00Z,2641,284,Texas Tech,Stonehill,False,False,,2,pre,,,Lubbock,TX
-401923303,2026-11-14,2026-11-14T18:00Z,311,2182,Maine,Drexel,False,False,,2,pre,,,Orono,ME
-401922031,2026-11-14,2026-11-14T18:00Z,155,149,North Dakota,Montana,False,False,,2,pre,,,Grand Forks,ND
-401920074,2026-11-14,2026-11-14T18:00Z,2244,71,George Mason,Bradley,True,False,Showdown in St. Pete,2,pre,,,St. Petersburg,FL
-401912229,2026-11-14,2026-11-14T18:00Z,349,2900,Army,St Thomas,False,False,,2,pre,,,West Point,NY
-401911231,2026-11-14,2026-11-14T18:30Z,36,2350,Colorado St,Loyola Chicago,False,False,,2,pre,,,Fort Collins,CO
+401919004,2026-11-14,2026-11-14T17:00Z,2006,2655,Akron,Tulane,False,False,,2,in,,,Akron,OH
+401923303,2026-11-14,2026-11-14T18:00Z,311,2182,Maine,Drexel,False,False,,2,in,,,Orono,ME
+401920750,2026-11-14,2026-11-14T18:00Z,2754,276,Youngstown St,Marshall,False,False,,2,in,,,Youngstown,OH
+401920074,2026-11-14,2026-11-14T18:00Z,71,2244,Bradley,George Mason,True,False,Showdown in St. Pete,2,in,,,St. Petersburg,FL
+401912229,2026-11-14,2026-11-14T18:00Z,349,2900,Army,St Thomas,False,False,,2,in,,,West Point,NY
+401911231,2026-11-14,2026-11-14T18:30Z,36,2350,Colorado St,Loyola Chicago,False,False,,2,in,,,Fort Collins,CO
+401919847,2026-11-14,2026-11-14T19:00Z,2641,284,Texas Tech,Stonehill,False,False,,2,pre,,,Lubbock,TX
 401922230,2026-11-14,2026-11-14T19:00Z,2511,2747,Queens,Wofford,False,False,,2,pre,,,Charlotte,NC
 401922220,2026-11-14,2026-11-14T19:00Z,2454,2643,North Florida,The Citadel,False,False,,2,pre,,,Jacksonville,FL
 401921096,2026-11-14,2026-11-14T19:00Z,2617,242,SF Austin,Rice,False,False,,2,pre,,,Nacogdoches,TX
@@ -577,7 +577,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401918055,2026-11-14,2026-11-14T22:00Z,25,3101,California,Utah Tech,False,False,,2,pre,,,Berkeley,CA
 401926777,2026-11-14,2026-11-14T23:00Z,278,27,Fresno St,UC Riverside,False,False,,2,pre,,,Fresno,CA
 401925827,2026-11-14,2026-11-14T23:00Z,249,6,North Texas,South Alabama,False,False,,2,pre,,,Denton,TX
-401920750,2026-11-14,2026-11-14T23:00Z,2754,276,Youngstown St,Marshall,False,False,,2,pre,,,Youngstown,OH
 401919782,2026-11-14,2026-11-14T23:00Z,2330,2363,Le Moyne,Manhattan,False,False,,2,pre,,,Syracuse,NY
 401909534,2026-11-14,2026-11-14T23:00Z,2507,38,Providence,Colorado,False,False,,2,pre,,,Providence,RI
 401920193,2026-11-14,2026-11-14T23:30Z,2603,219,Saint Joseph's,Penn,False,False,Big 5 Classic - Campus Game,2,pre,,,Philadelphia,PA
@@ -601,6 +600,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401911520,2026-11-14,2026-11-15T01:00Z,16,302,Sacramento St,UC Davis,False,False,,2,pre,,,Sacramento,CA
 401911347,2026-11-14,2026-11-15T01:00Z,2253,2433,Grand Canyon,UL Monroe,False,False,,2,pre,,,Phoenix,AZ
 401920760,2026-11-14,2026-11-15T01:30Z,2057,231,Belmont,Furman,False,False,,2,pre,,,Nashville,TN
+401922031,2026-11-14,2026-11-15T02:00Z,155,149,North Dakota,Montana,False,False,,2,pre,,,Grand Forks,ND
 401917530,2026-11-14,2026-11-15T03:00Z,2541,167,Santa Clara,New Mexico,False,False,,2,pre,,,Santa Clara,CA
 401911455,2026-11-14,2026-11-15T03:00Z,2440,3084,Nevada,Utah Valley,False,False,,2,pre,,,Reno,NV
 401918949,2026-11-15,2026-11-15T18:00Z,235,97,Memphis,Louisville,False,False,,2,pre,,,Memphis,TN
