@@ -222,3 +222,7 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401920157,2027,2026-11-12,2239,124946,Fullerton,Lincoln (CA),101.0,71.0,False,False,
 401920296,2027,2026-11-12,2463,134743,CSU Northridge,Grace (CA),108.0,69.0,False,False,
 401928807,2027,2026-11-13,2739,2677,Green Bay,Viterbo,66.0,46.0,False,False,
+401929386,2027,2026-11-13,2198,2310,E Kentucky,Kentucky St,106.0,59.0,False,False,
+401926732,2027,2026-11-13,2630,3134,UT Martin,Champ Chrstn,86.0,57.0,False,False,
+401926203,2027,2026-11-13,2678,124942,VMI,Mary Baldwin,71.0,53.0,False,False,
+401924953,2027,2026-11-13,2277,128256,Hou Christian,Biblical Stud,108.0,73.0,False,False,
