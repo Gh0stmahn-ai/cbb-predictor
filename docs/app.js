@@ -1,15 +1,24 @@
 "use strict";
 const $ = (s, el = document) => el.querySelector(s);
 const view = $("#view");
-const cache = {};
-async function load(name) {
-  if (cache[name] !== undefined) return cache[name];
+// Data files are cached in memory, but only briefly. A tab left open for days must not keep
+// serving the data it loaded when it was opened (that produced false "last update N hours ago" warnings).
+const CACHE_TTL = 10 * 60 * 1000;
+let cache = {}, cacheAt = Date.now();
+function freshCache() { if (Date.now() - cacheAt > CACHE_TTL) { cache = {}; cacheAt = Date.now(); } }
+async function load(name, force = false) {
+  freshCache();
+  if (!force && cache[name] !== undefined) return cache[name];
   try {
-    const r = await fetch(`data/${name}.json?v=${Date.now() >> 16}`);
+    const r = await fetch(`data/${name}.json?v=${Date.now()}`, {cache: "no-store"});
     cache[name] = r.ok ? await r.json() : null;
   } catch { cache[name] = null; }
   return cache[name];
 }
+// Coming back to a tab that has been in the background: reload the data if it has gone stale.
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && Date.now() - cacheAt > CACHE_TTL) route();
+});
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pct = (p, d = 0) => p == null ? "-" : (100 * p).toFixed(d) + "%";
 const sgn = x => x == null ? "-" : (x > 0 ? "+" : "") + x.toFixed(1);
@@ -164,7 +173,7 @@ function weekPicker(weeks) {
 function bindWeek(weeks) {
   const s = $("#wsel"); if (!s) return;
   const go = async () => {
-    const r = await fetch(`data/weeks/${s.value}.json`); const w = r.ok ? await r.json() : null;
+    const r = await fetch(`data/weeks/${s.value}.json?v=${Date.now()}`, {cache: "no-store"}); const w = r.ok ? await r.json() : null;
     const led = await load("ledger");
     const res = {}; (led?.games || []).forEach(g => { if (g[12] != null) res[g[0]] = [g[12], g[13]]; });
     if (!w) { $("#wk").innerHTML = `<p class="muted">That snapshot could not be loaded.</p>`; return; }
@@ -668,7 +677,9 @@ async function route() {
   const full = location.hash.replace(/^#\/?/, ""), r = full.split("?")[0].split("/")[0], arg = full.split("?")[0].split("/")[1];
   setNav(r in routes ? r : (r === "team" ? "team" : ""));
   TEAMS = (await load("teams")) || {};
-  const meta = await load("meta");
+  let meta = await load("meta");
+  // Before warning that data is old, confirm with a fresh copy straight from the server.
+  if (meta && (Date.now() - new Date(meta.updated)) / 36e5 > 30) { cache = {}; cacheAt = Date.now(); meta = await load("meta", true); }
   let warn = "";
   if (meta) {
     const ageH = (Date.now() - new Date(meta.updated)) / 36e5;
