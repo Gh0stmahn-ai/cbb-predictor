@@ -233,3 +233,7 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401921155,2027,2026-11-14,2448,2129,NC A&T,Cheyney (PA),104.0,76.0,False,False,
 401922054,2027,2026-11-14,2515,2828,Radford,Shenandoah,102.0,63.0,False,False,
 401934189,2027,2026-11-14,350,2410,UNC Wilmington,Montreat,100.0,41.0,False,False,
+401929444,2027,2026-11-14,2032,2176,Arkansas St,Dillard,99.0,65.0,False,False,
+401925948,2027,2026-11-14,2692,124946,Weber St,Lincoln (CA),80.0,57.0,False,False,
+401925048,2027,2026-11-14,2443,2573,LSU N Orleans,Southern NO,98.0,82.0,False,False,
+401927377,2027,2026-11-14,282,2189,Indiana St,Earlham,109.0,37.0,False,False,
