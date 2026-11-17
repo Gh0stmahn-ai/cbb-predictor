@@ -851,7 +851,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401922284,2026-11-21,2026-11-21T16:00Z,2430,2908,UNC Greensboro,SC Upstate,False,False,,2,pre,,,Greensboro,NC
 401925756,2026-11-21,2026-11-21T17:00Z,127,2174,Michigan St,Detroit Mercy,False,False,,2,pre,,,East Lansing,MI
 401923402,2026-11-21,2026-11-21T17:00Z,104,171,Boston U,Columbia,False,False,,2,pre,,,Boston,MA
-401911394,2026-11-21,2026-11-21T17:00Z,2678,2241,VMI,Gardner-Webb,False,False,,2,pre,,,Lexington,VA
 401923312,2026-11-21,2026-11-21T18:00Z,2441,160,New Haven,New Hampshire,False,False,,2,pre,,,West Haven,CT
 401921169,2026-11-21,2026-11-21T18:00Z,325,2309,Cleveland St,Kent State,False,False,,2,pre,,,Cleveland,OH
 401920948,2026-11-21,2026-11-21T18:00Z,2199,2172,E Michigan,Denver,False,False,,2,pre,,,Ypsilanti,MI
@@ -887,6 +886,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920964,2026-11-21,2026-11-22T00:00Z,2210,2413,Elon,Morehead St,False,False,,2,pre,,,Elon,NC
 401920125,2026-11-21,2026-11-22T00:00Z,13,2464,Cal Poly,N Arizona,False,False,,2,pre,,,San Luis Obispo,CA
 401917539,2026-11-21,2026-11-22T00:00Z,2351,2856,LMU,CA Baptist,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
+401911394,2026-11-21,2026-11-22T00:00Z,2678,2241,VMI,Gardner-Webb,False,False,,2,pre,,,Lexington,VA
 401911378,2026-11-21,2026-11-22T00:00Z,2382,2127,Mercer,Charleston So,False,False,,2,pre,,,Macon,GA
 401911310,2026-11-21,2026-11-22T00:00Z,261,225,Vermont,Brown,False,False,,2,pre,,,Burlington,VT
 401926217,2026-11-21,2026-11-22T00:30Z,2635,2506,Tennessee Tech,Presbyterian,False,False,,2,pre,,,Cookeville,TN
@@ -915,7 +915,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401925066,2026-11-22,2026-11-22T20:00Z,2447,2653,Nicholls,Troy,True,False,Pensacola Invitational,2,pre,,,Pensacola,FL
 401922252,2026-11-22,2026-11-22T20:00Z,6,2697,South Alabama,West Florida,False,False,,2,pre,,,Mobile,AL
 401929202,2026-11-22,2026-11-22T20:30Z,326,2377,Texas St,McNeese,False,False,,2,pre,,,San Marcos,TX
-401923323,2026-11-22,2026-11-22T20:30Z,2385,399,Mercyhurst,UAlbany,True,False,Queen City Classic,2,pre,,,Buffalo,NY
+401923323,2026-11-22,2026-11-22T20:30Z,399,2385,UAlbany,Mercyhurst,True,False,Queen City Classic,2,pre,,,Buffalo,NY
 401920381,2026-11-22,2026-11-22T20:30Z,197,259,Oklahoma St,Virginia Tech,True,False,The Shriners Children's Charleston Classic,2,pre,,,Charleston,SC
 401926795,2026-11-22,2026-11-22T21:30Z,2335,257,Liberty,Richmond,True,False,Greenbrier Tip-Off,2,pre,,,White Sulphur Springs,WV
 401921176,2026-11-22,2026-11-22T21:30Z,2379,85,MD Eastern,IU Indy,True,False,,2,pre,,,Youngstown,OH
