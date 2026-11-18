@@ -265,3 +265,6 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401927342,2027,2026-11-17,2169,2129,Delaware St,Cheyney (PA),90.0,70.0,False,False,
 401925751,2027,2026-11-17,2115,551,C Connecticut,VTSU Lyndon,98.0,55.0,False,False,
 401922221,2027,2026-11-17,2454,123362,North Florida,Ft Lauderdale,98.0,59.0,False,False,
+401927867,2027,2026-11-17,2464,111226,N Arizona,Embry Rid (AZ),72.0,59.0,False,False,
+401921006,2027,2026-11-17,140,580,Kansas City,Newman,68.0,64.0,False,False,
+401917952,2027,2026-11-17,2046,124721,Austin Peay,Life Univ,70.0,57.0,False,False,
