@@ -268,3 +268,5 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401927867,2027,2026-11-17,2464,111226,N Arizona,Embry Rid (AZ),72.0,59.0,False,False,
 401921006,2027,2026-11-17,140,580,Kansas City,Newman,68.0,64.0,False,False,
 401917952,2027,2026-11-17,2046,124721,Austin Peay,Life Univ,70.0,57.0,False,False,
+401934595,2027,2026-11-17,264,2829,Washington,Simon Fraser,96.0,59.0,False,False,
+401917534,2027,2026-11-17,279,594,Pacific,Pacific Union,96.0,41.0,False,False,
