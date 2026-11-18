@@ -717,6 +717,8 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401925879,2026-11-17,2026-11-18T04:00Z,2250,147,Gonzaga,Montana St,False,False,,2,pre,,,Spokane,WA
 401920512,2026-11-17,2026-11-18T04:59Z,2,277,Auburn,West Virginia,True,False,Players Era 8,2,pre,,,Las Vegas,NV
 401909753,2026-11-18,2026-11-18T17:00Z,239,2296,Baylor,Jackson St,False,False,,2,pre,,,Waco,TX
+401920513,2026-11-18,2026-11-18T19:00Z,87,164,Notre Dame,Rutgers,True,False,Players Era 8,2,pre,,,Las Vegas,NV
+401920514,2026-11-18,2026-11-18T21:30Z,57,248,Florida,Houston,True,False,Players Era 8,2,pre,,,Las Vegas,NV
 401922292,2026-11-18,2026-11-18T23:30Z,2427,2635,UNC Asheville,Tennessee Tech,False,False,,2,pre,,,Asheville,NC
 401922283,2026-11-18,2026-11-18T23:30Z,2908,2535,SC Upstate,Samford,False,False,,2,pre,,,Spartanburg,SC
 401920974,2026-11-18,2026-11-18T23:30Z,2737,236,Winthrop,Chattanooga,False,False,,2,pre,,,Rock Hill,SC
