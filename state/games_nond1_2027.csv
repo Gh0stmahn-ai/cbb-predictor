@@ -275,3 +275,8 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401924763,2027,2026-11-18,2217,2990,Fairfield,St Joseph BKN,93.0,62.0,False,False,
 401920772,2027,2026-11-18,2142,390,Colgate,Utica,109.0,50.0,False,False,
 401917902,2027,2026-11-18,2698,130401,West Georgia,Columbia (SC),85.0,50.0,False,False,
+401928829,2027,2026-11-18,2750,556,Wright St,Malone,77.0,60.0,False,False,
+401925109,2027,2026-11-18,292,128256,UT Rio Grande,Biblical Stud,98.0,40.0,False,False,
+401920761,2027,2026-11-18,2057,2841,Belmont,Union (KY),86.0,44.0,False,False,
+401923394,2027,2026-11-18,88,2877,S Indiana,Lindsey Wilson,87.0,81.0,False,False,
+401917965,2027,2026-11-18,2000,241,Abilene Chrstn,McMurry,103.0,41.0,False,False,

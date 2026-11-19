@@ -779,7 +779,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920158,2026-11-18,2026-11-19T03:30Z,26,2239,UCLA,Fullerton,False,False,,2,pre,,,Los Angeles,CA
 401918959,2026-11-19,2026-11-19T23:00Z,93,152,Murray St,NC State,True,False,Baha Mar Championship,2,pre,,,Nassau,Bahamas
 401928826,2026-11-19,2026-11-20T00:00Z,2649,2523,Toledo,Robert Morris,False,False,,2,pre,,,Toledo,OH
-401928388,2026-11-19,2026-11-20T00:00Z,2755,2572,Grambling,Southern Miss,False,False,,2,pre,,,Grambling,LA
 401923304,2026-11-19,2026-11-20T00:00Z,2514,311,Quinnipiac,Maine,False,False,,2,pre,,,Hamden,CT
 401920878,2026-11-19,2026-11-20T00:00Z,294,2031,Jacksonville,Little Rock,False,False,,2,pre,,,Jacksonville,FL
 401920413,2026-11-19,2026-11-20T00:00Z,2272,147,High Point,Montana St,False,False,,2,pre,,,High Point,NC
@@ -795,6 +794,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401919050,2026-11-19,2026-11-20T01:00Z,2628,245,TCU,Texas A&M,False,False,,2,pre,,,Fort Worth,TX
 401920888,2026-11-19,2026-11-20T01:30Z,275,2550,Wisconsin,Seton Hall,True,False,Baha Mar Championship,2,pre,,,Nassau,Bahamas
 401930884,2026-11-19,2026-11-20T02:00Z,2483,204,Oregon,Oregon St,True,False,,2,pre,,,Portland,OR
+401928388,2026-11-19,2026-11-20T02:00Z,2755,2572,Grambling,Southern Miss,False,False,,2,pre,,,Grambling,LA
 401928354,2026-11-19,2026-11-20T02:00Z,2492,2540,Pepperdine,Santa Barbara,False,False,,2,pre,,,Malibu,CA
 401925941,2026-11-19,2026-11-20T02:00Z,264,3101,Washington,Utah Tech,False,False,,2,pre,,,Seattle,WA
 401911534,2026-11-19,2026-11-20T02:00Z,166,2638,New Mexico St,UTEP,False,False,,2,pre,,,Las Cruces,NM
