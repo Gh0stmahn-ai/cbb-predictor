@@ -969,7 +969,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401928791,2026-11-24,2026-11-24T16:00Z,166,195,New Mexico St,Ohio,True,False,Jacksonville Classic,2,pre,,,Jacksonville,FL
 401928835,2026-11-24,2026-11-24T17:30Z,2006,2057,Akron,Belmont,True,False,ESPN Events Invitational - Adventure Bracket,2,pre,,,Kissimmee,FL
 401920819,2026-11-24,2026-11-24T17:30Z,2458,2545,N Colorado,SE Louisiana,True,False,Cancun Challenge - Mayan Division,2,pre,,,Cancun,Mexico
-401929035,2026-11-24,2026-11-24T18:00Z,2441,2815,New Haven,Lindenwood,True,False,,2,pre,,,Stony Brook,NY
 401928358,2026-11-24,2026-11-24T18:00Z,2229,253,FIU,Southern Utah,False,False,Florida International MTE,2,pre,,,Miami,FL
 401928859,2026-11-24,2026-11-24T18:30Z,82,242,UIC,Rice,True,False,Jacksonville Classic,2,pre,,,Jacksonville,FL
 401906806,2026-11-24,2026-11-24T18:30Z,221,201,Pitt,Oklahoma,True,False,Fort Myers Tip-Off - Beach Division,2,pre,,,Fort Myers,FL
@@ -979,6 +978,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401929285,2026-11-24,2026-11-24T20:00Z,43,2026,Yale,App State,True,False,ESPN Events Invitational - Adventure Bracket,2,pre,,,Kissimmee,FL
 401920546,2026-11-24,2026-11-24T20:00Z,2174,155,Detroit Mercy,North Dakota,True,False,Cancun Challenge - Mayan Division,2,pre,,,Cancun,Mexico
 401924267,2026-11-24,2026-11-24T20:30Z,2032,299,Arkansas St,Long Beach St,True,False,Florida International MTE,2,pre,,,Miami,FL
+401929035,2026-11-24,2026-11-24T21:00Z,2441,2815,New Haven,Lindenwood,True,False,,2,pre,,,Stony Brook,NY
 401921666,2026-11-24,2026-11-24T21:30Z,2287,202,Illinois St,Tulsa,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401909495,2026-11-24,2026-11-24T22:30Z,130,156,Michigan,Creighton,True,False,Players Era 16,2,pre,,,Las Vegas,NV
 401921707,2026-11-24,2026-11-24T22:30Z,2309,2751,Kent State,Wyoming,True,False,Sunshine Slam,2,pre,,,Daytona Beach,FL
@@ -1025,7 +1025,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401921184,2026-11-24,2026-11-25T01:00Z,219,2182,Penn,Drexel,False,False,Big 5 Classic - Campus Game,2,pre,,,Philadelphia,PA
 401921008,2026-11-24,2026-11-25T01:00Z,140,2739,Kansas City,Green Bay,False,False,,2,pre,,,Kansas City,MO
 401920709,2026-11-24,2026-11-25T01:00Z,2,288,Auburn,Lipscomb,False,False,,2,pre,,,Auburn,AL
-401911338,2026-11-24,2026-11-25T01:00Z,349,2005,Army,Air Force,True,False,,2,pre,,,San Antonio,TX
+401911338,2026-11-24,2026-11-25T01:00Z,2005,349,Air Force,Army,True,False,,2,pre,,,San Antonio,TX
 401911026,2026-11-24,2026-11-25T01:00Z,87,2117,Notre Dame,C Michigan,False,False,,2,pre,,,South Bend,IN
 401911535,2026-11-24,2026-11-25T01:30Z,2638,232,UTEP,Charleston,True,False,Cancun Challenge - Riviera Division,2,pre,,,Cancun,Mexico
 401928796,2026-11-24,2026-11-25T02:00Z,265,2534,Washington St,Sam Houston,False,False,,2,pre,,,Pullman,WA
@@ -1048,9 +1048,9 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401924268,2026-11-25,2026-11-25T18:00Z,299,253,Long Beach St,Southern Utah,True,False,Florida International MTE,2,pre,,,Miami,FL
 401911029,2026-11-25,2026-11-25T18:00Z,193,2198,Miami OH,E Kentucky,False,False,,2,pre,,,Oxford,OH
 401919007,2026-11-25,2026-11-25T18:30Z,2166,2655,Davidson,Tulane,True,False,Fort Myers Tip-Off - Palms Division,2,pre,,,Fort Myers,FL
+401921669,2026-11-25,2026-11-25T19:00Z,99,9,LSU,Arizona St,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401929406,2026-11-25,2026-11-25T19:00Z,233,2029,South Dakota,AR-Pine Bluff,False,False,,2,pre,,,Vermillion,SD
 401924705,2026-11-25,2026-11-25T19:00Z,171,2612,Columbia,Saint Peter's,False,False,,2,pre,,,New York,NY
-401921669,2026-11-25,2026-11-25T19:00Z,99,9,LSU,Arizona St,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401920868,2026-11-25,2026-11-25T19:00Z,2885,2363,NJIT,Manhattan,False,False,,2,pre,,,Newark,NJ
 401917967,2026-11-25,2026-11-25T19:00Z,2571,2000,S Dakota St,Abilene Chrstn,False,False,,2,pre,,,Brookings,SD
 401920809,2026-11-25,2026-11-25T19:30Z,2752,245,Xavier,Texas A&M,True,False,Battle 4 Atlantis - Signature Series,2,pre,,,Nassau,Bahamas

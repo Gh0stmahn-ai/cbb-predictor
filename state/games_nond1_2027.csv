@@ -270,3 +270,8 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401917952,2027,2026-11-17,2046,124721,Austin Peay,Life Univ,70.0,57.0,False,False,
 401934595,2027,2026-11-17,264,2829,Washington,Simon Fraser,96.0,59.0,False,False,
 401917534,2027,2026-11-17,279,594,Pacific,Pacific Union,96.0,41.0,False,False,
+401929014,2027,2026-11-18,2441,343,New Haven,MCLA,96.0,50.0,False,False,
+401928843,2027,2026-11-18,193,190,Miami OH,Defiance,91.0,69.0,False,False,
+401924763,2027,2026-11-18,2217,2990,Fairfield,St Joseph BKN,93.0,62.0,False,False,
+401920772,2027,2026-11-18,2142,390,Colgate,Utica,109.0,50.0,False,False,
+401917902,2027,2026-11-18,2698,130401,West Georgia,Columbia (SC),85.0,50.0,False,False,
