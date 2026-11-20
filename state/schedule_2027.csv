@@ -806,15 +806,15 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401917536,2026-11-19,2026-11-20T03:30Z,2541,2670,Santa Clara,VCU,False,False,,2,pre,,,Santa Clara,CA
 401920518,2026-11-19,2026-11-20T04:00Z,2305,248,Kansas,Houston,True,True,Players Era 8 - Championship,2,pre,,,Las Vegas,NV
 401926773,2026-11-19,2026-11-20T04:00Z,30,2627,USC,Tarleton St,False,False,,2,pre,,,Los Angeles,CA
-401909698,2026-11-20,2026-11-20T17:00Z,52,2739,Florida St,Green Bay,False,False,,2,pre,,,Tallahassee,FL
-401921418,2026-11-20,2026-11-20T17:30Z,135,197,Minnesota,Oklahoma St,True,False,The Shriners Children's Charleston Classic,2,pre,,,Charleston,SC
-401916122,2026-11-20,2026-11-20T17:30Z,2393,218,MTSU,Temple,True,False,U.S. Virgin Islands Paradise Jam,2,pre,,,Charlotte Amalie,Virgin Islands
-401919019,2026-11-20,2026-11-20T19:00Z,45,5,G Washington,UAB,True,False,Greenbrier Tip-Off,2,pre,,,White Sulphur Springs,WV
-401920380,2026-11-20,2026-11-20T20:00Z,259,77,Virginia Tech,Northwestern,True,False,The Shriners Children's Charleston Classic,2,pre,,,Charleston,SC
-401919826,2026-11-20,2026-11-20T20:00Z,399,2710,UAlbany,W Illinois,True,False,Queen City Classic,2,pre,,,Buffalo,NY
-401916123,2026-11-20,2026-11-20T20:00Z,2617,282,SF Austin,Indiana St,True,False,U.S. Virgin Islands Paradise Jam,2,pre,,,Charlotte Amalie,Virgin Islands
-401922022,2026-11-20,2026-11-20T21:00Z,304,2571,Idaho St,S Dakota St,False,False,,2,pre,,,Pocatello,ID
-401920066,2026-11-20,2026-11-20T21:30Z,2335,227,Liberty,Rhode Island,True,False,Greenbrier Tip-Off,2,pre,,,White Sulphur Springs,WV
+401909698,2026-11-20,2026-11-20T17:00Z,52,2739,Florida St,Green Bay,False,False,,2,post,87.0,63.0,Tallahassee,FL
+401921418,2026-11-20,2026-11-20T17:30Z,135,197,Minnesota,Oklahoma St,True,False,Shriners Children's Charleston Classic,2,post,85.0,70.0,Charleston,SC
+401916122,2026-11-20,2026-11-20T17:30Z,2393,218,MTSU,Temple,True,False,U.S. Virgin Islands Paradise Jam,2,post,76.0,85.0,Charlotte Amalie,Virgin Islands
+401919019,2026-11-20,2026-11-20T19:00Z,45,5,G Washington,UAB,True,False,Greenbrier Tip-Off,2,post,76.0,81.0,White Sulphur Springs,WV
+401920380,2026-11-20,2026-11-20T20:00Z,259,77,Virginia Tech,Northwestern,True,False,Shriners Children's Charleston Classic,2,in,,,Charleston,SC
+401919826,2026-11-20,2026-11-20T20:00Z,2710,399,W Illinois,UAlbany,True,False,Queen City Classic,2,in,,,Buffalo,NY
+401916123,2026-11-20,2026-11-20T20:00Z,2617,282,SF Austin,Indiana St,True,False,U.S. Virgin Islands Paradise Jam,2,in,,,Charlotte Amalie,Virgin Islands
+401922022,2026-11-20,2026-11-20T21:00Z,304,2571,Idaho St,S Dakota St,False,False,,2,in,,,Pocatello,ID
+401920066,2026-11-20,2026-11-20T21:30Z,2335,227,Liberty,Rhode Island,True,False,Greenbrier Tip-Off,2,in,,,White Sulphur Springs,WV
 401921723,2026-11-20,2026-11-20T22:00Z,2390,2363,Miami,Manhattan,False,False,,2,pre,,,Coral Gables,FL
 401921419,2026-11-20,2026-11-20T22:30Z,254,2168,Utah,Dayton,True,False,Shriners Children's Charleston Classic,2,pre,,,Charleston,SC
 401919827,2026-11-20,2026-11-20T22:30Z,2099,2385,Canisius,Mercyhurst,False,False,Queen City Classic,2,pre,,,Buffalo,NY
@@ -865,7 +865,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401923312,2026-11-21,2026-11-21T18:00Z,2441,160,New Haven,New Hampshire,False,False,,2,pre,,,West Haven,CT
 401921169,2026-11-21,2026-11-21T18:00Z,325,2309,Cleveland St,Kent State,False,False,,2,pre,,,Cleveland,OH
 401920948,2026-11-21,2026-11-21T18:00Z,2199,2172,E Michigan,Denver,False,False,,2,pre,,,Ypsilanti,MI
-401919828,2026-11-21,2026-11-21T18:30Z,2710,2385,W Illinois,Mercyhurst,True,False,Queen City Classic,2,pre,,,Buffalo,NY
+401919828,2026-11-21,2026-11-21T18:30Z,2385,2710,Mercyhurst,W Illinois,True,False,Queen City Classic,2,pre,,,Buffalo,NY
 401924882,2026-11-21,2026-11-21T19:00Z,2612,2619,Saint Peter's,Stony Brook,False,False,,2,pre,,,Jersey City,NJ
 401924722,2026-11-21,2026-11-21T19:00Z,2415,172,Morgan St,Cornell,False,False,,2,pre,,,Baltimore,MD
 401922222,2026-11-21,2026-11-21T19:00Z,2454,2031,North Florida,Little Rock,False,False,,2,pre,,,Jacksonville,FL
@@ -906,8 +906,8 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401925049,2026-11-21,2026-11-22T01:30Z,2640,2443,Texas Southern,LSU N Orleans,False,False,,2,pre,,,Houston,TX
 401917537,2026-11-21,2026-11-22T03:00Z,279,71,Pacific,Bradley,False,False,,2,pre,,,Stockton,CA
 401909567,2026-11-21,2026-11-22T04:00Z,150,265,Duke,Washington St,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
+401902281,2026-11-22,2026-11-22T17:00Z,2086,158,Butler,Nebraska,True,False,Bad Boy Mowers Series,2,pre,,,Chicago,IL
 401911024,2026-11-22,2026-11-22T17:00Z,82,193,UIC,Miami OH,True,False,Jacksonville Classic,2,pre,,,Jacksonville,FL
-401902281,2026-11-22,2026-11-22T18:00Z,2086,158,Butler,Nebraska,True,False,Bad Boy Mowers Series,2,pre,,,Chicago,IL
 401929023,2026-11-22,2026-11-22T18:00Z,2099,2710,Canisius,W Illinois,False,False,Queen City Classic,2,pre,,,Buffalo,NY
 401920736,2026-11-22,2026-11-22T18:00Z,77,2168,Northwestern,Dayton,True,False,Shriners Children's Charleston Classic,2,pre,,,Charleston,SC
 401919809,2026-11-22,2026-11-22T18:00Z,112358,2217,Long Island,Fairfield,False,False,,2,pre,,,Brooklyn,NY
