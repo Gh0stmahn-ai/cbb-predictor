@@ -829,6 +829,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401925927,2026-11-20,2026-11-21T00:00Z,2643,2569,The Citadel,SC State,False,False,,2,pre,,,Charleston,SC
 401924844,2026-11-20,2026-11-21T00:00Z,2169,315,Delaware St,Niagara,False,False,,2,pre,,,Dover,DE
 401924736,2026-11-20,2026-11-21T00:00Z,163,2405,Princeton,Monmouth,False,False,,2,pre,,,Princeton,NJ
+401921692,2026-11-20,2026-11-21T00:00Z,93,275,Murray St,Wisconsin,True,False,Baha Mar Championship - Consolation,2,pre,,,Nassau,Bahamas
 401921107,2026-11-20,2026-11-21T00:00Z,2198,91,E Kentucky,Bellarmine,False,False,,2,pre,,,Richmond,KY
 401921007,2026-11-20,2026-11-21T00:00Z,314,140,Iona,Kansas City,False,False,,2,pre,,,New Rochelle,NY
 401920922,2026-11-20,2026-11-21T00:00Z,116,2711,Mount St Marys,W Michigan,False,False,,2,pre,,,Emmitsburg,MD
@@ -853,6 +854,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401928795,2026-11-20,2026-11-21T02:00Z,68,2534,Boise St,Sam Houston,False,False,,2,pre,,,Boise,ID
 401920137,2026-11-20,2026-11-21T02:00Z,70,2934,Idaho,Bakersfield,False,False,,2,pre,,,Moscow,ID
 401912710,2026-11-20,2026-11-21T02:00Z,153,276,North Carolina,Marshall,False,False,,2,pre,,,Chapel Hill,NC
+401921691,2026-11-20,2026-11-21T02:30Z,152,2550,NC State,Seton Hall,True,False,Baha Mar Championship - Championship,2,pre,,,Nassau,Bahamas
 401925664,2026-11-20,2026-11-21T03:00Z,278,2011,Fresno St,Alabama St,False,False,,2,pre,,,Fresno,CA
 401911252,2026-11-20,2026-11-21T04:00Z,2608,139,Saint Mary's,Saint Louis,False,False,,2,pre,,,Moraga,CA
 401924884,2026-11-21,2026-11-21T16:00Z,2083,2561,Bucknell,Siena,False,False,,2,pre,,,Lewisburg,PA

@@ -283,3 +283,6 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401928812,2027,2026-11-19,94,2061,N Kentucky,Berea,93.0,41.0,False,False,
 401926144,2027,2026-11-19,2565,75,SIUE,North Park,64.0,45.0,False,False,
 401912211,2027,2026-11-19,44,124942,American,Mary Baldwin,82.0,51.0,False,False,
+401929373,2027,2026-11-19,2453,2839,North Alabama,Tusculum,74.0,67.0,False,False,
+401929409,2027,2026-11-19,155,561,North Dakota,Mayville St,91.0,66.0,False,False,
+401927375,2027,2026-11-19,2287,101,Illinois St,Eureka,123.0,48.0,False,False,
