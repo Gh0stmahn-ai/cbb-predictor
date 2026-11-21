@@ -857,28 +857,28 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401921691,2026-11-20,2026-11-21T02:30Z,152,2550,NC State,Seton Hall,True,False,Baha Mar Championship - Championship,2,pre,,,Nassau,Bahamas
 401925664,2026-11-20,2026-11-21T03:00Z,278,2011,Fresno St,Alabama St,False,False,,2,pre,,,Fresno,CA
 401911252,2026-11-20,2026-11-21T04:00Z,2608,139,Saint Mary's,Saint Louis,False,False,,2,pre,,,Moraga,CA
-401924884,2026-11-21,2026-11-21T16:00Z,2083,2561,Bucknell,Siena,False,False,,2,pre,,,Lewisburg,PA
-401922284,2026-11-21,2026-11-21T16:00Z,2430,2908,UNC Greensboro,SC Upstate,False,False,,2,pre,,,Greensboro,NC
-401925756,2026-11-21,2026-11-21T17:00Z,127,2174,Michigan St,Detroit Mercy,False,False,,2,pre,,,East Lansing,MI
-401923402,2026-11-21,2026-11-21T17:00Z,104,171,Boston U,Columbia,False,False,,2,pre,,,Boston,MA
-401921811,2026-11-21,2026-11-21T18:00Z,99,2511,LSU,Queens,False,False,,2,pre,,,Baton Rouge,LA
-401923312,2026-11-21,2026-11-21T18:00Z,2441,160,New Haven,New Hampshire,False,False,,2,pre,,,West Haven,CT
-401921169,2026-11-21,2026-11-21T18:00Z,325,2309,Cleveland St,Kent State,False,False,,2,pre,,,Cleveland,OH
-401920948,2026-11-21,2026-11-21T18:00Z,2199,2172,E Michigan,Denver,False,False,,2,pre,,,Ypsilanti,MI
-401919828,2026-11-21,2026-11-21T18:30Z,2385,2710,Mercyhurst,W Illinois,True,False,Queen City Classic,2,pre,,,Buffalo,NY
-401924882,2026-11-21,2026-11-21T19:00Z,2612,2619,Saint Peter's,Stony Brook,False,False,,2,pre,,,Jersey City,NJ
-401924722,2026-11-21,2026-11-21T19:00Z,2415,172,Morgan St,Cornell,False,False,,2,pre,,,Baltimore,MD
-401922222,2026-11-21,2026-11-21T19:00Z,2454,2031,North Florida,Little Rock,False,False,,2,pre,,,Jacksonville,FL
-401921222,2026-11-21,2026-11-21T19:00Z,2520,2426,Rider,Navy,False,False,,2,pre,,,Lawrenceville,NJ
-401919031,2026-11-21,2026-11-21T19:00Z,2724,167,Wichita St,New Mexico,False,False,,2,pre,,,Wichita,KS
-401911199,2026-11-21,2026-11-21T19:00Z,2501,2230,Portland,Fordham,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
-401911022,2026-11-21,2026-11-21T19:00Z,189,2459,Bowling Green,N Illinois,False,False,,2,pre,,,Bowling Green,OH
-401909730,2026-11-21,2026-11-21T19:00Z,154,2717,Wake Forest,W Carolina,False,False,,2,pre,,,Winston-Salem,NC
-401909719,2026-11-21,2026-11-21T19:00Z,183,322,Syracuse,Lafayette,False,False,,2,pre,,,Syracuse,NY
-401927365,2026-11-21,2026-11-21T20:00Z,2623,2181,Missouri St,Drake,False,False,,2,pre,,,Springfield,MO
-401920846,2026-11-21,2026-11-21T20:00Z,270,2900,Milwaukee,St Thomas,False,False,,2,pre,,,Milwaukee,WI
-401920569,2026-11-21,2026-11-21T20:00Z,282,2393,Indiana St,MTSU,True,False,U.S. Virgin Islands Paradise Jam,2,pre,,,Charlotte Amalie,Virgin Islands
-401917953,2026-11-21,2026-11-21T20:00Z,2046,292,Austin Peay,UT Rio Grande,False,False,,2,pre,,,Clarksville,TN
+401924884,2026-11-21,2026-11-21T16:00Z,2083,2561,Bucknell,Siena,False,False,,2,post,87.0,93.0,Lewisburg,PA
+401922284,2026-11-21,2026-11-21T16:00Z,2430,2908,UNC Greensboro,SC Upstate,False,False,,2,post,85.0,66.0,Greensboro,NC
+401925756,2026-11-21,2026-11-21T17:00Z,127,2174,Michigan St,Detroit Mercy,False,False,,2,post,91.0,70.0,East Lansing,MI
+401923402,2026-11-21,2026-11-21T17:00Z,104,171,Boston U,Columbia,False,False,,2,post,71.0,80.0,Boston,MA
+401921811,2026-11-21,2026-11-21T18:00Z,99,2511,LSU,Queens,False,False,,2,post,106.0,75.0,Baton Rouge,LA
+401923312,2026-11-21,2026-11-21T18:00Z,2441,160,New Haven,New Hampshire,False,False,,2,post,50.0,47.0,West Haven,CT
+401921169,2026-11-21,2026-11-21T18:00Z,325,2309,Cleveland St,Kent State,False,False,,2,post,62.0,69.0,Cleveland,OH
+401920948,2026-11-21,2026-11-21T18:00Z,2199,2172,E Michigan,Denver,False,False,,2,post,70.0,68.0,Ypsilanti,MI
+401919828,2026-11-21,2026-11-21T18:30Z,2385,2710,Mercyhurst,W Illinois,True,False,Queen City Classic,2,in,,,Buffalo,NY
+401924882,2026-11-21,2026-11-21T19:00Z,2612,2619,Saint Peter's,Stony Brook,False,False,,2,in,,,Jersey City,NJ
+401924722,2026-11-21,2026-11-21T19:00Z,2415,172,Morgan St,Cornell,False,False,,2,in,,,Baltimore,MD
+401922222,2026-11-21,2026-11-21T19:00Z,2454,2031,North Florida,Little Rock,False,False,,2,in,,,Jacksonville,FL
+401921222,2026-11-21,2026-11-21T19:00Z,2520,2426,Rider,Navy,False,False,,2,in,,,Lawrenceville,NJ
+401919031,2026-11-21,2026-11-21T19:00Z,2724,167,Wichita St,New Mexico,False,False,,2,in,,,Wichita,KS
+401911199,2026-11-21,2026-11-21T19:00Z,2501,2230,Portland,Fordham,True,False,Acrisure Series,2,in,,,Palm Springs,CA
+401911022,2026-11-21,2026-11-21T19:00Z,189,2459,Bowling Green,N Illinois,False,False,,2,in,,,Bowling Green,OH
+401909730,2026-11-21,2026-11-21T19:00Z,154,2717,Wake Forest,W Carolina,False,False,,2,in,,,Winston-Salem,NC
+401909719,2026-11-21,2026-11-21T19:00Z,183,322,Syracuse,Lafayette,False,False,,2,in,,,Syracuse,NY
+401927365,2026-11-21,2026-11-21T20:00Z,2623,2181,Missouri St,Drake,False,False,,2,in,,,Springfield,MO
+401920846,2026-11-21,2026-11-21T20:00Z,270,2900,Milwaukee,St Thomas,False,False,,2,in,,,Milwaukee,WI
+401920569,2026-11-21,2026-11-21T20:00Z,282,2393,Indiana St,MTSU,True,False,U.S. Virgin Islands Paradise Jam,2,in,,,Charlotte Amalie,Virgin Islands
+401917953,2026-11-21,2026-11-21T20:00Z,2046,292,Austin Peay,UT Rio Grande,False,False,,2,in,,,Clarksville,TN
 401911278,2026-11-21,2026-11-21T20:30Z,2066,349,Binghamton,Army,False,False,,2,pre,,,Binghamton,NY
 401923322,2026-11-21,2026-11-21T21:00Z,2099,399,Canisius,UAlbany,False,False,Queen City Classic,2,pre,,,Buffalo,NY
 401922048,2026-11-21,2026-11-21T21:00Z,2193,2344,ETSU,Longwood,False,False,,2,pre,,,Johnson City,TN
@@ -890,6 +890,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401925065,2026-11-21,2026-11-21T22:00Z,2447,2572,Nicholls,Southern Miss,True,False,Pensacola Invitational,2,pre,,,Pensacola,FL
 401919849,2026-11-21,2026-11-21T22:00Z,284,111,Stonehill,Northeastern,False,False,,2,pre,,,South Easton,MA
 401911337,2026-11-21,2026-11-21T22:00Z,2636,2005,UTSA,Air Force,False,False,,2,pre,,,San Antonio,TX
+401920570,2026-11-21,2026-11-21T22:30Z,151,79,East Carolina,S Illinois,True,False,U.S. Virgin Islands Paradise Jam,2,pre,,,Charlotte Amalie,Virgin Islands
 401925897,2026-11-21,2026-11-21T23:00Z,2450,350,Norfolk St,UNC Wilmington,False,False,,2,pre,,,Norfolk,VA
 401911023,2026-11-21,2026-11-21T23:00Z,113,311,UMass,Maine,False,False,,2,pre,,,Amherst,MA
 401909517,2026-11-21,2026-11-21T23:00Z,46,2154,Georgetown,Coppin St,False,False,,2,pre,,,Washington,DC
@@ -942,6 +943,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401919020,2026-11-22,2026-11-23T00:00Z,5,227,UAB,Rhode Island,True,False,Greenbrier Tip-Off,2,pre,,,White Sulphur Springs,WV
 401917541,2026-11-22,2026-11-23T00:00Z,2501,2856,Portland,CA Baptist,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401926774,2026-11-22,2026-11-23T01:00Z,30,309,USC,Louisiana,False,False,,2,pre,,,Los Angeles,CA
+401921206,2026-11-22,2026-11-23T01:00Z,3084,2630,Utah Valley,UT Martin,True,False,U.S. Virgin Islands Paradise Jam,2,pre,,,Charlotte Amalie,Virgin Islands
 401917542,2026-11-22,2026-11-23T02:30Z,28,2547,UC San Diego,Seattle U,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401911233,2026-11-22,2026-11-23T04:59Z,2350,23,Loyola Chicago,San José St,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401927397,2026-11-23,2026-11-23T16:00Z,2026,179,App State,St Bonaventure,True,False,ESPN Events Invitational - Adventure Bracket,2,pre,,,Kissimmee,FL
