@@ -877,6 +877,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401909719,2026-11-21,2026-11-21T19:00Z,183,322,Syracuse,Lafayette,False,False,,2,pre,,,Syracuse,NY
 401927365,2026-11-21,2026-11-21T20:00Z,2623,2181,Missouri St,Drake,False,False,,2,pre,,,Springfield,MO
 401920846,2026-11-21,2026-11-21T20:00Z,270,2900,Milwaukee,St Thomas,False,False,,2,pre,,,Milwaukee,WI
+401920569,2026-11-21,2026-11-21T20:00Z,282,2393,Indiana St,MTSU,True,False,U.S. Virgin Islands Paradise Jam,2,pre,,,Charlotte Amalie,Virgin Islands
 401917953,2026-11-21,2026-11-21T20:00Z,2046,292,Austin Peay,UT Rio Grande,False,False,,2,pre,,,Clarksville,TN
 401911278,2026-11-21,2026-11-21T20:30Z,2066,349,Binghamton,Army,False,False,,2,pre,,,Binghamton,NY
 401923322,2026-11-21,2026-11-21T21:00Z,2099,399,Canisius,UAlbany,False,False,Queen City Classic,2,pre,,,Buffalo,NY
@@ -934,6 +935,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401922293,2026-11-22,2026-11-22T22:00Z,2535,2427,Samford,UNC Asheville,False,False,,2,pre,,,Homewood,AL
 401920159,2026-11-22,2026-11-22T22:00Z,2502,2239,Portland St,Fullerton,False,False,,2,pre,,,Portland,OR
 401909556,2026-11-22,2026-11-22T22:00Z,103,2885,Boston College,NJIT,False,False,,2,pre,,,Chestnut Hill,MA
+401921205,2026-11-22,2026-11-22T22:30Z,2617,218,SF Austin,Temple,True,False,U.S. Virgin Islands Paradise Jam,2,pre,,,Charlotte Amalie,Virgin Islands
 401928999,2026-11-22,2026-11-22T23:00Z,2674,2572,Valparaiso,Southern Miss,True,False,Pensacola Invitational,2,pre,,,Pensacola,FL
 401921420,2026-11-22,2026-11-22T23:00Z,135,254,Minnesota,Utah,True,False,The Shriners Children's Charleston Classic,2,pre,,,Charleston,SC
 401920905,2026-11-22,2026-11-23T00:00Z,26,48,UCLA,Delaware,False,False,,2,pre,,,Los Angeles,CA
@@ -1130,6 +1132,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401913531,2026-11-27,2026-11-27T23:00Z,356,98,Illinois,Western KY,False,False,,2,pre,,,Champaign,IL
 401921185,2026-11-27,2026-11-27T23:00Z,219,119,Penn,Towson,False,False,Cathedral Classic,2,pre,,,Philadelphia,PA
 401911030,2026-11-27,2026-11-27T23:00Z,84,189,Indiana,Bowling Green,False,False,,2,pre,,,Bloomington,IN
+401929284,2026-11-27,2026-11-28T00:00Z,61,2116,Georgia,UCF,True,False,ESPN Events Invitational - Magic Bracket,2,pre,,,Kissimmee,FL
 401926756,2026-11-27,2026-11-28T00:00Z,2540,2329,Santa Barbara,Lehigh,True,False,Gratitude Thanksgiving Classic,2,pre,,,Thousand Oaks,CA
 401912711,2026-11-27,2026-11-28T00:00Z,153,277,North Carolina,West Virginia,True,False,Dick Vitale Invitational pres. by Belk,2,pre,,,Charlotte,NC
 401911380,2026-11-27,2026-11-28T00:00Z,2193,2127,ETSU,Charleston So,False,False,ETSU MTE,2,pre,,,Johnson City,TN

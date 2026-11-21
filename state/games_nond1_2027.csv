@@ -287,3 +287,8 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401929409,2027,2026-11-19,155,561,North Dakota,Mayville St,91.0,66.0,False,False,
 401927375,2027,2026-11-19,2287,101,Illinois St,Eureka,123.0,48.0,False,False,
 401925916,2027,2026-11-19,2502,3218,Portland St,NW Indian,132.0,41.0,False,False,
+401929353,2027,2026-11-20,2916,3079,Incarnate Word,Cent Baptist,120.0,71.0,False,False,
+401918454,2027,2026-11-20,2729,2047,William & Mary,Averett,85.0,39.0,False,False,
+401925841,2027,2026-11-20,2379,2854,MD Eastern,Bloomfield,87.0,77.0,False,False,
+401929460,2027,2026-11-20,2803,402,Bryant,Worcester St,75.0,61.0,False,False,
+401928834,2027,2026-11-20,2006,2706,Akron,WVU Tech,116.0,71.0,False,False,
