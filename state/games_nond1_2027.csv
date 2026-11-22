@@ -295,3 +295,8 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401917903,2027,2026-11-20,2698,2488,West Georgia,Paine,105.0,56.0,False,False,
 401935675,2027,2026-11-20,2492,110418,Pepperdine,West Coast,140.0,54.0,False,False,
 401926755,2027,2026-11-20,2329,422,Lehigh,Neumann,79.0,38.0,False,False,
+401929452,2027,2026-11-21,256,3229,James Madison,VA Lynchburg,136.0,45.0,False,False,
+401928819,2027,2026-11-21,2870,502,Purdue FW,Calumet,99.0,53.0,False,False,
+401920773,2027,2026-11-21,2142,2944,Colgate,PSU Behrend,87.0,55.0,False,False,
+401926113,2027,2026-11-21,231,126954,Furman,Clinton,108.0,69.0,False,False,
+401925890,2027,2026-11-21,2458,130183,N Colorado,Justice,89.0,66.0,False,False,

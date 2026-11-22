@@ -1154,6 +1154,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401926212,2026-11-28,2026-11-28T18:00Z,2870,2747,Purdue FW,Wofford,False,False,,2,pre,,,Fort Wayne,IN
 401921414,2026-11-28,2026-11-28T18:00Z,2515,2261,Radford,Hampton,True,False,Capital Thanksgiving Classic,2,pre,,,Washington,DC
 401920775,2026-11-28,2026-11-28T18:00Z,2142,261,Colgate,Vermont,True,False,The Island Invitational,2,pre,,,Hempstead,NY
+401920310,2026-11-28,2026-11-28T18:00Z,59,2016,Georgia Tech,Alcorn St,False,False,,2,pre,,,Atlanta,GA
 401912232,2026-11-28,2026-11-28T18:00Z,349,2520,Army,Rider,False,False,,2,pre,,,West Point,NY
 401911395,2026-11-28,2026-11-28T18:00Z,2241,2428,Gardner-Webb,NC Central,False,False,,2,pre,,,Boiling Springs,NC
 401926757,2026-11-28,2026-11-28T18:30Z,2492,2329,Pepperdine,Lehigh,True,False,Gratitude Thanksgiving Classic,2,pre,,,Thousand Oaks,CA
@@ -1201,7 +1202,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401911242,2026-11-28,2026-11-28T23:00Z,257,2678,Richmond,VMI,False,False,,2,pre,,,Richmond,VA
 401921065,2026-11-28,2026-11-29T00:00Z,2539,2065,San Francisco,Bethune,False,False,,2,pre,,,San Francisco,CA
 401920954,2026-11-28,2026-11-29T00:00Z,79,2502,S Illinois,Portland St,False,False,,2,pre,,,Carbondale,IL
-401920310,2026-11-28,2026-11-29T00:00Z,59,2016,Georgia Tech,Alcorn St,False,False,,2,pre,,,Atlanta,GA
 401917550,2026-11-28,2026-11-29T00:00Z,2541,3101,Santa Clara,Utah Tech,False,False,,2,pre,,,Santa Clara,CA
 401911381,2026-11-28,2026-11-29T00:00Z,2127,2413,Charleston So,Morehead St,True,False,ETSU MTE,2,pre,,,Johnson City,TN
 401925783,2026-11-28,2026-11-29T00:30Z,2184,2569,Duquesne,SC State,False,False,,2,pre,,,Pittsburgh,PA
