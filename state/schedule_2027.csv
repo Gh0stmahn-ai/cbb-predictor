@@ -908,27 +908,27 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401925049,2026-11-21,2026-11-22T01:30Z,2640,2443,Texas Southern,LSU N Orleans,False,False,,2,pre,,,Houston,TX
 401917537,2026-11-21,2026-11-22T03:00Z,279,71,Pacific,Bradley,False,False,,2,pre,,,Stockton,CA
 401909567,2026-11-21,2026-11-22T04:00Z,150,265,Duke,Washington St,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
-401902281,2026-11-22,2026-11-22T17:00Z,2086,158,Butler,Nebraska,True,False,Bad Boy Mowers Series,2,pre,,,Chicago,IL
-401911024,2026-11-22,2026-11-22T17:00Z,82,193,UIC,Miami OH,True,False,Jacksonville Classic,2,pre,,,Jacksonville,FL
-401929023,2026-11-22,2026-11-22T18:00Z,2099,2710,Canisius,W Illinois,False,False,Queen City Classic,2,pre,,,Buffalo,NY
-401920736,2026-11-22,2026-11-22T18:00Z,77,2168,Northwestern,Dayton,True,False,Shriners Children's Charleston Classic,2,pre,,,Charleston,SC
-401919809,2026-11-22,2026-11-22T18:00Z,112358,2217,Long Island,Fairfield,False,False,,2,pre,,,Brooklyn,NY
-401912212,2026-11-22,2026-11-22T18:00Z,44,119,American,Towson,False,False,,2,pre,,,Washington,DC
-401909527,2026-11-22,2026-11-22T18:00Z,269,2130,Marquette,Chicago St,False,False,,2,pre,,,Milwaukee,WI
-401928802,2026-11-22,2026-11-22T19:00Z,98,45,Western KY,G Washington,True,False,Greenbrier Tip-Off,2,pre,,,White Sulphur Springs,WV
-401925942,2026-11-22,2026-11-22T19:00Z,3101,233,Utah Tech,South Dakota,True,False,,2,pre,,,Sioux Falls,SD
-401921748,2026-11-22,2026-11-22T19:00Z,2132,2349,Cincinnati,UMass Lowell,False,False,,2,pre,,,Cincinnati,OH
-401921706,2026-11-22,2026-11-22T19:00Z,2184,2751,Duquesne,Wyoming,True,False,Sunshine Slam,2,pre,,,Daytona Beach,FL
-401918988,2026-11-22,2026-11-22T19:00Z,235,339,Memphis,Evansville,False,False,,2,pre,,,Memphis,TN
-401918455,2026-11-22,2026-11-22T19:00Z,2754,2729,Youngstown St,William & Mary,False,False,,2,pre,,,Youngstown,OH
-401911200,2026-11-22,2026-11-22T19:00Z,2230,301,Fordham,San Diego,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
-401928790,2026-11-22,2026-11-22T19:30Z,166,2523,New Mexico St,Robert Morris,True,False,Jacksonville Classic,2,pre,,,Jacksonville,FL
-401906868,2026-11-22,2026-11-22T20:00Z,251,88,Texas,S Indiana,False,False,,2,pre,,,Austin,TX
-401925066,2026-11-22,2026-11-22T20:00Z,2447,2653,Nicholls,Troy,True,False,Pensacola Invitational,2,pre,,,Pensacola,FL
-401922252,2026-11-22,2026-11-22T20:00Z,6,2697,South Alabama,West Florida,False,False,,2,pre,,,Mobile,AL
+401902281,2026-11-22,2026-11-22T17:00Z,2086,158,Butler,Nebraska,True,False,Bad Boy Mowers Series,2,post,74.0,76.0,Chicago,IL
+401911024,2026-11-22,2026-11-22T17:00Z,82,193,UIC,Miami OH,True,False,Jacksonville Classic,2,post,60.0,71.0,Jacksonville,FL
+401929023,2026-11-22,2026-11-22T18:00Z,2099,2710,Canisius,W Illinois,False,False,Queen City Classic,2,post,46.0,66.0,Buffalo,NY
+401920736,2026-11-22,2026-11-22T18:00Z,77,2168,Northwestern,Dayton,True,False,Shriners Children's Charleston Classic,2,post,79.0,55.0,Charleston,SC
+401919809,2026-11-22,2026-11-22T18:00Z,112358,2217,Long Island,Fairfield,False,False,,2,post,71.0,74.0,Brooklyn,NY
+401912212,2026-11-22,2026-11-22T18:00Z,44,119,American,Towson,False,False,,2,post,86.0,75.0,Washington,DC
+401909527,2026-11-22,2026-11-22T18:00Z,269,2130,Marquette,Chicago St,False,False,,2,post,106.0,62.0,Milwaukee,WI
+401928802,2026-11-22,2026-11-22T19:00Z,98,45,Western KY,G Washington,True,False,Greenbrier Tip-Off,2,in,,,White Sulphur Springs,WV
+401925942,2026-11-22,2026-11-22T19:00Z,3101,233,Utah Tech,South Dakota,True,False,,2,in,,,Sioux Falls,SD
+401921748,2026-11-22,2026-11-22T19:00Z,2132,2349,Cincinnati,UMass Lowell,False,False,,2,in,,,Cincinnati,OH
+401921706,2026-11-22,2026-11-22T19:00Z,2184,2751,Duquesne,Wyoming,True,False,Sunshine Slam,2,in,,,Daytona Beach,FL
+401918988,2026-11-22,2026-11-22T19:00Z,235,339,Memphis,Evansville,False,False,,2,in,,,Memphis,TN
+401918455,2026-11-22,2026-11-22T19:00Z,2754,2729,Youngstown St,William & Mary,False,False,,2,in,,,Youngstown,OH
+401911200,2026-11-22,2026-11-22T19:00Z,301,2230,San Diego,Fordham,True,False,Acrisure Series,2,in,,,Palm Springs,CA
+401928790,2026-11-22,2026-11-22T19:30Z,166,2523,New Mexico St,Robert Morris,True,False,Jacksonville Classic,2,in,,,Jacksonville,FL
+401906868,2026-11-22,2026-11-22T20:00Z,251,88,Texas,S Indiana,False,False,,2,in,,,Austin,TX
+401925066,2026-11-22,2026-11-22T20:00Z,2447,2653,Nicholls,Troy,True,False,Pensacola Invitational,2,in,,,Pensacola,FL
+401922252,2026-11-22,2026-11-22T20:00Z,6,2697,South Alabama,West Florida,False,False,,2,in,,,Mobile,AL
+401920381,2026-11-22,2026-11-22T20:30Z,197,259,Oklahoma St,Virginia Tech,True,False,Shriners Children's Charleston Classic,2,in,,,Charleston,SC
 401929202,2026-11-22,2026-11-22T20:30Z,326,2377,Texas St,McNeese,False,False,,2,pre,,,San Marcos,TX
-401923323,2026-11-22,2026-11-22T20:30Z,399,2385,UAlbany,Mercyhurst,True,False,Queen City Classic,2,pre,,,Buffalo,NY
-401920381,2026-11-22,2026-11-22T20:30Z,197,259,Oklahoma St,Virginia Tech,True,False,The Shriners Children's Charleston Classic,2,pre,,,Charleston,SC
+401923323,2026-11-22,2026-11-22T20:30Z,399,2385,UAlbany,Mercyhurst,True,False,Queen City Classic,2,in,,,Buffalo,NY
 401926795,2026-11-22,2026-11-22T21:30Z,2335,257,Liberty,Richmond,True,False,Greenbrier Tip-Off,2,pre,,,White Sulphur Springs,WV
 401921176,2026-11-22,2026-11-22T21:30Z,2379,85,MD Eastern,IU Indy,True,False,,2,pre,,,Youngstown,OH
 401917540,2026-11-22,2026-11-22T21:30Z,2351,300,LMU,UC Irvine,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
@@ -1148,16 +1148,14 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401911524,2026-11-27,2026-11-28T01:00Z,302,279,UC Davis,Pacific,True,False,Resorts World Classic,2,pre,,,Las Vegas,NV
 401919033,2026-11-27,2026-11-28T02:00Z,96,2724,Kentucky,Wichita St,False,False,,2,pre,,,Lexington,KY
 401926783,2026-11-27,2026-11-28T03:30Z,2437,55,Omaha,Jax State,True,False,Resorts World Classic,2,pre,,,Las Vegas,NV
-401920849,2026-11-28,2026-11-28T05:00Z,2900,163,St Thomas,Princeton,True,False,Seahawk Classic,2,pre,,,Wilmington,NC
-401920728,2026-11-28,2026-11-28T05:00Z,2294,2504,Iowa,Prairie View,False,False,,2,pre,,,Iowa City,IA
 401920890,2026-11-28,2026-11-28T17:00Z,2550,2561,Seton Hall,Siena,False,False,,2,pre,,,Newark,NJ
+401920849,2026-11-28,2026-11-28T17:00Z,2900,163,St Thomas,Princeton,True,False,Seahawk Classic,2,pre,,,Wilmington,NC
 401918961,2026-11-28,2026-11-28T17:00Z,152,2210,NC State,Elon,False,False,,2,pre,,,Raleigh,NC
 401927389,2026-11-28,2026-11-28T18:00Z,2460,2523,Northern Iowa,Robert Morris,False,False,,2,pre,,,Cedar Falls,IA
 401926212,2026-11-28,2026-11-28T18:00Z,2870,2747,Purdue FW,Wofford,False,False,,2,pre,,,Fort Wayne,IN
 401921414,2026-11-28,2026-11-28T18:00Z,2515,2261,Radford,Hampton,True,False,Capital Thanksgiving Classic,2,pre,,,Washington,DC
 401920775,2026-11-28,2026-11-28T18:00Z,2142,261,Colgate,Vermont,True,False,The Island Invitational,2,pre,,,Hempstead,NY
 401920310,2026-11-28,2026-11-28T18:00Z,59,2016,Georgia Tech,Alcorn St,False,False,,2,pre,,,Atlanta,GA
-401912232,2026-11-28,2026-11-28T18:00Z,349,2520,Army,Rider,False,False,,2,pre,,,West Point,NY
 401911395,2026-11-28,2026-11-28T18:00Z,2241,2428,Gardner-Webb,NC Central,False,False,,2,pre,,,Boiling Springs,NC
 401926757,2026-11-28,2026-11-28T18:30Z,2492,2329,Pepperdine,Lehigh,True,False,Gratitude Thanksgiving Classic,2,pre,,,Thousand Oaks,CA
 401924779,2026-11-28,2026-11-28T19:00Z,2415,2363,Morgan St,Manhattan,False,False,,2,pre,,,Baltimore,MD
@@ -1166,6 +1164,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401921158,2026-11-28,2026-11-28T19:00Z,2448,2169,NC A&T,Delaware St,False,False,,2,pre,,,Greensboro,NC
 401921031,2026-11-28,2026-11-28T19:00Z,2427,290,UNC Asheville,GA Southern,False,False,,2,pre,,,Asheville,NC
 401920977,2026-11-28,2026-11-28T19:00Z,236,2653,Chattanooga,Troy,False,False,,2,pre,,,Chattanooga,TN
+401920728,2026-11-28,2026-11-28T19:00Z,2294,2504,Iowa,Prairie View,False,False,,2,pre,,,Iowa City,IA
 401920415,2026-11-28,2026-11-28T19:00Z,2272,2643,High Point,The Citadel,False,False,,2,pre,,,High Point,NC
 401920350,2026-11-28,2026-11-28T19:00Z,2506,16,Presbyterian,Sacramento St,False,False,,2,pre,,,Clinton,SC
 401920077,2026-11-28,2026-11-28T19:00Z,2244,2368,George Mason,Marist,False,False,,2,pre,,,Fairfax,VA
@@ -1205,6 +1204,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401921065,2026-11-28,2026-11-29T00:00Z,2539,2065,San Francisco,Bethune,False,False,,2,pre,,,San Francisco,CA
 401920954,2026-11-28,2026-11-29T00:00Z,79,2502,S Illinois,Portland St,False,False,,2,pre,,,Carbondale,IL
 401917550,2026-11-28,2026-11-29T00:00Z,2541,3101,Santa Clara,Utah Tech,False,False,,2,pre,,,Santa Clara,CA
+401912232,2026-11-28,2026-11-29T00:00Z,349,2520,Army,Rider,False,False,,2,pre,,,West Point,NY
 401911381,2026-11-28,2026-11-29T00:00Z,2127,2413,Charleston So,Morehead St,True,False,ETSU MTE,2,pre,,,Johnson City,TN
 401925783,2026-11-28,2026-11-29T00:30Z,2184,2569,Duquesne,SC State,False,False,,2,pre,,,Pittsburgh,PA
 401919851,2026-11-28,2026-11-29T01:00Z,87,284,Notre Dame,Stonehill,False,False,,2,pre,,,South Bend,IN
