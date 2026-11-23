@@ -961,6 +961,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401919006,2026-11-23,2026-11-23T21:00Z,2247,2655,Georgia St,Tulane,True,False,Fort Myers Tip-Off - Palms Division,2,pre,,,Fort Myers,FL
 401911457,2026-11-23,2026-11-23T21:30Z,2539,2440,San Francisco,Nevada,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401921708,2026-11-23,2026-11-23T22:00Z,252,264,BYU,Washington,True,False,Southwest Maui Invitational,2,pre,,,Maui,HI
+401921210,2026-11-23,2026-11-23T22:30Z,2630,218,UT Martin,Temple,True,False,U.S. Virgin Islands Paradise Jam - Third Place Game,2,pre,,,Charlotte Amalie,Virgin Islands
 401920752,2026-11-23,2026-11-23T23:30Z,2754,2379,Youngstown St,MD Eastern,False,False,,2,pre,,,Youngstown,OH
 401921157,2026-11-23,2026-11-24T00:00Z,2569,2448,SC State,NC A&T,False,False,,2,pre,,,Orangeburg,SC
 401921029,2026-11-23,2026-11-24T00:00Z,94,290,N Kentucky,GA Southern,False,False,,2,pre,,,Highland Heights,KY
