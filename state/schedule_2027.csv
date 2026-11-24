@@ -977,7 +977,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920721,2026-11-23,2026-11-24T03:00Z,2439,331,UNLV,E Washington,False,False,,2,pre,,,Las Vegas,NV
 401918057,2026-11-23,2026-11-24T03:00Z,25,2011,California,Alabama St,False,False,,2,pre,,,Berkeley,CA
 401909743,2026-11-23,2026-11-24T04:30Z,12,36,Arizona,Colorado St,True,False,Southwest Maui Invitational,2,pre,,,Maui,HI
-401921030,2026-11-24,2026-11-24T05:00Z,290,91,GA Southern,Bellarmine,True,False,,2,pre,,,Highland Heights,KY
 401927398,2026-11-24,2026-11-24T15:00Z,179,2750,St Bonaventure,Wright St,True,False,ESPN Events Invitational - Adventure Bracket,2,pre,,,Kissimmee,FL
 401928791,2026-11-24,2026-11-24T16:00Z,166,195,New Mexico St,Ohio,True,False,Jacksonville Classic,2,pre,,,Jacksonville,FL
 401928835,2026-11-24,2026-11-24T17:30Z,2006,2057,Akron,Belmont,True,False,ESPN Events Invitational - Adventure Bracket,2,pre,,,Kissimmee,FL
@@ -986,6 +985,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401928859,2026-11-24,2026-11-24T18:30Z,82,242,UIC,Rice,True,False,Jacksonville Classic,2,pre,,,Jacksonville,FL
 401906806,2026-11-24,2026-11-24T18:30Z,221,201,Pitt,Oklahoma,True,False,Fort Myers Tip-Off - Beach Division,2,pre,,,Fort Myers,FL
 401917676,2026-11-24,2026-11-24T19:00Z,2539,204,San Francisco,Oregon St,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
+401921709,2026-11-24,2026-11-24T19:30Z,252,145,BYU,Ole Miss,True,False,Southwest Maui Invitational,2,pre,,,Maui,HI
 401906853,2026-11-24,2026-11-24T20:00Z,120,2633,Maryland,Tennessee,True,False,Players Era 16,2,pre,,,Las Vegas,NV
 401915941,2026-11-24,2026-11-24T20:00Z,2628,2390,TCU,Miami,True,False,Players Era 16,2,pre,,,Las Vegas,NV
 401929285,2026-11-24,2026-11-24T20:00Z,43,2026,Yale,App State,True,False,ESPN Events Invitational - Adventure Bracket,2,pre,,,Kissimmee,FL
@@ -993,9 +993,9 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401924267,2026-11-24,2026-11-24T20:30Z,2032,299,Arkansas St,Long Beach St,True,False,Florida International MTE,2,pre,,,Miami,FL
 401929035,2026-11-24,2026-11-24T21:00Z,2441,2815,New Haven,Lindenwood,True,False,,2,pre,,,Stony Brook,NY
 401921666,2026-11-24,2026-11-24T21:30Z,2287,202,Illinois St,Tulsa,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
-401909495,2026-11-24,2026-11-24T22:30Z,130,156,Michigan,Creighton,True,False,Players Era 16,2,pre,,,Las Vegas,NV
 401921707,2026-11-24,2026-11-24T22:30Z,2309,2751,Kent State,Wyoming,True,False,Sunshine Slam,2,pre,,,Daytona Beach,FL
 401909775,2026-11-24,2026-11-24T22:30Z,66,21,Iowa State,San Diego St,True,False,Players Era 16,2,pre,,,Las Vegas,NV
+401909495,2026-11-24,2026-11-24T22:30Z,130,156,Michigan,Creighton,True,False,Players Era 16,2,pre,,,Las Vegas,NV
 401924877,2026-11-24,2026-11-24T23:00Z,164,2529,Rutgers,Sacred Heart,False,False,,2,pre,,,Piscataway,NJ
 401923395,2026-11-24,2026-11-24T23:00Z,2678,88,VMI,S Indiana,False,False,,2,pre,,,Lexington,VA
 401923262,2026-11-24,2026-11-24T23:00Z,2226,2382,FAU,Mercer,False,False,,2,pre,,,Boca Raton,FL
@@ -1006,11 +1006,13 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401921142,2026-11-24,2026-11-24T23:30Z,231,2210,Furman,Elon,False,False,,2,pre,,,Greenville,SC
 401906774,2026-11-24,2026-11-25T00:00Z,57,270,Florida,Milwaukee,False,False,,2,pre,,,Gainesville,FL
 401916319,2026-11-24,2026-11-25T00:00Z,194,238,Ohio State,Vanderbilt,False,False,,2,pre,,,Columbus,OH
+401916291,2026-11-24,2026-11-25T00:00Z,84,294,Indiana,Jacksonville,False,False,,2,pre,,,Bloomington,IN
 401926827,2026-11-24,2026-11-25T00:00Z,295,2261,Old Dominion,Hampton,False,False,,2,pre,,,Norfolk,VA
 401925950,2026-11-24,2026-11-25T00:00Z,2692,2627,Weber St,Tarleton St,False,False,,2,pre,,,Ogden,UT
 401923271,2026-11-24,2026-11-25T00:00Z,2368,2803,Marist,Bryant,False,False,,2,pre,,,Poughkeepsie,NY
 401921777,2026-11-24,2026-11-25T00:00Z,222,2154,Villanova,Coppin St,False,False,,2,pre,,,Villanova,PA
 401921266,2026-11-24,2026-11-25T00:00Z,2352,2520,Loyola MD,Rider,False,False,,2,pre,,,Baltimore,MD
+401921030,2026-11-24,2026-11-25T00:00Z,290,91,GA Southern,Bellarmine,True,False,,2,pre,,,Highland Heights,KY
 401920976,2026-11-24,2026-11-25T00:00Z,236,2169,Chattanooga,Delaware St,False,False,,2,pre,,,Chattanooga,TN
 401920923,2026-11-24,2026-11-25T00:00Z,2415,116,Morgan St,Mount St Marys,False,False,,2,pre,,,Baltimore,MD
 401920889,2026-11-24,2026-11-25T00:00Z,2550,160,Seton Hall,New Hampshire,False,False,,2,pre,,,Newark,NJ
@@ -1020,7 +1022,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920358,2026-11-24,2026-11-25T00:00Z,108,104,Harvard,Boston U,False,False,,2,pre,,,Cambridge,MA
 401920309,2026-11-24,2026-11-25T00:00Z,59,2535,Georgia Tech,Samford,False,False,,2,pre,,,Atlanta,GA
 401918996,2026-11-24,2026-11-25T00:00Z,58,56,South Florida,Stetson,False,False,,2,pre,,,Tampa,FL
-401916291,2026-11-24,2026-11-25T00:00Z,84,294,Indiana,Jacksonville,False,False,,2,pre,,,Bloomington,IN
 401911458,2026-11-24,2026-11-25T00:00Z,2541,2440,Santa Clara,Nevada,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401911379,2026-11-24,2026-11-25T00:00Z,256,2127,James Madison,Charleston So,False,False,,2,pre,,,Harrisonburg,VA
 401911279,2026-11-24,2026-11-25T00:00Z,2329,2066,Lehigh,Binghamton,False,False,,2,pre,,,Bethlehem,PA
@@ -1075,10 +1076,10 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920858,2026-11-25,2026-11-25T21:00Z,276,2504,Marshall,Prairie View,False,False,,2,pre,,,Huntington,WV
 401921670,2026-11-25,2026-11-25T21:30Z,30,2579,USC,South Carolina,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401926065,2026-11-25,2026-11-25T22:00Z,158,2582,Nebraska,Southern,False,False,,2,pre,,,Lincoln,NE
+401917182,2026-11-25,2026-11-25T22:00Z,213,235,Penn State,Memphis,True,False,Battle 4 Atlantis - Championship Bracket,2,pre,,,Nassau,Bahamas
 401925917,2026-11-25,2026-11-25T22:00Z,27,2502,UC Riverside,Portland St,False,False,,2,pre,,,Riverside,CA
 401925688,2026-11-25,2026-11-25T22:00Z,326,2016,Texas St,Alcorn St,True,False,,2,pre,,,Ruston,LA
 401920237,2026-11-25,2026-11-25T22:00Z,159,107,Dartmouth,Holy Cross,False,False,,2,pre,,,Hanover,NH
-401917182,2026-11-25,2026-11-25T22:00Z,213,235,Penn State,Memphis,True,False,Battle 4 Atlantis - Championship Bracket,2,pre,,,Nassau,Bahamas
 401922253,2026-11-25,2026-11-25T23:00Z,2466,2697,N'Western St,West Florida,False,False,,2,pre,,,Natchitoches,LA
 401920299,2026-11-25,2026-11-25T23:00Z,2692,2463,Weber St,CSU Northridge,False,False,,2,pre,,,Ogden,UT
 401911241,2026-11-25,2026-11-25T23:00Z,257,2065,Richmond,Bethune,False,False,,2,pre,,,Richmond,VA
@@ -1135,8 +1136,8 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920382,2026-11-27,2026-11-27T22:00Z,259,295,Virginia Tech,Old Dominion,False,False,,2,pre,,,Blacksburg,VA
 401927366,2026-11-27,2026-11-27T22:30Z,68,2181,Boise St,Drake,True,False,Snake River Invitational,2,pre,,,Idaho Falls,ID
 401913531,2026-11-27,2026-11-27T23:00Z,356,98,Illinois,Western KY,False,False,,2,pre,,,Champaign,IL
-401921185,2026-11-27,2026-11-27T23:00Z,219,119,Penn,Towson,False,False,Cathedral Classic,2,pre,,,Philadelphia,PA
 401911030,2026-11-27,2026-11-27T23:00Z,84,189,Indiana,Bowling Green,False,False,,2,pre,,,Bloomington,IN
+401921185,2026-11-27,2026-11-27T23:00Z,219,119,Penn,Towson,False,False,Cathedral Classic,2,pre,,,Philadelphia,PA
 401929284,2026-11-27,2026-11-28T00:00Z,61,2116,Georgia,UCF,True,False,ESPN Events Invitational - Magic Bracket,2,pre,,,Kissimmee,FL
 401926756,2026-11-27,2026-11-28T00:00Z,2540,2329,Santa Barbara,Lehigh,True,False,Gratitude Thanksgiving Classic,2,pre,,,Thousand Oaks,CA
 401912711,2026-11-27,2026-11-28T00:00Z,153,277,North Carolina,West Virginia,True,False,Dick Vitale Invitational pres. by Belk,2,pre,,,Charlotte,NC
@@ -1194,7 +1195,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401917549,2026-11-28,2026-11-28T21:00Z,301,2458,San Diego,N Colorado,False,False,,2,pre,,,San Diego,CA
 401912214,2026-11-28,2026-11-28T21:00Z,44,2349,American,UMass Lowell,False,False,Capital Thanksgiving Classic,2,pre,,,Washington,DC
 401923305,2026-11-28,2026-11-28T21:30Z,322,311,Lafayette,Maine,False,False,Lafayette Classic,2,pre,,,Easton,PA
-401920197,2026-11-28,2026-11-28T22:00Z,2405,2603,Monmouth,Saint Joseph's,False,False,,2,pre,,,West Long Branch,NJ
 401920160,2026-11-28,2026-11-28T22:00Z,2239,2692,Fullerton,Weber St,False,False,,2,pre,,,Fullerton,CA
 401920139,2026-11-28,2026-11-28T22:00Z,2934,2464,Bakersfield,N Arizona,False,False,,2,pre,,,Bakersfield,CA
 401917548,2026-11-28,2026-11-28T22:00Z,2547,300,Seattle U,UC Irvine,False,False,,2,pre,,,Seattle,WA
@@ -1204,6 +1204,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401911242,2026-11-28,2026-11-28T23:00Z,257,2678,Richmond,VMI,False,False,,2,pre,,,Richmond,VA
 401921065,2026-11-28,2026-11-29T00:00Z,2539,2065,San Francisco,Bethune,False,False,,2,pre,,,San Francisco,CA
 401920954,2026-11-28,2026-11-29T00:00Z,79,2502,S Illinois,Portland St,False,False,,2,pre,,,Carbondale,IL
+401920197,2026-11-28,2026-11-29T00:00Z,2405,2603,Monmouth,Saint Joseph's,False,False,,2,pre,,,West Long Branch,NJ
 401917550,2026-11-28,2026-11-29T00:00Z,2541,3101,Santa Clara,Utah Tech,False,False,,2,pre,,,Santa Clara,CA
 401912232,2026-11-28,2026-11-29T00:00Z,349,2520,Army,Rider,False,False,,2,pre,,,West Point,NY
 401911381,2026-11-28,2026-11-29T00:00Z,2127,2413,Charleston So,Morehead St,True,False,ETSU MTE,2,pre,,,Johnson City,TN
@@ -1213,10 +1214,10 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401917551,2026-11-28,2026-11-29T03:00Z,28,2351,UC San Diego,LMU,False,False,,2,pre,,,San Diego,CA
 401923306,2026-11-29,2026-11-29T17:00Z,311,315,Maine,Niagara,True,False,Lafayette Classic,2,pre,,,Easton,PA
 401920776,2026-11-29,2026-11-29T17:00Z,2142,2771,Colgate,Merrimack,True,False,The Island Invitational,2,pre,,,Hempstead,NY
+401911189,2026-11-29,2026-11-29T18:00Z,2168,235,Dayton,Memphis,True,False,A10/American Showcase,2,pre,,,Columbus,OH
 401927392,2026-11-29,2026-11-29T18:00Z,113,2350,UMass,Loyola Chicago,False,False,,2,pre,,,Amherst,MA
 401921415,2026-11-29,2026-11-29T18:00Z,2349,2515,UMass Lowell,Radford,True,False,Capital Thanksgiving Classic,2,pre,,,Washington,DC
 401920238,2026-11-29,2026-11-29T18:00Z,2026,159,App State,Dartmouth,False,False,,2,pre,,,Boone,NC
-401911189,2026-11-29,2026-11-29T18:00Z,2168,235,Dayton,Memphis,True,False,A10/American Showcase,2,pre,,,Columbus,OH
 401920280,2026-11-29,2026-11-29T18:30Z,82,2099,UIC,Canisius,False,False,,2,pre,,,Chicago,IL
 401928808,2026-11-29,2026-11-29T19:00Z,2739,155,Green Bay,North Dakota,False,False,,2,pre,,,Ashwaubenon,WI
 401926869,2026-11-29,2026-11-29T19:00Z,204,270,Oregon St,Milwaukee,False,False,,2,pre,,,Corvallis,OR
