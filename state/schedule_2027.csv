@@ -1036,6 +1036,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401929359,2026-11-24,2026-11-25T01:00Z,250,198,UT Arlington,Oral Roberts,False,False,,2,pre,,,Arlington,TX
 401925642,2026-11-24,2026-11-25T01:00Z,2453,2010,North Alabama,Alabama A&M,False,False,,2,pre,,,Florence,AL
 401924723,2026-11-24,2026-11-25T01:00Z,172,2083,Cornell,Bucknell,False,False,,2,pre,,,Ithaca,NY
+401921711,2026-11-24,2026-11-25T01:00Z,264,228,Washington,Clemson,True,False,Southwest Maui Invitational,2,pre,,,Maui,HI
 401921184,2026-11-24,2026-11-25T01:00Z,219,2182,Penn,Drexel,False,False,Big 5 Classic - Campus Game,2,pre,,,Philadelphia,PA
 401921008,2026-11-24,2026-11-25T01:00Z,140,2739,Kansas City,Green Bay,False,False,,2,pre,,,Kansas City,MO
 401920709,2026-11-24,2026-11-25T01:00Z,2,288,Auburn,Lipscomb,False,False,,2,pre,,,Auburn,AL
