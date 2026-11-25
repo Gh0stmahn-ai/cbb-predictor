@@ -1088,6 +1088,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920237,2026-11-25,2026-11-25T22:00Z,159,107,Dartmouth,Holy Cross,False,False,,2,pre,,,Hanover,NH
 401921716,2026-11-25,2026-11-25T22:30Z,2507,252,Providence,BYU,True,False,Southwest Maui Invitational - Third Place Game,2,pre,,,Maui,HI
 401922253,2026-11-25,2026-11-25T23:00Z,2466,2697,N'Western St,West Florida,False,False,,2,pre,,,Natchitoches,LA
+401920549,2026-11-25,2026-11-25T23:00Z,232,338,Charleston,Kennesaw St,True,False,Cancun Challenge - Riviera Division - Consolation,2,pre,,,Cancun,Mexico
 401920299,2026-11-25,2026-11-25T23:00Z,2692,2463,Weber St,CSU Northridge,False,False,,2,pre,,,Ogden,UT
 401911241,2026-11-25,2026-11-25T23:00Z,257,2065,Richmond,Bethune,False,False,,2,pre,,,Richmond,VA
 401909720,2026-11-25,2026-11-25T23:00Z,183,399,Syracuse,UAlbany,False,False,,2,pre,,,Syracuse,NY
@@ -1103,6 +1104,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401929287,2026-11-25,2026-11-26T00:30Z,344,154,Mississippi St,Wake Forest,True,False,Battle 4 Atlantis - Championship Bracket,2,pre,,,Nassau,Bahamas
 401920138,2026-11-25,2026-11-26T01:00Z,2492,2934,Pepperdine,Bakersfield,False,False,,2,pre,,,Malibu,CA
 401911522,2026-11-25,2026-11-26T01:00Z,302,2437,UC Davis,Omaha,True,False,Resorts World Classic,2,pre,,,Las Vegas,NV
+401920550,2026-11-25,2026-11-26T01:30Z,2638,2199,UTEP,E Michigan,True,False,Cancun Challenge - Riviera Division - Championship,2,pre,,,Cancun,Mexico
 401924897,2026-11-25,2026-11-26T02:00Z,167,2400,New Mexico,Miss Valley St,False,False,,2,pre,,,Albuquerque,NM
 401917545,2026-11-25,2026-11-26T02:00Z,2351,331,LMU,E Washington,False,False,,2,pre,,,Los Angeles,CA
 401917544,2026-11-25,2026-11-26T03:30Z,55,279,Jax State,Pacific,True,False,Resorts World Classic,2,pre,,,Las Vegas,NV
