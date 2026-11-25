@@ -1055,43 +1055,43 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401921712,2026-11-24,2026-11-25T03:30Z,36,2670,Colorado St,VCU,True,False,Southwest Maui Invitational,2,pre,,,Maui,HI
 401909763,2026-11-24,2026-11-25T04:59Z,38,24,Colorado,Stanford,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401909800,2026-11-25,2026-11-25T05:30Z,2306,2250,Kansas St,Gonzaga,True,False,Players Era 16,2,pre,,,Las Vegas,NV
-401927399,2026-11-25,2026-11-25T15:00Z,2057,179,Belmont,St Bonaventure,True,False,ESPN Events Invitational - Adventure Bracket,2,pre,,,Kissimmee,FL
-401928845,2026-11-25,2026-11-25T16:00Z,195,242,Ohio,Rice,True,False,Jacksonville Classic,2,pre,,,Jacksonville,FL
-401921702,2026-11-25,2026-11-25T16:00Z,2429,2460,Charlotte,Northern Iowa,True,False,Fort Myers Tip-Off - Palms Division,2,pre,,,Fort Myers,FL
-401920428,2026-11-25,2026-11-25T17:00Z,269,258,Marquette,Virginia,True,False,Battle 4 Atlantis - Signature Series,2,pre,,,Nassau,Bahamas
-401928831,2026-11-25,2026-11-25T17:30Z,2750,43,Wright St,Yale,True,False,ESPN Events Invitational - Adventure Bracket,2,pre,,,Kissimmee,FL
-401920547,2026-11-25,2026-11-25T17:30Z,2174,2458,Detroit Mercy,N Colorado,True,False,Cancun Challenge - Mayan Division - Consolation,2,pre,,,Cancun,Mexico
-401926835,2026-11-25,2026-11-25T18:00Z,2619,2815,Stony Brook,Lindenwood,False,False,,2,pre,,,Stony Brook,NY
-401924268,2026-11-25,2026-11-25T18:00Z,299,253,Long Beach St,Southern Utah,True,False,Florida International MTE,2,pre,,,Miami,FL
-401911029,2026-11-25,2026-11-25T18:00Z,193,2198,Miami OH,E Kentucky,False,False,,2,pre,,,Oxford,OH
-401919007,2026-11-25,2026-11-25T18:30Z,2166,2655,Davidson,Tulane,True,False,Fort Myers Tip-Off - Palms Division,2,pre,,,Fort Myers,FL
-401921669,2026-11-25,2026-11-25T19:00Z,99,9,LSU,Arizona St,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
-401929406,2026-11-25,2026-11-25T19:00Z,233,2029,South Dakota,AR-Pine Bluff,False,False,,2,pre,,,Vermillion,SD
-401924705,2026-11-25,2026-11-25T19:00Z,171,2612,Columbia,Saint Peter's,False,False,,2,pre,,,New York,NY
-401920868,2026-11-25,2026-11-25T19:00Z,2885,2363,NJIT,Manhattan,False,False,,2,pre,,,Newark,NJ
-401917967,2026-11-25,2026-11-25T19:00Z,2571,2000,S Dakota St,Abilene Chrstn,False,False,,2,pre,,,Brookings,SD
-401921715,2026-11-25,2026-11-25T19:30Z,12,145,Arizona,Ole Miss,True,False,Southwest Maui Invitational - Championship,2,pre,,,Maui,HI
-401920809,2026-11-25,2026-11-25T19:30Z,2752,245,Xavier,Texas A&M,True,False,Battle 4 Atlantis - Signature Series,2,pre,,,Nassau,Bahamas
-401928836,2026-11-25,2026-11-25T20:00Z,2026,2006,App State,Akron,True,False,ESPN Events Invitational - Adventure Bracket,2,pre,,,Kissimmee,FL
-401920548,2026-11-25,2026-11-25T20:00Z,155,2545,North Dakota,SE Louisiana,True,False,Cancun Challenge - Mayan Division - Championship,2,pre,,,Cancun,Mexico
-401919042,2026-11-25,2026-11-25T20:00Z,197,2296,Oklahoma St,Jackson St,False,False,,2,pre,,,Stillwater,OK
-401928359,2026-11-25,2026-11-25T20:30Z,2229,2032,FIU,Arkansas St,False,False,Florida International MTE,2,pre,,,Miami,FL
-401925050,2026-11-25,2026-11-25T21:00Z,2443,2755,LSU N Orleans,Grambling,False,False,,2,pre,,,New Orleans,LA
-401924737,2026-11-25,2026-11-25T21:00Z,2335,163,Liberty,Princeton,True,False,Live Oak Bank Holiday Classic,2,pre,,,Wilmington,NC
-401921703,2026-11-25,2026-11-25T21:00Z,526,2247,FGCU,Georgia St,True,False,Fort Myers Tip-Off - Palms Division,2,pre,,,Fort Myers,FL
-401920858,2026-11-25,2026-11-25T21:00Z,276,2504,Marshall,Prairie View,False,False,,2,pre,,,Huntington,WV
-401921670,2026-11-25,2026-11-25T21:30Z,30,2579,USC,South Carolina,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
-401926065,2026-11-25,2026-11-25T22:00Z,158,2582,Nebraska,Southern,False,False,,2,pre,,,Lincoln,NE
-401917182,2026-11-25,2026-11-25T22:00Z,213,235,Penn State,Memphis,True,False,Battle 4 Atlantis - Championship Bracket,2,pre,,,Nassau,Bahamas
-401925917,2026-11-25,2026-11-25T22:00Z,27,2502,UC Riverside,Portland St,False,False,,2,pre,,,Riverside,CA
-401925688,2026-11-25,2026-11-25T22:00Z,326,2016,Texas St,Alcorn St,True,False,,2,pre,,,Ruston,LA
-401920237,2026-11-25,2026-11-25T22:00Z,159,107,Dartmouth,Holy Cross,False,False,,2,pre,,,Hanover,NH
-401921716,2026-11-25,2026-11-25T22:30Z,2507,252,Providence,BYU,True,False,Southwest Maui Invitational - Third Place Game,2,pre,,,Maui,HI
+401927399,2026-11-25,2026-11-25T15:00Z,2057,179,Belmont,St Bonaventure,True,False,ESPN Events Invitational - Adventure Bracket,2,post,68.0,71.0,Kissimmee,FL
+401928845,2026-11-25,2026-11-25T16:00Z,195,242,Ohio,Rice,True,False,Jacksonville Classic,2,post,74.0,82.0,Jacksonville,FL
+401921702,2026-11-25,2026-11-25T16:00Z,2429,2460,Charlotte,Northern Iowa,True,False,Fort Myers Tip-Off - Palms Division,2,post,85.0,72.0,Fort Myers,FL
+401920428,2026-11-25,2026-11-25T17:00Z,269,258,Marquette,Virginia,True,False,Battle 4 Atlantis - Signature Series,2,post,54.0,60.0,Nassau,Bahamas
+401920547,2026-11-25,2026-11-25T17:30Z,2174,2458,Detroit Mercy,N Colorado,True,False,Cancun Challenge - Mayan Division - Consolation,2,post,83.0,93.0,Cancun,Mexico
+401928831,2026-11-25,2026-11-25T17:31Z,2750,43,Wright St,Yale,True,False,ESPN Events Invitational - Adventure Bracket,2,post,70.0,72.0,Kissimmee,FL
+401926835,2026-11-25,2026-11-25T18:00Z,2619,2815,Stony Brook,Lindenwood,False,False,,2,post,69.0,63.0,Stony Brook,NY
+401924268,2026-11-25,2026-11-25T18:00Z,299,253,Long Beach St,Southern Utah,True,False,Florida International MTE,2,post,65.0,64.0,Miami,FL
+401911029,2026-11-25,2026-11-25T18:00Z,193,2198,Miami OH,E Kentucky,False,False,,2,post,85.0,72.0,Oxford,OH
+401919007,2026-11-25,2026-11-25T18:30Z,2166,2655,Davidson,Tulane,True,False,Fort Myers Tip-Off - Palms Division,2,post,74.0,47.0,Fort Myers,FL
+401921669,2026-11-25,2026-11-25T19:00Z,9,99,Arizona St,LSU,True,False,Acrisure Series,2,post,92.0,94.0,Palm Springs,CA
+401929406,2026-11-25,2026-11-25T19:00Z,233,2029,South Dakota,AR-Pine Bluff,False,False,,2,post,86.0,50.0,Vermillion,SD
+401924705,2026-11-25,2026-11-25T19:00Z,171,2612,Columbia,Saint Peter's,False,False,,2,post,65.0,44.0,New York,NY
+401920868,2026-11-25,2026-11-25T19:00Z,2885,2363,NJIT,Manhattan,False,False,,2,post,70.0,81.0,Newark,NJ
+401917967,2026-11-25,2026-11-25T19:00Z,2571,2000,S Dakota St,Abilene Chrstn,False,False,,2,post,95.0,101.0,Brookings,SD
+401921715,2026-11-25,2026-11-25T19:30Z,12,145,Arizona,Ole Miss,True,False,Southwest Maui Invitational - Championship,2,post,84.0,73.0,Maui,HI
+401928836,2026-11-25,2026-11-25T20:00Z,2026,2006,App State,Akron,True,False,ESPN Events Invitational - Adventure Bracket,2,post,76.0,66.0,Kissimmee,FL
+401920548,2026-11-25,2026-11-25T20:00Z,155,2545,North Dakota,SE Louisiana,True,False,Cancun Challenge - Mayan Division - Championship,2,post,72.0,73.0,Cancun,Mexico
+401919042,2026-11-25,2026-11-25T20:00Z,197,2296,Oklahoma St,Jackson St,False,False,,2,post,93.0,58.0,Stillwater,OK
+401928359,2026-11-25,2026-11-25T20:30Z,2229,2032,FIU,Arkansas St,False,False,Florida International MTE,2,in,,,Miami,FL
+401925050,2026-11-25,2026-11-25T21:00Z,2443,2755,LSU N Orleans,Grambling,False,False,,2,in,,,New Orleans,LA
+401924737,2026-11-25,2026-11-25T21:00Z,2335,163,Liberty,Princeton,True,False,Live Oak Bank Holiday Classic,2,in,,,Wilmington,NC
+401921703,2026-11-25,2026-11-25T21:00Z,526,2247,FGCU,Georgia St,True,False,Fort Myers Tip-Off - Palms Division,2,in,,,Fort Myers,FL
+401920858,2026-11-25,2026-11-25T21:00Z,276,2504,Marshall,Prairie View,False,False,,2,in,,,Huntington,WV
+401920809,2026-11-25,2026-11-25T21:13Z,2752,245,Xavier,Texas A&M,True,False,Battle 4 Atlantis - Signature Series,2,in,,,Nassau,Bahamas
+401926065,2026-11-25,2026-11-25T22:00Z,158,2582,Nebraska,Southern,False,False,,2,in,,,Lincoln,NE
+401925917,2026-11-25,2026-11-25T22:00Z,27,2502,UC Riverside,Portland St,False,False,,2,in,,,Riverside,CA
+401925688,2026-11-25,2026-11-25T22:00Z,326,2016,Texas St,Alcorn St,True,False,,2,in,,,Ruston,LA
+401920237,2026-11-25,2026-11-25T22:00Z,159,107,Dartmouth,Holy Cross,False,False,,2,in,,,Hanover,NH
+401921670,2026-11-25,2026-11-25T22:17Z,30,2579,USC,South Carolina,True,False,Acrisure Series,2,in,,,Palm Springs,CA
+401921716,2026-11-25,2026-11-25T22:30Z,2507,252,Providence,BYU,True,False,Southwest Maui Invitational - Third Place Game,2,in,,,Maui,HI
 401922253,2026-11-25,2026-11-25T23:00Z,2466,2697,N'Western St,West Florida,False,False,,2,pre,,,Natchitoches,LA
 401920549,2026-11-25,2026-11-25T23:00Z,232,338,Charleston,Kennesaw St,True,False,Cancun Challenge - Riviera Division - Consolation,2,pre,,,Cancun,Mexico
 401920299,2026-11-25,2026-11-25T23:00Z,2692,2463,Weber St,CSU Northridge,False,False,,2,pre,,,Ogden,UT
 401911241,2026-11-25,2026-11-25T23:00Z,257,2065,Richmond,Bethune,False,False,,2,pre,,,Richmond,VA
 401909720,2026-11-25,2026-11-25T23:00Z,183,399,Syracuse,UAlbany,False,False,,2,pre,,,Syracuse,NY
+401917182,2026-11-25,2026-11-25T23:35Z,213,235,Penn State,Memphis,True,False,Battle 4 Atlantis - Championship Bracket,2,pre,,,Nassau,Bahamas
 401909568,2026-11-25,2026-11-26T00:00Z,150,41,Duke,UConn,True,False,,2,pre,,,Las Vegas,NV
 401922285,2026-11-25,2026-11-26T00:00Z,2643,2908,The Citadel,SC Upstate,False,False,,2,pre,,,Charleston,SC
 401921108,2026-11-25,2026-11-26T00:00Z,94,91,N Kentucky,Bellarmine,False,False,,2,pre,,,Highland Heights,KY
@@ -1107,8 +1107,12 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401920550,2026-11-25,2026-11-26T01:30Z,2638,2199,UTEP,E Michigan,True,False,Cancun Challenge - Riviera Division - Championship,2,pre,,,Cancun,Mexico
 401924897,2026-11-25,2026-11-26T02:00Z,167,2400,New Mexico,Miss Valley St,False,False,,2,pre,,,Albuquerque,NM
 401917545,2026-11-25,2026-11-26T02:00Z,2351,331,LMU,E Washington,False,False,,2,pre,,,Los Angeles,CA
+401921671,2026-11-25,2026-11-26T02:30Z,38,2253,Colorado,Grand Canyon,True,False,Acrisure Series - Championship Game,2,pre,,,Palm Springs,CA
+401921713,2026-11-25,2026-11-26T03:00Z,2670,264,VCU,Washington,True,False,Southwest Maui Invitational - Fifth Place Game,2,pre,,,Maui,HI
 401917544,2026-11-25,2026-11-26T03:30Z,55,279,Jax State,Pacific,True,False,Resorts World Classic,2,pre,,,Las Vegas,NV
 401929005,2026-11-25,2026-11-26T04:59Z,62,2916,Hawai'i,Incarnate Word,False,False,,2,pre,,,Honolulu,HI
+401921672,2026-11-25,2026-11-26T04:59Z,139,24,Saint Louis,Stanford,True,False,Acrisure Series - Third Place Game,2,pre,,,Palm Springs,CA
+401921714,2026-11-26,2026-11-26T05:30Z,36,228,Colorado St,Clemson,True,False,Southwest Maui Invitational - Seventh Place Game,2,pre,,,Maui,HI
 401929281,2026-11-26,2026-11-26T16:00Z,2132,61,Cincinnati,Georgia,True,False,ESPN Events Invitational - Magic Bracket,2,pre,,,Kissimmee,FL
 401912231,2026-11-26,2026-11-26T17:00Z,2636,349,UTSA,Army,False,False,,2,pre,,,San Antonio,TX
 401906807,2026-11-26,2026-11-26T17:00Z,2509,201,Purdue,Oklahoma,True,False,Fort Myers Tip-Off - Beach Division,2,pre,,,Fort Myers,FL
@@ -1125,7 +1129,11 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401918972,2026-11-26,2026-11-27T00:00Z,99,2567,LSU,SMU,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401909506,2026-11-26,2026-11-27T00:00Z,221,305,Pitt,DePaul,True,False,Fort Myers Tip-Off - Beach Division,2,pre,,,Fort Myers,FL
 401911523,2026-11-26,2026-11-27T01:00Z,302,55,UC Davis,Jax State,True,False,Resorts World Classic,2,pre,,,Las Vegas,NV
+401920530,2026-11-26,2026-11-27T02:00Z,2599,97,St John's,Louisville,True,False,Players Era 16,2,pre,,,Las Vegas,NV
+401920539,2026-11-26,2026-11-27T02:00Z,2306,333,Kansas St,Alabama,True,False,Players Era 16,2,pre,,,Las Vegas,NV
 401917546,2026-11-26,2026-11-27T03:30Z,2437,279,Omaha,Pacific,True,False,Resorts World Classic,2,pre,,,Las Vegas,NV
+401920531,2026-11-26,2026-11-27T04:30Z,2483,2641,Oregon,Texas Tech,True,False,Players Era 16,2,pre,,,Las Vegas,NV
+401920540,2026-11-26,2026-11-27T04:30Z,2250,239,Gonzaga,Baylor,True,False,Players Era 16,2,pre,,,Las Vegas,NV
 401920429,2026-11-27,2026-11-27T16:00Z,2752,258,Xavier,Virginia,True,False,Battle 4 Atlantis - Signature Series,2,pre,,,Nassau,Bahamas
 401920848,2026-11-27,2026-11-27T17:00Z,2900,2335,St Thomas,Liberty,True,False,Live Oak Bank Holiday Classic,2,pre,,,Wilmington,NC
 401924810,2026-11-27,2026-11-27T18:00Z,2771,261,Merrimack,Vermont,True,False,The Island Invitational,2,pre,,,Hempstead,NY
