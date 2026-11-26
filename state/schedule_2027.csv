@@ -1113,18 +1113,18 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401929005,2026-11-25,2026-11-26T04:59Z,62,2916,Hawai'i,Incarnate Word,False,False,,2,pre,,,Honolulu,HI
 401921672,2026-11-25,2026-11-26T04:59Z,139,24,Saint Louis,Stanford,True,False,Acrisure Series - Third Place Game,2,pre,,,Palm Springs,CA
 401921714,2026-11-26,2026-11-26T05:30Z,36,228,Colorado St,Clemson,True,False,Southwest Maui Invitational - Seventh Place Game,2,pre,,,Maui,HI
-401929281,2026-11-26,2026-11-26T16:00Z,2132,61,Cincinnati,Georgia,True,False,ESPN Events Invitational - Magic Bracket,2,pre,,,Kissimmee,FL
-401912231,2026-11-26,2026-11-26T17:00Z,2636,349,UTSA,Army,False,False,,2,pre,,,San Antonio,TX
-401906807,2026-11-26,2026-11-26T17:00Z,2509,201,Purdue,Oklahoma,True,False,Fort Myers Tip-Off - Beach Division,2,pre,,,Fort Myers,FL
-401920528,2026-11-26,2026-11-26T18:00Z,120,21,Maryland,San Diego St,True,False,Players Era 16,2,pre,,,Las Vegas,NV
-401929282,2026-11-26,2026-11-26T18:30Z,2116,103,UCF,Boston College,True,False,ESPN Events Invitational - Magic Bracket,2,pre,,,Kissimmee,FL
-401921674,2026-11-26,2026-11-26T19:00Z,9,2579,Arizona St,South Carolina,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
-401906869,2026-11-26,2026-11-26T19:30Z,251,46,Texas,Georgetown,True,False,Rady Children's Invitational,2,pre,,,San Diego,CA
-401920529,2026-11-26,2026-11-26T20:30Z,66,2633,Iowa State,Tennessee,True,False,Players Era 16,2,pre,,,Las Vegas,NV
-401920537,2026-11-26,2026-11-26T20:30Z,130,2390,Michigan,Miami,True,False,Players Era 16,2,pre,,,Las Vegas,NV
-401925757,2026-11-26,2026-11-26T21:30Z,127,8,Michigan St,Arkansas,True,False,,2,pre,,,Detroit,MI
-401921673,2026-11-26,2026-11-26T21:30Z,30,328,USC,Utah State,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
-401917547,2026-11-26,2026-11-26T22:00Z,26,2608,UCLA,Saint Mary's,True,False,Rady Children's Invitational,2,pre,,,San Diego,CA
+401929281,2026-11-26,2026-11-26T16:00Z,2132,61,Cincinnati,Georgia,True,False,ESPN Events Invitational - Magic Bracket,2,post,83.0,81.0,Kissimmee,FL
+401912231,2026-11-26,2026-11-26T17:00Z,2636,349,UTSA,Army,False,False,,2,post,61.0,79.0,San Antonio,TX
+401906807,2026-11-26,2026-11-26T17:00Z,2509,201,Purdue,Oklahoma,True,False,Fort Myers Tip-Off - Beach Division,2,post,63.0,70.0,Fort Myers,FL
+401920528,2026-11-26,2026-11-26T18:00Z,21,120,San Diego St,Maryland,True,False,Players Era 16,2,post,75.0,71.0,Las Vegas,NV
+401929282,2026-11-26,2026-11-26T18:30Z,2116,103,UCF,Boston College,True,False,ESPN Events Invitational - Magic Bracket,2,post,73.0,75.0,Kissimmee,FL
+401921674,2026-11-26,2026-11-26T19:00Z,2579,9,South Carolina,Arizona St,True,False,Acrisure Series,2,post,80.0,73.0,Palm Springs,CA
+401906869,2026-11-26,2026-11-26T19:30Z,251,46,Texas,Georgetown,True,False,Rady Children's Invitational,2,post,92.0,83.0,San Diego,CA
+401920529,2026-11-26,2026-11-26T20:30Z,66,2633,Iowa State,Tennessee,True,False,Players Era 16,2,in,,,Las Vegas,NV
+401920537,2026-11-26,2026-11-26T20:30Z,130,2390,Michigan,Miami,True,False,Players Era 16,2,post,70.0,97.0,Las Vegas,NV
+401925757,2026-11-26,2026-11-26T21:30Z,127,8,Michigan St,Arkansas,True,False,,2,in,,,Detroit,MI
+401921673,2026-11-26,2026-11-26T21:30Z,328,30,Utah State,USC,True,False,Acrisure Series,2,in,,,Palm Springs,CA
+401917547,2026-11-26,2026-11-26T22:00Z,2608,26,Saint Mary's,UCLA,True,False,Rady Children's Invitational,2,in,,,San Diego,CA
 401920538,2026-11-26,2026-11-26T23:00Z,156,2628,Creighton,TCU,True,False,Players Era 16,2,pre,,,Las Vegas,NV
 401918972,2026-11-26,2026-11-27T00:00Z,99,2567,LSU,SMU,True,False,Acrisure Series,2,pre,,,Palm Springs,CA
 401909506,2026-11-26,2026-11-27T00:00Z,221,305,Pitt,DePaul,True,False,Fort Myers Tip-Off - Beach Division,2,pre,,,Fort Myers,FL
