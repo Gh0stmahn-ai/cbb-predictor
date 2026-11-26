@@ -336,3 +336,4 @@ game_id,season,date,home_id,away_id,home_name,away_name,home_pts,away_pts,neutra
 401911311,2027,2026-11-25,225,353,Brown,J&W,98.0,52.0,False,False,
 401925943,2027,2026-11-25,3101,3246,Utah Tech,Bethesda,124.0,54.0,False,False,
 401921170,2027,2026-11-25,325,2963,Cleveland St,Case Western,76.0,46.0,False,False,
+401925880,2027,2026-11-25,147,3218,Montana St,NW Indian,110.0,43.0,False,False,
