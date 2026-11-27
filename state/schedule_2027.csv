@@ -1143,6 +1143,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401929181,2026-11-27,2026-11-27T19:00Z,278,6,Fresno St,South Alabama,True,False,Second Line Showcase,2,pre,,,New Orleans,LA
 401921224,2026-11-27,2026-11-27T19:00Z,2217,2426,Fairfield,Navy,False,False,Mahoney Classic,2,pre,,,Fairfield,CT
 401919786,2026-11-27,2026-11-27T19:00Z,2330,311,Le Moyne,Maine,True,False,Lafayette Classic,2,pre,,,Easton,PA
+401921717,2026-11-27,2026-11-27T19:30Z,26,46,UCLA,Georgetown,True,False,Rady Children's Invitational - Consolation,2,pre,,,San Diego,CA
 401928468,2026-11-27,2026-11-27T20:00Z,2348,326,Louisiana Tech,Texas St,False,False,,2,pre,,,Ruston,LA
 401924738,2026-11-27,2026-11-27T20:00Z,350,163,UNC Wilmington,Princeton,False,False,Seahawk Classic,2,pre,,,Wilmington,NC
 401902282,2026-11-27,2026-11-27T20:00Z,2086,91,Butler,Bellarmine,False,False,,2,pre,,,Indianapolis,IN
@@ -1153,6 +1154,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401911212,2026-11-27,2026-11-27T21:00Z,45,2378,G Washington,UMBC,False,False,,2,pre,,,Washington,DC
 401929283,2026-11-27,2026-11-27T21:30Z,103,2132,Boston College,Cincinnati,True,False,ESPN Events Invitational - Magic Bracket,2,pre,,,Kissimmee,FL
 401924845,2026-11-27,2026-11-27T21:30Z,322,315,Lafayette,Niagara,False,False,Lafayette Classic,2,pre,,,Easton,PA
+401921718,2026-11-27,2026-11-27T22:00Z,2608,251,Saint Mary's,Texas,True,False,Rady Children's Invitational - Championship,2,pre,,,San Diego,CA
 401909789,2026-11-27,2026-11-27T22:00Z,2305,222,Kansas,Villanova,False,False,,2,pre,,,Lawrence,KS
 401920810,2026-11-27,2026-11-27T22:00Z,245,269,Texas A&M,Marquette,True,False,Battle 4 Atlantis - Signature Series,2,pre,,,Nassau,Bahamas
 401920382,2026-11-27,2026-11-27T22:00Z,259,295,Virginia Tech,Old Dominion,False,False,,2,pre,,,Blacksburg,VA
@@ -1301,7 +1303,6 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401926784,2026-12-01,2026-12-02T00:00Z,55,2031,Jax State,Little Rock,False,False,,2,pre,,,Jacksonville,AL
 401926114,2026-12-01,2026-12-02T00:00Z,2653,231,Troy,Furman,False,False,,2,pre,,,Troy,AL
 401925814,2026-12-01,2026-12-02T00:00Z,2325,2747,La Salle,Wofford,False,False,,2,pre,,,Philadelphia,PA
-401925734,2026-12-01,2026-12-02T00:00Z,130,2400,Michigan,Miss Valley St,False,False,,2,pre,,,Ann Arbor,MI
 401921874,2026-12-01,2026-12-02T00:00Z,2509,2294,Purdue,Iowa,False,True,,2,pre,,,West Lafayette,IN
 401920978,2026-12-01,2026-12-02T00:00Z,236,2010,Chattanooga,Alabama A&M,False,False,,2,pre,,,Chattanooga,TN
 401920880,2026-12-01,2026-12-02T00:00Z,2116,294,UCF,Jacksonville,False,False,,2,pre,,,Orlando,FL
@@ -1323,6 +1324,7 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401909528,2026-12-01,2026-12-02T00:30Z,269,2681,Marquette,Wagner,False,False,,2,pre,,,Milwaukee,WI
 401909790,2026-12-01,2026-12-02T01:00Z,2305,2460,Kansas,Northern Iowa,False,False,,2,pre,,,Lawrence,KS
 401921873,2026-12-01,2026-12-02T01:00Z,84,164,Indiana,Rutgers,False,True,,2,pre,,,Bloomington,IN
+401925734,2026-12-01,2026-12-02T01:00Z,130,2400,Michigan,Miss Valley St,False,False,,2,pre,,,Ann Arbor,MI
 401925689,2026-12-01,2026-12-02T01:00Z,66,2016,Iowa State,Alcorn St,False,False,,2,pre,,,Ames,IA
 401918973,2026-12-01,2026-12-02T01:00Z,2567,2617,SMU,SF Austin,False,False,,2,pre,,,Dallas,TX
 401917969,2026-12-01,2026-12-02T01:00Z,2000,2492,Abilene Chrstn,Pepperdine,False,False,,2,pre,,,Abilene,TX
@@ -1406,8 +1408,8 @@ game_id,date,start,home_id,away_id,home_name,away_name,neutral,conf_game,notes,s
 401917556,2026-12-02,2026-12-03T03:00Z,2541,278,Santa Clara,Fresno St,False,False,,2,pre,,,Santa Clara,CA
 401911460,2026-12-02,2026-12-03T03:00Z,2440,279,Nevada,Pacific,False,False,,2,pre,,,Reno,NV
 401921879,2026-12-02,2026-12-03T03:30Z,30,264,USC,Washington,False,True,,2,pre,,,Los Angeles,CA
-401920696,2026-12-03,2026-12-03T23:00Z,261,163,Vermont,Princeton,False,False,,2,pre,,,Burlington,VT
 401916292,2026-12-03,2026-12-03T23:00Z,84,2710,Indiana,W Illinois,False,False,,2,pre,,,Bloomington,IN
+401920696,2026-12-03,2026-12-03T23:00Z,261,163,Vermont,Princeton,False,False,,2,pre,,,Burlington,VT
 401922225,2026-12-03,2026-12-04T00:00Z,2454,233,North Florida,South Dakota,False,False,,2,pre,,,Jacksonville,FL
 401921143,2026-12-03,2026-12-04T00:00Z,2210,256,Elon,James Madison,False,False,,2,pre,,,Elon,NC
 401920203,2026-12-03,2026-12-04T00:00Z,2670,2154,VCU,Coppin St,False,False,,2,pre,,,Richmond,VA
